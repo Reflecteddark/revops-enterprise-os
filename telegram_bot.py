@@ -142,23 +142,33 @@ def find_wb() -> str:
     return max(candidates, key=os.path.getmtime)
 
 
-def find_latest_report_pdf() -> str | None:
-    """Находит самый свежий PDF-отчёт в рабочей папке или на Рабочем столе."""
-    candidates = []
-    for loc in [BASE_DIR, Path.home() / "Desktop"]:
-        try:
-            candidates.extend(glob.glob(str(loc / "RevOps*.pdf")))
-        except Exception:
-            pass
+def find_role_report_pdf(role: str = "all") -> str | None:
+    """Находит свежий PDF-отчёт для указанной роли (all, ceo, rop, cfo)."""
+    role = role.lower()
+    pattern_map = {
+        "all": ["*Executive_Summary*.pdf", "*Full_Report*.pdf", "RevOps*.pdf"],
+        "ceo": ["*Report_CEO*.pdf", "*CEO*.pdf"],
+        "rop": ["*Report_ROP*.pdf", "*ROP*.pdf", "*Пульт_РОПа*.pdf"],
+        "cfo": ["*Report_CFO*.pdf", "*CFO*.pdf", "*Финансы*.pdf"],
+    }
+    patterns = pattern_map.get(role, ["*Executive_Summary*.pdf", "RevOps*.pdf"])
 
-    valid_revops = [
+    candidates = []
+    for loc in [BASE_DIR, BASE_DIR / "presentation", Path.home() / "Desktop"]:
+        for pat in patterns:
+            try:
+                candidates.extend(glob.glob(str(loc / pat)))
+            except Exception:
+                pass
+
+    valid = [
         f for f in candidates
         if os.path.isfile(f) and os.path.getsize(f) > 0 and not os.path.basename(f).startswith("~$")
     ]
-    if valid_revops:
-        return max(valid_revops, key=os.path.getmtime)
+    if valid:
+        return max(valid, key=os.path.getmtime)
 
-    # Фоллбек: любые PDF строго внутри BASE_DIR
+    # Фоллбек: любые PDF внутри BASE_DIR
     fallback = [
         f for f in glob.glob(str(BASE_DIR / "*.pdf"))
         if os.path.isfile(f) and os.path.getsize(f) > 0 and not os.path.basename(f).startswith("~$")
@@ -166,6 +176,11 @@ def find_latest_report_pdf() -> str | None:
     if fallback:
         return max(fallback, key=os.path.getmtime)
     return None
+
+
+def find_latest_report_pdf() -> str | None:
+    """Находит самый свежий PDF-отчёт (для обратной совместимости)."""
+    return find_role_report_pdf("all")
 
 
 def _col(header: list, name: str, default: int) -> int:
@@ -367,10 +382,13 @@ def build_help_msg() -> str:
     return (
         "🤖 <b>RevOps Enterprise Bot — Команды:</b>\n\n"
         "• /status или /start — Утренний брифинг отдела продаж\n"
-        "• /risk — Сделки в зоне риска (зависшие > 14 дней или низкий health score)\n"
+        "• /risk — Сделки в зоне риска (зависшие > 14 дней или health < 40)\n"
         "• /hot — Горячие сделки на стадиях КП и Подписание договора\n"
         "• /plan — Детализация выполнения финансового плана\n"
-        "• /summary или /report — Получить свежий PDF-отчёт прямо в чат\n"
+        "• /ceo — 👔 Стратегический отчёт для CEO / Собственника (PDF, 5 стр.)\n"
+        "• /rop — 📋 Операционный пульт РОПа & аудит звонков (PDF, 5 стр.)\n"
+        "• /cfo — 💳 Финансовый срез: платежный календарь и DSO (PDF, 5 стр.)\n"
+        "• /summary или /report — 📄 Полная мастер-презентация C-Level (PDF, 10 стр.)\n"
         "• /sync — Проверить статус CRM-интеграций (AmoCRM / Bitrix24)\n"
         "• /help — Справка по доступным командам"
     )
@@ -379,10 +397,10 @@ def build_help_msg() -> str:
 # ── Polling (опциональный командный режим) ──────────────────────────
 
 def run_polling(token: str, chat_id: str, wb_path: str) -> None:
-    """Простой polling-бот. Отвечает на /start /status /risk /hot /plan /summary /report /sync /help."""
+    """Простой polling-бот. Отвечает на /start /status /risk /hot /plan /summary /report /ceo /rop /cfo /sync /help."""
     print("Polling... (Ctrl+C для выхода)")
     offset = 0
-    COMMANDS = {"/risk", "/hot", "/plan", "/status", "/start", "/summary", "/report", "/help", "/sync"}
+    COMMANDS = {"/risk", "/hot", "/plan", "/status", "/start", "/summary", "/report", "/help", "/sync", "/ceo", "/rop", "/cfo"}
 
     while True:
         try:
@@ -391,7 +409,8 @@ def run_polling(token: str, chat_id: str, wb_path: str) -> None:
                 offset = upd["update_id"] + 1
                 msg = upd.get("message", {})
                 from_id = str(msg.get("chat", {}).get("id", ""))
-                text = msg.get("text", "").strip().lower().split()[0] if msg.get("text") else ""
+                raw_text = msg.get("text", "").strip()
+                text = raw_text.lower().split()[0] if raw_text else ""
 
                 # Принимаем только из разрешённого chat_id
                 if from_id != str(chat_id) or text not in COMMANDS:
@@ -419,16 +438,39 @@ def run_polling(token: str, chat_id: str, wb_path: str) -> None:
                 elif text == "/help":
                     reply = build_help_msg()
                     tg_send(token, chat_id, reply)
-                elif text in ("/summary", "/report"):
-                    pdf = find_latest_report_pdf()
+                elif text in ("/summary", "/report", "/ceo", "/rop", "/cfo"):
+                    parts = raw_text.lower().split()
+                    role = "all"
+                    if text == "/ceo" or (len(parts) > 1 and parts[1] == "ceo"):
+                        role = "ceo"
+                    elif text == "/rop" or (len(parts) > 1 and parts[1] == "rop"):
+                        role = "rop"
+                    elif text == "/cfo" or (len(parts) > 1 and parts[1] == "cfo"):
+                        role = "cfo"
+
+                    role_captions = {
+                        "all": "📄 RevOps Executive Master Report (10 страниц)",
+                        "ceo": "👔 RevOps Отчет для CEO / Собственника (5 страниц)",
+                        "rop": "📋 RevOps Пульт РОПа: Сделки в риске и аудит звонков (5 страниц)",
+                        "cfo": "💳 RevOps Финансовый срез: Платежный календарь и DSO (5 страниц)",
+                    }
+                    tg_send(token, chat_id, f"⏳ Подготавливаю отчет ({role.upper()})...")
+                    pdf = find_role_report_pdf(role)
+                    if not pdf:
+                        try:
+                            cmd_gen = [sys.executable, str(BASE_DIR / "presentation" / "build.py"), "--role", role, "--skip-presteps"]
+                            subprocess.run(cmd_gen, cwd=BASE_DIR, timeout=45)
+                            pdf = find_role_report_pdf(role)
+                        except Exception as e:
+                            print(f"[TG ERROR] Auto-generation failed: {e}")
+
                     if pdf:
-                        tg_send(token, chat_id, "⏳ Отправляю свежий PDF-отчёт...")
-                        caption = f"📄 RevOps Executive Report: {os.path.basename(pdf)}"
+                        caption = role_captions.get(role, f"📄 RevOps Report: {os.path.basename(pdf)}")
                         ok = tg_send_document(token, chat_id, pdf, caption=caption)
                         if not ok:
                             tg_send(token, chat_id, "❌ Не удалось отправить документ через Telegram API.")
                     else:
-                        tg_send(token, chat_id, "⚠️ Готовый PDF-отчёт не найден. Запустите генерацию через скрипт generate_full_report_pdf.py.")
+                        tg_send(token, chat_id, f"⚠️ PDF-отчет для роли '{role}' не найден. Запустите генерацию через launchers/Generate_Report_{role.upper()}.bat")
                 else:
                     continue
 
