@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 220" width="100%" height="100%">
+  <!-- Target line at 5.0M -->
+  <line x1="40" y1="40" x2="500" y2="40" stroke="#0F172A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="505" y="44" font-family="Inter, sans-serif" font-size="10" font-weight="800" fill="#0F172A">ПЛАН 5.0M ₽</text>
+
+  <!-- Base line at 0 -->
+  <line x1="40" y1="180" x2="500" y2="180" stroke="#CBD5E1" stroke-width="1"/>
+
+  <!-- Step 1: As-Is (1.65M) -->
+  <rect x="55" y="134" width="65" height="46" rx="3" fill="#64748B"/>
+  <text x="87" y="126" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#64748B" text-anchor="middle">1.65M</text>
+  <text x="87" y="196" font-family="Inter, sans-serif" font-size="9.5" fill="#475569" text-anchor="middle">Факт As-Is</text>
+
+  <!-- Step 2: Marketing (+0.5M) -->
+  <rect x="145" y="120" width="65" height="14" rx="3" fill="#4F46E5"/>
+  <text x="177" y="114" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#4F46E5" text-anchor="middle">+0.50M</text>
+  <text x="177" y="196" font-family="Inter, sans-serif" font-size="9.5" fill="#475569" text-anchor="middle">+30% Бюджет</text>
+
+  <!-- Step 3: CR (+1.23M) -->
+  <rect x="235" y="85" width="65" height="35" rx="3" fill="#4F46E5"/>
+  <text x="267" y="79" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#4F46E5" text-anchor="middle">+1.23M</text>
+  <text x="267" y="196" font-family="Inter, sans-serif" font-size="9.5" fill="#475569" text-anchor="middle">+3% CR воронки</text>
+
+  <!-- Step 4: KAM (+2.40M) -->
+  <rect x="325" y="20" width="65" height="65" rx="3" fill="#6366F1"/>
+  <text x="357" y="14" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#4F46E5" text-anchor="middle">+2.40M</text>
+  <text x="357" y="196" font-family="Inter, sans-serif" font-size="9.5" fill="#475569" text-anchor="middle">+1 КАМ (Штат)</text>
+
+  <!-- Step 5: To-Be Total (5.775M) -->
+  <rect x="425" y="20" width="75" height="160" rx="3" fill="#15803D"/>
+  <text x="462" y="14" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#15803D" text-anchor="middle">5.78M ₽</text>
+  <text x="462" y="196" font-family="Inter, sans-serif" font-size="9.5" font-weight="700" fill="#15803D" text-anchor="middle">Прогноз To-Be</text>
+</svg>

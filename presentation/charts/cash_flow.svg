@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200" width="100%" height="100%">
+  <!-- Fact Cash-In -->
+  <g transform="translate(10, 20)">
+    <text x="140" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A" text-anchor="end">Факт Cash-In</text>
+    <rect x="150" y="2" width="130" height="20" rx="3" fill="#15803D"/>
+    <text x="290" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#15803D">1 650 000 ₽</text>
+    <text x="390" y="16" font-family="Inter, sans-serif" font-size="9.5" fill="#64748B">На расчетном счете</text>
+  </g>
+
+  <!-- Expected 30d -->
+  <g transform="translate(10, 60)">
+    <text x="140" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A" text-anchor="end">Ожидаемый (30д)</text>
+    <rect x="150" y="2" width="310" height="20" rx="3" fill="#B45309"/>
+    <text x="470" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#B45309">4 075 000 ₽</text>
+  </g>
+
+  <!-- Overdue AR -->
+  <g transform="translate(10, 100)">
+    <text x="140" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A" text-anchor="end">Просрочка DSO</text>
+    <rect x="150" y="2" width="25" height="20" rx="3" fill="#DC2626"/>
+    <text x="185" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#DC2626">150 000 ₽</text>
+    <text x="270" y="16" font-family="Inter, sans-serif" font-size="9.5" fill="#DC2626">DSO > 20 дней (INV-203)</text>
+  </g>
+
+  <!-- AI Loss Recovery -->
+  <g transform="translate(10, 140)">
+    <text x="140" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A" text-anchor="end">AI-Дожим отказников</text>
+    <rect x="150" y="2" width="90" height="20" rx="3" fill="#4F46E5"/>
+    <text x="250" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#4F46E5">1 000 000 ₽</text>
+    <text x="360" y="16" font-family="Inter, sans-serif" font-size="9.5" fill="#4F46E5">Возврат 440 000 ₽ (44%)</text>
+  </g>
+</svg>

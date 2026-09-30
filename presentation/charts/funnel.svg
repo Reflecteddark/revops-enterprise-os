@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gradRed" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#DC2626"/>
+      <stop offset="100%" stop-color="#EF4444"/>
+    </linearGradient>
+    <linearGradient id="gradGreen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#15803D"/>
+      <stop offset="100%" stop-color="#22C55E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Stage 1 -->
+  <g transform="translate(10, 15)">
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1E293B">1. Новый лид</text>
+    <rect x="150" y="2" width="220" height="20" rx="4" fill="url(#gradGreen)"/>
+    <text x="380" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A">950 000 ₽</text>
+    <text x="475" y="16" font-family="Inter, sans-serif" font-size="10" fill="#15803D" font-weight="600">0ч / 24ч (OK)</text>
+  </g>
+
+  <!-- Stage 2 -->
+  <g transform="translate(10, 48)">
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1E293B">2. Квалификация</text>
+    <rect x="150" y="2" width="160" height="20" rx="4" fill="url(#gradGreen)"/>
+    <text x="320" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A">120 000 ₽</text>
+    <text x="475" y="16" font-family="Inter, sans-serif" font-size="10" fill="#15803D" font-weight="600">24ч / 48ч (OK)</text>
+  </g>
+
+  <!-- Stage 3 -->
+  <g transform="translate(10, 81)">
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1E293B">3. Демо / Встреча</text>
+    <rect x="150" y="2" width="190" height="20" rx="4" fill="url(#gradGreen)"/>
+    <text x="350" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0F172A">280 000 ₽</text>
+    <text x="475" y="16" font-family="Inter, sans-serif" font-size="10" fill="#15803D" font-weight="600">72ч / 120ч (OK)</text>
+  </g>
+
+  <!-- Stage 4: SLA BREACH (Highlight) -->
+  <g transform="translate(10, 114)">
+    <rect x="-6" y="-2" width="532" height="28" rx="6" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#991B1B">4. Согласование КП</text>
+    <rect x="150" y="2" width="280" height="20" rx="4" fill="url(#gradRed)"/>
+    <text x="435" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#DC2626">3 850 000 ₽</text>
+    <text x="160" y="16" font-family="Inter, sans-serif" font-size="10" font-weight="800" fill="#FFFFFF">312 ч (НОРМА 48 ч — СРЫВ 6.5x!)</text>
+  </g>
+
+  <!-- Stage 5: SLA BREACH (Highlight) -->
+  <g transform="translate(10, 147)">
+    <rect x="-6" y="-2" width="532" height="28" rx="6" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#991B1B">5. Счет на оплате</text>
+    <rect x="150" y="2" width="180" height="20" rx="4" fill="url(#gradRed)"/>
+    <text x="340" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#DC2626">330 000 ₽</text>
+    <text x="160" y="16" font-family="Inter, sans-serif" font-size="10" font-weight="800" fill="#FFFFFF">708 ч (НОРМА 72 ч — СРЫВ 9.8x!)</text>
+  </g>
+
+  <!-- Stage 6: WON -->
+  <g transform="translate(10, 180)">
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1E293B">6. Оплачено (Won)</text>
+    <rect x="150" y="2" width="240" height="20" rx="4" fill="#047857"/>
+    <text x="400" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#047857">1 650 000 ₽</text>
+    <text x="475" y="16" font-family="Inter, sans-serif" font-size="10" fill="#047857" font-weight="600">Касса (Факт)</text>
+  </g>
+
+  <!-- Stage 7: LOST -->
+  <g transform="translate(10, 213)">
+    <text x="0" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#64748B">7. Архив / Отказ</text>
+    <rect x="150" y="2" width="150" height="20" rx="4" fill="#94A3B8"/>
+    <text x="310" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#64748B">1 000 000 ₽</text>
+    <text x="475" y="16" font-family="Inter, sans-serif" font-size="10" fill="#64748B" font-weight="600">AI Recovery</text>
+  </g>
+</svg>

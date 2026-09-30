@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 210" width="100%" height="100%">
+  <!-- Y-Axis Lines -->
+  <line x1="50" y1="20" x2="430" y2="20" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="40" y="24" font-family="Inter, sans-serif" font-size="9" fill="#94A3B8" text-anchor="end">13</text>
+  
+  <line x1="50" y1="65" x2="430" y2="65" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="40" y="69" font-family="Inter, sans-serif" font-size="9" fill="#94A3B8" text-anchor="end">10</text>
+
+  <!-- Red Threshold Line at 9.0 -->
+  <line x1="50" y1="80" x2="430" y2="80" stroke="#DC2626" stroke-width="2" stroke-dasharray="4,4"/>
+  <text x="435" y="83" font-family="Inter, sans-serif" font-size="9" font-weight="700" fill="#DC2626">Порог: 9.0</text>
+
+  <line x1="50" y1="125" x2="430" y2="125" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="40" y="129" font-family="Inter, sans-serif" font-size="9" fill="#94A3B8" text-anchor="end">5</text>
+
+  <line x1="50" y1="170" x2="430" y2="170" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="40" y="174" font-family="Inter, sans-serif" font-size="9" fill="#94A3B8" text-anchor="end">0</text>
+
+  <!-- Bar 1: Ivanov (11.0) -->
+  <rect x="80" y="50" width="60" height="120" rx="4" fill="#15803D"/>
+  <text x="110" y="42" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#15803D" text-anchor="middle">11.0</text>
+  <text x="110" y="186" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Иванов (РОП)</text>
+
+  <!-- Bar 2: Petrov (7.0 - Defect) -->
+  <rect x="190" y="98" width="60" height="72" rx="4" fill="#DC2626"/>
+  <text x="220" y="90" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#DC2626" text-anchor="middle">7.0 (Брак)</text>
+  <text x="220" y="186" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Петров (КАМ)</text>
+
+  <!-- Bar 3: Sidorov (12.5) -->
+  <rect x="300" y="32" width="60" height="138" rx="4" fill="#15803D"/>
+  <text x="330" y="24" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#15803D" text-anchor="middle">12.5</text>
+  <text x="330" y="186" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Сидоров (SDR)</text>
+</svg>

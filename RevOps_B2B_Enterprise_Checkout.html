@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RevOps Enterprise OS — B2B Checkout & Invoice Payment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Surface Tokens (Stripe depth principle: tone shifts, not heavy shadows) */
+      --surface-base: #F8FAFC;
+      --surface-elevated: #FFFFFF;
+      --surface-sunken: #F1F5F9;
+
+      /* Action Primary Token (Stripe Indigo - The Holy Single CTA) */
+      --action-primary: #4F46E5;
+      --action-primary-hover: #4338CA;
+      --action-primary-pressed: #3730A3;
+      --action-primary-soft: #EEF2FF;
+      --action-primary-success: #15803D; /* Post-action completion state */
+
+      /* Text Tokens */
+      --text-primary: #0F172A;     /* 17.85:1 AAA on #FFFFFF */
+      --text-secondary: #64748B;   /* 4.76:1 AA on #FFFFFF */
+      --text-disabled: #94A3B8;    /* WCAG exempt */
+      --text-inverse: #FFFFFF;     /* 6.29:1 AA+ on #4F46E5, 7.9:1 AAA on hover */
+
+      /* Feedback Semantic Tokens */
+      --feedback-success-icon: #16A34A; /* 3.30:1 Non-text contrast */
+      --feedback-success-text: #15803D; /* 5.02:1 AA Normal text */
+      --feedback-success-bg: #ECFDF5;
+      --feedback-error: #DC2626;        /* 4.83:1 AA Normal text on #FFFFFF */
+      --feedback-error-bg: #FFF1F2;
+      --feedback-warning: #D97706;      /* Non-text icon */
+      --feedback-warning-text: #B45309; /* 5.02:1 AA Normal text */
+      --feedback-warning-bg: #FFFBEB;
+
+      /* Borders & Focus Indicators */
+      --border-default: #E2E8F0;
+      --border-focus: #4F46E5;          /* 6.29:1 Contrast to white */
+      --action-primary-border: #C7D2FE;
+      --focus-ring: 0 0 0 3px rgba(79, 70, 229, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--surface-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    .brand-header {
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .brand-secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--feedback-success-text);
+      background: var(--feedback-success-bg);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid #A7F3D0;
+    }
+
+    .checkout-container {
+      width: 100%;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    legend.section-title, .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .payment-option {
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+      background: var(--surface-elevated);
+      position: relative;
+    }
+
+    .payment-option:hover {
+      border-color: #CBD5E1;
+    }
+
+    .payment-option.active {
+      border-color: var(--border-focus);
+      background: var(--action-primary-soft);
+    }
+
+    .payment-option:focus-within {
+      box-shadow: var(--focus-ring);
+      border-color: var(--border-focus);
+    }
+
+    .payment-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--action-primary);
+      cursor: pointer;
+    }
+
+    .payment-option-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text-primary);
+      background: var(--surface-elevated);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: var(--focus-ring);
+    }
+
+    .form-input.error {
+      border-color: var(--feedback-error);
+    }
+
+    .form-error-text {
+      font-size: 12px;
+      color: var(--feedback-error);
+      margin-top: 6px;
+      display: none;
+      font-weight: 600;
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* Order Summary Sidebar with Tabular Nums */
+    .summary-card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+    }
+
+    .order-header {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .order-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .order-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+
+    .summary-line.total {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-default);
+      color: var(--text-primary);
+    }
+
+    .summary-line.total .total-label {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .summary-line.total .total-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .roi-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--feedback-success-text);
+      background: var(--feedback-success-bg);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #A7F3D0;
+      margin: 18px 0;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+
+    /* THE HOLY PRIMARY CTA BUTTON (Inter 16pt Bold) */
+    .btn-checkout {
+      width: 100%;
+      height: 52px;
+      background-color: var(--action-primary);
+      color: var(--text-inverse);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      transition: background-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      margin-top: 12px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      outline: none;
+      position: relative;
+    }
+
+    .btn-checkout:hover:not(:disabled) {
+      background-color: var(--action-primary-hover);
+    }
+
+    .btn-checkout:focus-visible {
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-checkout:active:not(:disabled) {
+      background-color: var(--action-primary-pressed);
+      transform: scale(0.99);
+    }
+
+    /* WCAG & UX Fix 4.5: Disabled State that Preserves Visual Stability */
+    .btn-checkout:disabled {
+      opacity: 0.82;
+      cursor: not-allowed;
+      background-color: var(--action-primary);
+      color: var(--text-inverse);
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Post-Action Success State (Declarative Class with --action-primary-success Token) */
+    .btn-checkout.is-success {
+      background-color: var(--action-primary-success);
+      border-color: var(--action-primary-success);
+      cursor: default;
+    }
+
+    .btn-checkout.is-success:hover {
+      background-color: var(--action-primary-success);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #FFFFFF;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* WCAG 2.2 Criterion 2.3.3: Motion Reduction */
+    @media (prefers-reduced-motion: reduce) {
+      .spinner {
+        animation: none;
+        border-top-color: #FFFFFF;
+        border-right-color: #FFFFFF;
+        opacity: 0.9;
+      }
+      .success-banner {
+        animation: none;
+      }
+    }
+
+    /* Accessible Screen Reader Only Live Region Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Enterprise Inline Success Banner (Fix 4.1) */
+    .success-banner {
+      margin-top: 16px;
+      background-color: var(--feedback-success-bg);
+      border: 1px solid #A7F3D0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      animation: bannerSlideIn 0.25s ease-out;
+    }
+
+    @keyframes bannerSlideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-banner-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .success-banner-icon {
+      color: var(--feedback-success-icon);
+      flex-shrink: 0;
+    }
+
+    .success-banner-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--feedback-success-text);
+    }
+
+    .success-banner-desc {
+      font-size: 13px;
+      color: #166534;
+      line-height: 1.45;
+      margin-left: 30px;
+      margin-bottom: 12px;
+    }
+
+    .success-banner-actions {
+      margin-left: 30px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .success-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--feedback-success-text);
+      background: #FFFFFF;
+      border: 1px solid #A7F3D0;
+      padding: 6px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+
+    .success-download-btn:hover {
+      background: #F0FDF4;
+      border-color: #86EFAC;
+    }
+
+    .success-download-btn:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    /* Post-Conversion Bridging Hint (Non-competing, displayed only AFTER checkout) */
+    .post-conversion-hint {
+      margin-top: 14px;
+      margin-left: 30px;
+      padding-top: 12px;
+      border-top: 1px dashed #A7F3D0;
+      font-size: 12.5px;
+      color: #166534;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .post-conversion-link {
+      color: var(--action-primary);
+      font-weight: 600;
+      text-decoration: underline;
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .post-conversion-link:hover, .post-conversion-link:focus-visible {
+      color: var(--action-primary-hover);
+    }
+
+    .post-conversion-link:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* WCAG AAA Fix 4.4: Explicit :focus-visible for Secondary Links */
+    .secondary-links {
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .secondary-link {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.15s ease;
+      outline: none;
+    }
+
+    .secondary-link:hover, .secondary-link:focus-visible {
+      color: var(--text-primary);
+    }
+
+    .secondary-link:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .security-guarantees {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-default);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .security-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .security-icon {
+      color: var(--feedback-success-icon);
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Brand Header -->
+  <header class="brand-header">
+    <div class="brand-title">RevOps Enterprise OS</div>
+    <div class="brand-secure-badge" role="status" aria-label="Защищенный B2B расчет">
+      <svg class="security-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Безопасный B2B расчет (256-bit SSL)
+    </div>
+  </header>
+
+  <!-- Checkout Grid -->
+  <main class="checkout-container">
+    <!-- Left Column: Form & Billing Details -->
+    <div class="card">
+      <form id="checkoutForm" onsubmit="handleCheckout(event)" novalidate>
+        <!-- Accessible Screen Reader Live Region (Pre-rendered in DOM for NVDA/JAWS/VoiceOver) -->
+        <div id="liveAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
+        <fieldset>
+          <legend class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="5" width="20" height="14" rx="2"/>
+              <line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+            Способ безналичного расчета
+          </legend>
+
+          <div class="payment-methods" role="radiogroup" aria-label="Способ оплаты">
+            <label class="payment-option active" id="optInvoice" onclick="selectPayment('invoice')">
+              <input type="radio" name="payment_method" value="invoice" id="radioInvoice" checked>
+              <span class="payment-option-label">Счет на оплату / УПД</span>
+            </label>
+            <label class="payment-option" id="optCard" onclick="selectPayment('b2b_card')">
+              <input type="radio" name="payment_method" value="b2b_card" id="radioCard">
+              <span class="payment-option-label">Корпоративная карта</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Billing Details Form Fields with Explicit Labels & ARIA -->
+        <div class="form-group">
+          <label class="form-label" for="innInput">ИНН или наименование компании</label>
+          <input 
+            type="text" 
+            class="form-input" 
+            id="innInput" 
+            placeholder="7707083893 / ООО Вектор Плюс" 
+            required 
+            aria-describedby="innError innHint" 
+            oninput="validateINN(this)">
+          <div class="form-error-text" id="innError" role="alert">Укажите корректный ИНН юрлица (10 цифр) или ИП (12 цифр)</div>
+          <div class="form-hint" id="innHint">Реквизиты и юридический адрес подтянутся автоматически из ЕГРЮЛ</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="kppInput">КПП (для юрлиц)</label>
+            <input type="text" class="form-input" id="kppInput" placeholder="773601001">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bikInput">БИК Банка</label>
+            <input type="text" class="form-input" id="bikInput" placeholder="044525225" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="emailInput">Корпоративный Email для счета и закрывающих актов</label>
+          <input 
+            type="email" 
+            class="form-input" 
+            id="emailInput" 
+            placeholder="director@company.ru" 
+            required 
+            aria-describedby="emailError emailHint" 
+            oninput="validateEmail(this)">
+          <div class="form-error-text" id="emailError" role="alert">Введите действующий корпоративный email</div>
+          <div class="form-hint" id="emailHint">ЭДО Диадок / СБИС подключается автоматически по указанному ИНН</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phoneInput">Телефон ответственного лица / куратора сделки</label>
+          <input type="tel" class="form-input" id="phoneInput" placeholder="+7 (999) 000-00-00" required>
+        </div>
+
+        <!-- The Single Sacred Primary CTA Button (Inter 16px Semibold) -->
+        <button type="submit" class="btn-checkout" id="submitBtn" aria-label="Сформировать счет на 450 000 рублей">
+          <span id="btnText">Сформировать счет на 450 000 ₽</span>
+          <span id="btnSpinner" class="spinner" aria-hidden="true" style="display: none;"></span>
+          <svg id="btnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+
+        <!-- Enterprise Inline Success Banner Container (Visual container, announced via #liveAnnouncer) -->
+        <div id="checkoutSuccessBanner" class="success-banner" style="display: none;">
+          <div class="success-banner-header">
+            <svg class="success-banner-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span class="success-banner-title">Счет № INV-2026-09 выставлен и направлен в Диадок</span>
+          </div>
+          <p class="success-banner-desc">
+            Оригинал счета с факсимиле и договором оферты направлен на <strong id="successEmailDisplay">director@company.ru</strong>. Документооборот доступен в ЭДО по ИНН. Спринт активируется сразу после зачисления средств.
+          </p>
+          <div class="success-banner-actions">
+            <a href="/api/invoice/INV-2026-09.pdf" class="success-download-btn" download target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Скачать счет в PDF
+            </a>
+          </div>
+
+          <!-- Enterprise Post-Conversion Bridging (Only shown AFTER invoice generation) -->
+          <div class="post-conversion-hint">
+            <span>Пока счет проходит согласование в бухгалтерии:</span>
+            <a href="https://t.me/revops_bot?start=test_drive" class="post-conversion-link" target="_blank" rel="noopener">
+              Подключите команду к бесплатному тест-драйву на 3 звонках →
+            </a>
+          </div>
+        </div>
+
+        <!-- Secondary Low-Contrast Legal Links (WCAG AAA focus outline, Fix 4.4) -->
+        <div class="secondary-links">
+          <a class="secondary-link" href="#offer-sla">Договор оферты и регламент SLA</a>
+          &nbsp;•&nbsp;
+          <a class="secondary-link" href="#requisites">Реквизиты исполнителя</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Column: Order Summary & Financial Guarantee -->
+    <aside class="summary-card" aria-label="Детали заказа">
+      <div class="order-header">Детали заказа</div>
+      <h2 class="order-title">RevOps Optimization Sprint</h2>
+      <p class="order-desc">4-недельный спринт ликвидации 7 узких мест воронки продаж, внедрение речевого ИИ-аудита и регламентов РОПа.</p>
+
+      <div class="summary-line">
+        <span>Аудит звонков и воронки (As-Is)</span>
+        <span style="color: var(--text-primary); font-weight: 500;">Включено</span>
+      </div>
+      <div class="summary-line">
+        <span>Движок автодожима и SLA 48ч</span>
+        <span style="color: var(--text-primary); font-weight: 500;">Включено</span>
+      </div>
+      <div class="summary-line">
+        <span>Лицензии RevOps Platform V17.6</span>
+        <span style="color: var(--text-primary); font-weight: 500;">Безлимит</span>
+      </div>
+      <div class="summary-line">
+        <span>НДС</span>
+        <span style="color: var(--text-primary); font-weight: 500;">0% (УСН)</span>
+      </div>
+
+      <div class="roi-badge" role="note">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        <span>Прогнозный возврат выручки: +1 440 000 ₽ / мес</span>
+      </div>
+
+      <div class="summary-line total">
+        <span class="total-label">Итого к оплате:</span>
+        <span class="total-value">450 000 ₽</span>
+      </div>
+
+      <!-- Security Trust Signals -->
+      <div class="security-guarantees">
+        <div class="security-item">
+          <svg class="security-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Мгновенный старт спринта сразу после поступления средств</span>
+        </div>
+        <div class="security-item">
+          <svg class="security-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Электронный документооборот (Диадок / СБИС) за 1 минуту</span>
+        </div>
+        <div class="security-item">
+          <svg class="security-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Полное соответствие требованиям 152-ФЗ РФ</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    function selectPayment(type) {
+      const optInv = document.getElementById('optInvoice');
+      const optCard = document.getElementById('optCard');
+      const rInv = document.getElementById('radioInvoice');
+      const rCard = document.getElementById('radioCard');
+      const btnText = document.getElementById('btnText');
+      const btn = document.getElementById('submitBtn');
+
+      if (type === 'invoice') {
+        optInv.classList.add('active');
+        optCard.classList.remove('active');
+        rInv.checked = true;
+        btnText.textContent = 'Сформировать счет на 450 000 ₽';
+        btn.setAttribute('aria-label', 'Сформировать счет на 450 000 рублей');
+      } else {
+        optCard.classList.add('active');
+        optInv.classList.remove('active');
+        rCard.checked = true;
+        btnText.textContent = 'Оплатить картой 450 000 ₽';
+        btn.setAttribute('aria-label', 'Оплатить картой 450 000 рублей');
+      }
+    }
+
+    function validateINN(input) {
+      const val = input.value.trim();
+      const err = document.getElementById('innError');
+      if (val.length > 0 && val.length !== 10 && val.length !== 12 && !isNaN(val)) {
+        input.classList.add('error');
+        input.setAttribute('aria-invalid', 'true');
+        err.style.display = 'block';
+      } else {
+        input.classList.remove('error');
+        input.removeAttribute('aria-invalid');
+        err.style.display = 'none';
+      }
+    }
+
+    function validateEmail(input) {
+      const val = input.value.trim();
+      const err = document.getElementById('emailError');
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (val.length > 0 && !regex.test(val)) {
+        input.classList.add('error');
+        input.setAttribute('aria-invalid', 'true');
+        err.style.display = 'block';
+      } else {
+        input.classList.remove('error');
+        input.removeAttribute('aria-invalid');
+        err.style.display = 'none';
+      }
+    }
+
+    function handleCheckout(e) {
+      e.preventDefault();
+      const innInput = document.getElementById('innInput');
+      const emailInput = document.getElementById('emailInput');
+      const btn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnIcon = document.getElementById('btnIcon');
+      const banner = document.getElementById('checkoutSuccessBanner');
+      const emailDisplay = document.getElementById('successEmailDisplay');
+
+      validateINN(innInput);
+      validateEmail(emailInput);
+
+      if (innInput.classList.contains('error') || emailInput.classList.contains('error')) {
+        return;
+      }
+
+      // 1. Enter Loading State: Keep button in visual flow with spinner
+      btn.disabled = true;
+      btnText.textContent = 'Формирование счета в Диадок...';
+      const btnSpinner = document.getElementById('btnSpinner');
+      if (btnIcon) btnIcon.style.display = 'none';
+      if (btnSpinner) btnSpinner.style.display = 'inline-block';
+      
+      const liveAnnouncer = document.getElementById('liveAnnouncer');
+      if (liveAnnouncer) {
+        liveAnnouncer.textContent = 'Формирование счета в системе Диадок. Пожалуйста, подождите.';
+      }
+
+      // 2. Simulate Async Diadoc API Response
+      setTimeout(() => {
+        // Complete post-action state via declarative class with --action-primary-success token
+        btn.classList.add('is-success');
+        btnText.textContent = '✓ Счет сформирован (450 000 ₽)';
+        if (btnSpinner) btnSpinner.style.display = 'none';
+
+        if (liveAnnouncer) {
+          liveAnnouncer.textContent = 'Счет на 450 000 рублей успешно выставлен и направлен в Диадок на указанный email.';
+        }
+
+        // Show Enterprise Inline Success Banner (No crude alert())
+        emailDisplay.textContent = emailInput.value.trim() || 'director@company.ru';
+        banner.style.display = 'block';
+        banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

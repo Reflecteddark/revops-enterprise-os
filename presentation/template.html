@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>RevOps Enterprise OS V17.6 — Executive Summary</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==================== SLIDE 1: COVER ==================== -->
+  <section class="slide slide-cover">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="cover-brand">RevOps Enterprise OS</div>
+      <div class="cover-badge">RELEASE V17.6 ENTERPRISE</div>
+    </div>
+    <div class="cover-body">
+      <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #818CF8; margin-bottom: 12px;">
+        Управленческий дайджест руководителя
+      </div>
+      <h1 class="cover-title">RevOps Enterprise OS V17.6</h1>
+      <p class="cover-sub">
+        Архитектура управления выручкой, речевой ИИ-аудит звонков Whisper+LLM и ликвидация 7 узких мест воронки продаж.
+      </p>
+    </div>
+    <div class="cover-footer">
+      <div>Отчетная дата: {{ meta.date }} • Период: {{ meta.period }}</div>
+      <div>{{ meta.compliance }}</div>
+      <div>Статус: 🟢 100% Production Ready (118/118 Tests Passed)</div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: KEY KPIS (EXECUTIVE DASHBOARD) ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">DASHBOARD</span>
+        <h2 class="slide-title">2. Ключевые KPI Руководителя (Executive Dashboard)</h2>
+      </div>
+      <div class="slide-meta">Лист: 📄 Executive_OnePager • Роль: CEO / Собственник</div>
+    </div>
+
+    <!-- 6 KPI Cards in 2 Rows (3x2) -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px;">
+      <div class="kpi-card success" style="padding: 14px 16px;">
+        <div class="kpi-label">Выручка Closed-Won</div>
+        <div class="kpi-val" style="font-size: 26px;">{{ kpi.revenue_won }}</div>
+        <div class="kpi-sub" style="font-size: 11px; color: #15803D; font-weight: 600;">{{ kpi.revenue_won_sub }}</div>
+      </div>
+      <div class="kpi-card" style="padding: 14px 16px;">
+        <div class="kpi-label">Run-Rate Прогноз</div>
+        <div class="kpi-val" style="font-size: 26px;">{{ kpi.run_rate }}</div>
+        <div class="kpi-sub" style="font-size: 11px;">{{ kpi.run_rate_sub }}</div>
+      </div>
+      <div class="kpi-card highlight" style="padding: 14px 16px;">
+        <div class="kpi-label">Взвешенный Пайплайн</div>
+        <div class="kpi-val" style="font-size: 26px;">{{ kpi.weighted_pipeline }}</div>
+        <div class="kpi-sub" style="font-size: 11px; color: #4F46E5; font-weight: 600;">{{ kpi.weighted_pipeline_sub }}</div>
+      </div>
+      <div class="kpi-card danger" style="padding: 14px 16px;">
+        <div class="kpi-label">Активный Пайплайн в CRM</div>
+        <div class="kpi-val" style="font-size: 26px;">{{ kpi.active_pipeline }}</div>
+        <div class="kpi-sub" style="font-size: 11px; color: #DC2626; font-weight: 600;">{{ kpi.active_pipeline_sub }}</div>
+      </div>
+      <div class="kpi-card success" style="padding: 14px 16px;">
+        <div class="kpi-label">Сквозной ROMI Маркетинга</div>
+        <div class="kpi-val" style="font-size: 26px;">{{ kpi.romi }}</div>
+        <div class="kpi-sub" style="font-size: 11px;">{{ kpi.romi_sub }}</div>
+      </div>
+      <div class="kpi-card success" style="padding: 14px 16px;">
+        <div class="kpi-label">Соотношение LTV / CAC</div>
+        <div class="kpi-val" style="font-size: 26px;">{{ kpi.ltv_cac }}</div>
+        <div class="kpi-sub" style="font-size: 11px; color: #15803D; font-weight: 600;">{{ kpi.ltv_cac_sub }}</div>
+      </div>
+    </div>
+
+    <div class="verdict-banner" style="font-size: 11px; padding: 10px 14px;">
+      🎯 <strong>СТРАТЕГИЧЕСКИЙ ВЕРДИКТ:</strong> Компания закрыла 1 650 000 ₽ (33% плана 5.0M). В пайплайне находится 5.53M ₽, из которых взвешенный объем закрытия — 4.40M ₽. Ключевой резерв достижения плана — перехват сделок D-104 и D-107.
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Executive Dashboard</span>
+      <span>Слайд 2 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: ВОРОНКА И УЗКИЕ ГОРЛЫШКИ ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">FUNNEL SLA</span>
+        <h2 class="slide-title">3. Воронка Продаж и Узкие Горлышки SLA</h2>
+      </div>
+      <div class="slide-meta">Лист: 🎯 Воронка_и_SLA / ⚡ Пульс_Компании</div>
+    </div>
+
+    <!-- Alert Highlight Banner -->
+    <div style="background: #FEE2E2; border: 1.5px solid #FCA5A5; border-radius: 8px; padding: 10px 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-size: 12px; font-weight: 800; color: #991B1B;">
+        🚨 ВНИМАНИЕ: {{ funnel.alert_text }}
+      </div>
+      <div style="font-size: 11px; font-weight: 700; color: #DC2626;">
+        3.85M ₽ зависло на этапе КП (312ч vs норма 48ч)
+      </div>
+    </div>
+
+    <div class="two-cols">
+      <div class="card-block">
+        <div class="card-block-title">📊 Горизонтальная карта конверсии и срывов SLA</div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+          <img src="charts/funnel.svg" alt="Funnel Chart" style="width: 100%; max-height: 220px;">
+        </div>
+      </div>
+
+      <div class="card-block">
+        <div class="card-block-title">📋 Детализация этапов воронки и нормативы SLA</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Этап воронки</th>
+              <th>Объем, ₽</th>
+              <th>Норма</th>
+              <th>Факт</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for st in funnel.stages %}
+            <tr>
+              <td><strong>{{ st.num }}. {{ st.name }}</strong></td>
+              <td><strong>{{ st.vol }}</strong></td>
+              <td>{{ st.sla_norm }}</td>
+              <td style="font-weight: 700; color: {{ st.color }};">{{ st.sla_fact }}</td>
+              <td>
+                {% if 'Срыв' in st.status %}
+                  <span class="badge badge-danger">{{ st.status }}</span>
+                {% elif 'В норме' in st.status %}
+                  <span class="badge badge-success">{{ st.status }}</span>
+                {% else %}
+                  <span class="badge badge-indigo">{{ st.status }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Анализ воронки SLA</span>
+      <span>Слайд 3 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: ТОП-5 РИСКОВ ВЫРУЧКИ ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">ACTION CENTER</span>
+        <h2 class="slide-title">4. Топ-5 Рисков Выручки (Action Center)</h2>
+      </div>
+      <div class="slide-meta">Сумма в зоне риска: <strong style="color: #DC2626; font-size: 13px;">{{ risks.total }}</strong></div>
+    </div>
+
+    <div class="two-cols">
+      <div class="card-block" style="flex: 1.2;">
+        <div class="card-block-title">🚨 Реестр инцидентов и регламентные действия РОПа</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Сделка</th>
+              <th>Симптом сбоя</th>
+              <th>Сумма</th>
+              <th>Приоритет</th>
+              <th>Срочное действие</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in risks['items'] %}
+            <tr style="background: {{ r.bg }};">
+              <td><strong>{{ r.deal }}</strong><br><span style="font-size: 8px; color: #64748B;">{{ r.client }}</span></td>
+              <td>{{ r.issue }}</td>
+              <td style="font-weight: 800; color: #DC2626; font-size: 11px;">{{ r.amount }}</td>
+              <td><span class="badge {{ r.badge }}">{{ r.priority }}</span></td>
+              <td style="font-size: 9px; line-height: 1.3;">{{ r.action }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-block" style="flex: 0.8;">
+        <div class="card-block-title">📊 Распределение капитала в риске по сделкам</div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+          <img src="charts/risks_bar.svg" alt="Risks Bar" style="width: 100%; max-height: 190px;">
+        </div>
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px; font-size: 9.5px; color: #475569;">
+          <strong>Итог перехвата:</strong> 15 минут утреннего регламента РОПа сохраняют 2 730 000 ₽ от перехода в отказники.
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict-banner">
+      ⏱ <strong>РЕГЛАМЕНТ РОПа 09:00 - 09:15:</strong> Звонок по D-109 до 12:00 → Спец-скидка 7% по D-104 → Делегирование D-103 на КАМа.
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Оперативный Action Center</span>
+      <span>Слайд 4 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: 7 СМЕРТНЫХ ГРЕХОВ ОП ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">DIAGNOSTICS</span>
+        <h2 class="slide-title">5. Диагностика 7 Смертных Грехов Отдела Продаж</h2>
+      </div>
+      <div class="slide-meta">Общие потери: <strong style="color: #DC2626; font-size: 13px;">{{ sins.total }} / мес</strong></div>
+    </div>
+
+    <div class="card-block" style="flex: 1; margin-bottom: 8px;">
+      <div class="card-block-title">🔴 Анатомия системных сбоев и оцифрованная упущенная выгода</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Смертный грех ОП (Системный сбой)</th>
+            <th>База в риске</th>
+            <th>Упущенная выгода / мес</th>
+            <th>Приоритет</th>
+            <th>Как закрывает платформа RevOps</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in sins['items'] %}
+          <tr>
+            <td><strong>{{ s.num }}</strong></td>
+            <td><strong>{{ s.sin }}</strong></td>
+            <td>{{ s.risk_base }}</td>
+            <td style="font-weight: 800; color: #DC2626; font-size: 10.5px;">{{ s.loss }}</td>
+            <td>
+              {% if 'P0' in s.priority %}
+                <span class="badge badge-danger">{{ s.priority }}</span>
+              {% else %}
+                <span class="badge badge-warning">{{ s.priority }}</span>
+              {% endif %}
+            </td>
+            <td>{{ s.solution }}</td>
+          </tr>
+          {% endfor %}
+          <tr style="background: #FEE2E2; font-weight: 800; font-size: 11px;">
+            <td colspan="3" style="text-align: right; padding-right: 12px; color: #991B1B;">ИТОГО ВЫЯВЛЕННЫХ ПОТЕРЬ И РИСКОВ В МЕСЯЦ:</td>
+            <td style="color: #DC2626; font-size: 14px;">{{ sins.total }}</td>
+            <td colspan="2" style="color: #15803D;">ПОТЕНЦИАЛ ВОЗВРАТА: <strong>+2 100 300 ₽</strong> (при закрытии 30% узких мест)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="verdict-banner">
+      💡 <strong>ФИНАНСОВЫЙ ВЫВОД:</strong> Устранение всего 30% найденных утечек окупает чек внедрения (450 000 ₽) за 6 дней и приносит собственнику 1 650 300 ₽ чистой прибыли уже в первый месяц.
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Аудит As-Is</span>
+      <span>Слайд 5 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: EXPRESS КАЛЬКУЛЯТОР ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">EXPRESS</span>
+        <h2 class="slide-title">6. Экспресс-Калькулятор Окупаемости (3 Цифры Бизнеса)</h2>
+      </div>
+      <div class="slide-meta">Входные данные: 150 лидов • Чек 400 000 ₽ • 4 менеджера</div>
+    </div>
+
+    <div class="kpi-row-4">
+      <div class="kpi-card danger">
+        <div class="kpi-label">Выявленный риск потерь</div>
+        <div class="kpi-val">{{ express.loss }}</div>
+        <div class="kpi-sub">По 4 базовым узким местам</div>
+      </div>
+      <div class="kpi-card success">
+        <div class="kpi-label">Возврат в 1-й месяц</div>
+        <div class="kpi-val">{{ express.recovery }}</div>
+        <div class="kpi-sub">35% от базовых потерь</div>
+      </div>
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Срок окупаемости</div>
+        <div class="kpi-val">{{ express.payback }}</div>
+        <div class="kpi-sub">При спринте внедрения</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Емкость базы (100% CR)</div>
+        <div class="kpi-val">60 000 000 ₽</div>
+        <div class="kpi-sub">Факт кассы: 1.65M ₽ (2.8%)</div>
+      </div>
+    </div>
+
+    <div class="two-cols">
+      <div class="card-block">
+        <div class="card-block-title">📊 4 Сценария Роста Выручки при устранении потерь</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1;">
+          {% for sc in express.scenarios %}
+          <div style="background: {{ sc.bg }}; border: 1px solid #E2E8F0; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="font-size: 10px; font-weight: 700; color: #475569;">{{ sc.name }}</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #0F172A; margin: 4px 0;">{{ sc.val }}</div>
+            <div style="font-size: 9.5px; font-weight: 700; color: #15803D;">{{ sc.gain }} к текущей кассе</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card-block">
+        <div class="card-block-title">📋 4 Узких места воронки экспресс-оценки</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Узкое место</th>
+              <th>Бенчмарк</th>
+              <th>Потери / мес</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1. Слив лидов на звонках (нет Next Step)</td><td>30% выручки</td><td><strong>412 500 ₽</strong></td></tr>
+            <tr><td>2. Зависание сделок в КП > 48ч</td><td>18% выручки</td><td><strong>297 000 ₽</strong></td></tr>
+            <tr><td>3. Брошенные отказники без дожима</td><td>8% выручки</td><td><strong>132 000 ₽</strong></td></tr>
+            <tr><td>4. Зависшая дебиторка (DSO 20+ дней)</td><td>12% выручки</td><td><strong>198 000 ₽</strong></td></tr>
+            <tr style="background: #F8FAFC; font-weight: 700;">
+              <td>ИТОГО УПУЩЕННОЙ ПРИБЫЛИ:</td><td>—</td><td style="color: #DC2626;">1 039 500 ₽</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Экспресс-моделирование</span>
+      <span>Слайд 6 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: ИИ-АУДИТ РЕЧИ ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">AI SPEECH</span>
+        <h2 class="slide-title">7. Речевой ИИ-Аудит Звонков (Whisper + LLM, 13 параметров)</h2>
+      </div>
+      <div class="slide-meta">6 звонков оцифровано • 880 000 ₽ под угрозой</div>
+    </div>
+
+    <div class="kpi-row-4">
+      <div class="kpi-card">
+        <div class="kpi-label">Средний балл речи</div>
+        <div class="kpi-val">{{ speech.avg_score }}</div>
+        <div class="kpi-sub">Целевой норматив: 11.0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Доля фиксации Next Step</div>
+        <div class="kpi-val">{{ speech.next_step_pct }}</div>
+        <div class="kpi-sub">Обязательный критерий</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Диалогов с браком (&lt;9)</div>
+        <div class="kpi-val">{{ speech.defect_calls }} звонка</div>
+        <div class="kpi-sub">Грубость / срыв даты</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Деньги под угрозой</div>
+        <div class="kpi-val">{{ speech.total_risk }}</div>
+        <div class="kpi-sub">Риск потери контрактов</div>
+      </div>
+    </div>
+
+    <div class="two-cols">
+      <div class="card-block">
+        <div class="card-block-title">📊 Контроль качества речи по менеджерам (Порог 9.0)</div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+          <img src="charts/speech_bar.svg" alt="Speech Bar" style="width: 100%; max-height: 190px;">
+        </div>
+      </div>
+
+      <div class="card-block">
+        <div class="card-block-title">📋 Ключевые кейсы брака речи и офферы спасения</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Звонок / Сделка</th>
+              <th>Балл</th>
+              <th>Дефект речи</th>
+              <th>Чек</th>
+              <th>Действие</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in speech.cases %}
+            <tr style="background: #FFF1F2;">
+              <td><strong>{{ c.id }}</strong> ({{ c.deal }})</td>
+              <td><span class="badge badge-danger">{{ c.score }}</span></td>
+              <td>{{ c.defect }}</td>
+              <td style="font-weight: 800; color: #DC2626;">{{ c.risk }}</td>
+              <td>{{ c.action }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div style="margin-top: 10px; font-size: 9.5px; color: #475569;">
+          <strong>Связка с Payroll:</strong> Менеджер Петров получил штраф -30% переменной части (6 750 ₽) за срыв диалога C-505.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Whisper AI Speech Engine</span>
+      <span>Слайд 7 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8: ФИНАНСЫ И AI-ДОЖИМ ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">FINANCE</span>
+        <h2 class="slide-title">8. Финансовый Контур и Agentic AI-Дожим Отказников</h2>
+      </div>
+      <div class="slide-meta">DSO: 6 дней • Касса: 1 650 000 ₽</div>
+    </div>
+
+    <div class="kpi-row-4">
+      <div class="kpi-card success">
+        <div class="kpi-label">Факт Cash-In</div>
+        <div class="kpi-val">{{ finance.cash_in }}</div>
+        <div class="kpi-sub">На расчетном счете</div>
+      </div>
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Ожидаемый (30 дней)</div>
+        <div class="kpi-val">{{ finance.expected }}</div>
+        <div class="kpi-sub">План поступлений</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Просрочено (Overdue)</div>
+        <div class="kpi-val">{{ finance.overdue }}</div>
+        <div class="kpi-sub">Счет INV-203 (> 20 дней)</div>
+      </div>
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Потенциал AI-дожима</div>
+        <div class="kpi-val">1 000 000 ₽</div>
+        <div class="kpi-sub">Возврат до 440 000 ₽</div>
+      </div>
+    </div>
+
+    <div class="two-cols">
+      <div class="card-block">
+        <div class="card-block-title">📊 Структура Cash Flow и распределение капитала</div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+          <img src="charts/cash_flow.svg" alt="Cash Flow" style="width: 100%; max-height: 180px;">
+        </div>
+      </div>
+
+      <div class="card-block">
+        <div class="card-block-title">🤖 Автономная реактивация списанных отказников</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Сделка</th>
+              <th>Клиент</th>
+              <th>Чек</th>
+              <th>Оффер ИИ-дожима</th>
+              <th>Шанс</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in finance.recovery_items %}
+            <tr>
+              <td><strong>{{ r.deal }}</strong></td>
+              <td>{{ r.client }}</td>
+              <td style="font-weight: 700;">{{ r.amount }}</td>
+              <td style="font-size: 9px;">{{ r.offer }}</td>
+              <td><span class="badge badge-success">{{ r.chance }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div style="margin-top: 10px; font-size: 9.5px; color: #475569;">
+          <strong>Reverse ETL:</strong> Крупная сделка D-105 (3 000 000 ₽) снята с перегруженного РОПа и перераспределена на КАМа Петрова.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Cash Flow &amp; AI Recovery</span>
+      <span>Слайд 8 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 9: СИМУЛЯТОР РОСТА (MONTE CARLO) ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">MONTE CARLO</span>
+        <h2 class="slide-title">9. Симулятор Роста &amp; Стохастический Коридор 95%</h2>
+      </div>
+      <div class="slide-meta">Прогноз To-Be: <strong>{{ simulator.to_be }}</strong> ({{ simulator.delta }})</div>
+    </div>
+
+    <div class="kpi-row-4">
+      <div class="kpi-card">
+        <div class="kpi-label">P10 (Пессимистичный)</div>
+        <div class="kpi-val">{{ simulator.p10 }}</div>
+        <div class="kpi-sub">90% гарантия кассы</div>
+      </div>
+      <div class="kpi-card highlight">
+        <div class="kpi-label">P50 (Медианный итог)</div>
+        <div class="kpi-val">{{ simulator.p50 }}</div>
+        <div class="kpi-sub">Наиболее вероятный итог</div>
+      </div>
+      <div class="kpi-card success">
+        <div class="kpi-label">P90 (С ИИ-дожимом)</div>
+        <div class="kpi-val">{{ simulator.p90 }}</div>
+        <div class="kpi-sub">План 5.0M практически взят</div>
+      </div>
+      <div class="kpi-card success">
+        <div class="kpi-label">Вероятность выполнения плана</div>
+        <div class="kpi-val">{{ simulator.prob }}</div>
+        <div class="kpi-sub">Растет до 91% с ИИ-дожимом</div>
+      </div>
+    </div>
+
+    <div class="card-block" style="flex: 1;">
+      <div class="card-block-title">📊 Waterfall-декомпозиция роста выручки: As-Is → To-Be (5.775M ₽)</div>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+        <img src="charts/monte_carlo.svg" alt="Monte Carlo Waterfall" style="width: 100%; max-height: 190px;">
+      </div>
+      <div style="font-size: 10px; color: #15803D; font-weight: 600; text-align: center; margin-top: 4px;">
+        ✓ Прирост выручки +4 125 000 ₽ складывается из 3 рычагов: маркетинг (+30%), конверсия (+3%) и найм +1 КАМа.
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Monte Carlo Engine</span>
+      <span>Слайд 9 из 10</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 10: СЛЕДУЮЩИЙ ШАГ ==================== -->
+  <section class="slide">
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <span class="brand-tag">{{ meta.title }}</span>
+        <span class="version-pill">NEXT STEPS</span>
+        <h2 class="slide-title">10. Спринт Внедрения: Условия, Окупаемость и Запуск</h2>
+      </div>
+      <div class="slide-meta">Пакет 4 недели • Гарантия окупаемости</div>
+    </div>
+
+    <div class="two-cols">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="card-block" style="flex: none;">
+          <div class="card-block-title">🚀 4-Недельный спринт внедрения RevOps Enterprise</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px;">
+              <strong style="color: #4F46E5;">Неделя 1:</strong> Аудит воронки As-Is, подключение Whisper+LLM, оцифровка 100% звонков.
+            </div>
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px;">
+              <strong style="color: #4F46E5;">Неделя 2:</strong> Пульт РОПа «15 минут», радар зависания SLA, автоперелив лидов.
+            </div>
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px;">
+              <strong style="color: #4F46E5;">Неделя 3:</strong> Agentic AI Recovery в WhatsApp/TG, возврат списанных лидов.
+            </div>
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px;">
+              <strong style="color: #4F46E5;">Неделя 4:</strong> Финансовый календарь DSO, обучение РОПа, сдача платформы (118 тестов).
+            </div>
+          </div>
+        </div>
+
+        <div class="card-block" style="flex: 1;">
+          <div class="card-block-title">🔒 Гарантии безопасности и юридическая чистота</div>
+          <div style="font-size: 10px; color: #475569; line-height: 1.5;">
+            • <strong>152-ФЗ РФ:</strong> Серверная инфраструктура в РФ, шифрование ПДн SHA-256.<br>
+            • <strong>ЭДО Диадок / СБИС:</strong> Официальный безналичный расчет, инвойс за 1 минуту.<br>
+            • <strong>SLA Поддержки:</strong> Время реакции инженера внедрения &lt; 2 часов.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Final Conversion Card -->
+      <div class="card-block" style="background: #F8FAFC; border: 2px solid #C7D2FE; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 11px; font-weight: 700; color: #4F46E5; text-transform: uppercase;">Пакет внедрения</div>
+          <div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: #0F172A; margin: 4px 0;">{{ offer.price }}</div>
+          <div style="font-size: 10px; color: #64748B;">4 недели спринта • Без скрытых платежей • НДС 0%</div>
+
+          <div style="margin: 16px 0; border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; padding: 12px 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px;">
+              <span>Ожидаемый возврат кассы:</span>
+              <strong style="color: #15803D;">{{ offer.expected_return }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px;">
+              <span>Срок окупаемости:</span>
+              <strong style="color: #15803D;">{{ offer.payback }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px;">
+              <span>Чистый ROI:</span>
+              <strong style="color: #4F46E5;">{{ offer.roi }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="btn-primary-cta">
+            👉 УТВЕРДИТЬ ПРОЕКТ И СФОРМИРОВАТЬ СЧЕТ
+          </div>
+          <a href="https://revops.io/trial" class="soft-fallback-link" target="_blank" rel="noopener">
+            Не готовы к спринту? Бесплатный тест-драйв на 3 звонках →
+          </a>
+          <div style="text-align: center; font-size: 10px; color: #64748B; margin-top: 10px;">
+            Старт работ в течение 24 часов после оплаты • ЭДО Диадок / СБИС
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>RevOps Platform V17.6 Enterprise • Финальный слайд</span>
+      <span>Слайд 10 из 10</span>
+    </div>
+  </section>
+
+</body>
+</html>
