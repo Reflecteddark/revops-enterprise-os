@@ -1,7 +1,18 @@
 @echo off
 chcp 65001 > nul
 title RevOps Telegram Bot Manager
-cd /d "%~dp0\.."
+
+if exist "telegram_bot.py" (
+    rem Already in project directory
+) else if exist "%~dp0\telegram_bot.py" (
+    cd /d "%~dp0"
+) else if exist "%~dp0\..\telegram_bot.py" (
+    cd /d "%~dp0\.."
+) else if exist "C:\Users\strel\.gemini\antigravity\scratch\revops-enterprise-os\telegram_bot.py" (
+    cd /d "C:\Users\strel\.gemini\antigravity\scratch\revops-enterprise-os"
+) else if exist "C:\Users\strel\.gemini\antigravity\scratch\telegram_bot.py" (
+    cd /d "C:\Users\strel\.gemini\antigravity\scratch"
+)
 
 :menu
 cls

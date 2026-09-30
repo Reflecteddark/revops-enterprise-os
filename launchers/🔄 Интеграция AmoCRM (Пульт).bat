@@ -1,7 +1,18 @@
 @echo off
 chcp 65001 > nul
 title AmoCRM Connector Manager
-cd /d "%~dp0\.."
+
+if exist "amocrm_connector.py" (
+    rem Already in project directory
+) else if exist "%~dp0\amocrm_connector.py" (
+    cd /d "%~dp0"
+) else if exist "%~dp0\..\amocrm_connector.py" (
+    cd /d "%~dp0\.."
+) else if exist "C:\Users\strel\.gemini\antigravity\scratch\revops-enterprise-os\amocrm_connector.py" (
+    cd /d "C:\Users\strel\.gemini\antigravity\scratch\revops-enterprise-os"
+) else if exist "C:\Users\strel\.gemini\antigravity\scratch\amocrm_connector.py" (
+    cd /d "C:\Users\strel\.gemini\antigravity\scratch"
+)
 
 :menu
 cls
