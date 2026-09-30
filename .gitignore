@@ -32,6 +32,9 @@ venv.bak/
 .env.*
 service_account.json
 credentials.json
+amocrm_credentials.json
+bitrix24_credentials.json
+telegram_credentials.json
 *.key
 *.pem
 

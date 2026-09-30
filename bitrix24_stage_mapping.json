@@ -1,0 +1,35 @@
+{
+  "_comment": "Маппинг Bitrix24 stage_id → RevOps stage_id (1-6, 0=проигрыш). Запустите 'python bitrix24_connector.py --show-stages' чтобы увидеть все этапы вашего Bitrix24.",
+  "_format": "Стандартные воронка: 'NEW', 'IN_PROCESS' и т.д. Доп. воронки: 'C1:STAGE_NAME' (C + ID воронки + :название_этапа)",
+  "_revops_stages": {
+    "1": "Новый лид",
+    "2": "Квалификация",
+    "3": "Переговоры",
+    "4": "Коммерческое предложение",
+    "5": "Согласование / Подписание",
+    "6": "Успешно реализовано (WON)",
+    "0": "Закрыто — проигрыш (LOSE)"
+  },
+  "_semantic_fallback": "Если stage_id не найден — используется STAGE_SEMANTIC_ID: S=6, F=0, P=3",
+  "_instruction": [
+    "1. Запустите: python bitrix24_connector.py --show-stages",
+    "2. Скопируйте нужные stage_id из вашего Bitrix24",
+    "3. Замените EXAMPLE_* ключи на реальные значения",
+    "4. WON и LOSE уже настроены — не меняйте если не нужно"
+  ],
+  "WON": 6,
+  "LOSE": 0,
+  "NEW": 1,
+  "IN_PROCESS": 2,
+  "PREPARATION": 3,
+  "PREPAYMENT_INVOICE": 4,
+  "EXECUTING": 5,
+  "FINAL_INVOICE": 5,
+  "EXAMPLE_C1:NEW": 1,
+  "EXAMPLE_C1:QUALIFIED": 2,
+  "EXAMPLE_C1:NEGOTIATION": 3,
+  "EXAMPLE_C1:PROPOSAL": 4,
+  "EXAMPLE_C1:CONTRACT": 5,
+  "EXAMPLE_C1:WON": 6,
+  "EXAMPLE_C1:LOSE": 0
+}

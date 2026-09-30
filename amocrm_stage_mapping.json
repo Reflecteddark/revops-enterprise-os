@@ -1,0 +1,26 @@
+{
+  "_comment": "Маппинг AmoCRM status_id → RevOps stage_id (1-6, 0=проигрыш). Запустите 'python amocrm_connector.py --show-stages' чтобы увидеть реальные status_id вашего AmoCRM.",
+  "_revops_stages": {
+    "1": "Новый лид",
+    "2": "Квалификация",
+    "3": "Переговоры",
+    "4": "Коммерческое предложение",
+    "5": "Согласование / Подписание",
+    "6": "Успешно реализовано (Closed Won)",
+    "0": "Закрыто — проигрыш (не попадает в пайплайн)"
+  },
+  "_instruction": [
+    "1. Запустите: python amocrm_connector.py --show-stages",
+    "2. Скопируйте status_id из вашего AmoCRM",
+    "3. Замените EXAMPLE_* ключи на реальные числа",
+    "4. Статусы 142 и 143 — универсальные для AmoCRM (не меняйте)",
+    "5. Один status_id = один stage RevOps (1-6 или 0 для проигрыша)"
+  ],
+  "142": 6,
+  "143": 0,
+  "EXAMPLE_INCOMING_STATUS_ID": 1,
+  "EXAMPLE_QUALIFIED_STATUS_ID": 2,
+  "EXAMPLE_NEGOTIATION_STATUS_ID": 3,
+  "EXAMPLE_PROPOSAL_STATUS_ID": 4,
+  "EXAMPLE_CONTRACT_STATUS_ID": 5
+}
