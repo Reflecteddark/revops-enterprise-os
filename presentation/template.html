@@ -8,37 +8,34 @@
 <body>
 
   <!-- ==================== SLIDE 1: COVER ==================== -->
-  {% if 'slide_1' in active_slides %}
   <section class="slide slide-cover">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div class="cover-brand">RevOps Enterprise OS</div>
-      <div class="cover-badge">{{ role_badge or 'RELEASE V17.6 ENTERPRISE' }}</div>
+      <div class="cover-badge">RELEASE V17.6 ENTERPRISE</div>
     </div>
     <div class="cover-body">
       <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #818CF8; margin-bottom: 12px;">
-        {{ role_subtitle or 'Управленческий дайджест руководителя' }}
+        Управленческий дайджест руководителя
       </div>
-      <h1 class="cover-title">{{ role_title or 'RevOps Enterprise OS V17.6' }}</h1>
+      <h1 class="cover-title">RevOps Enterprise OS V17.6</h1>
       <p class="cover-sub">
-        {{ role_desc or 'Архитектура управления выручкой, речевой ИИ-аудит звонков Whisper+LLM и ликвидация 7 узких мест воронки продаж.' }}
+        Архитектура управления выручкой, речевой ИИ-аудит звонков Whisper+LLM и ликвидация 7 узких мест воронки продаж.
       </p>
     </div>
     <div class="cover-footer">
       <div>Отчетная дата: {{ meta.date }} • Период: {{ meta.period }}</div>
-      <div>{{ role_audience or meta.compliance }}</div>
+      <div>{{ meta.compliance }}</div>
       <div>Статус: 🟢 100% Production Ready (118/118 Tests Passed)</div>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 2: KEY KPIS (EXECUTIVE DASHBOARD) ==================== -->
-  {% if 'slide_2' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">DASHBOARD</span>
-        <h2 class="slide-title">Ключевые KPI Руководителя (Executive Dashboard)</h2>
+        <h2 class="slide-title">2. Ключевые KPI Руководителя (Executive Dashboard)</h2>
       </div>
       <div class="slide-meta">Лист: 📄 Executive_OnePager • Роль: CEO / Собственник</div>
     </div>
@@ -83,19 +80,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Executive Dashboard</span>
-      <span>Слайд {{ page_numbers['slide_2'] }} из {{ total_pages }}</span>
+      <span>Слайд 2 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 3: ВОРОНКА И УЗКИЕ ГОРЛЫШКИ ==================== -->
-  {% if 'slide_3' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">FUNNEL SLA</span>
-        <h2 class="slide-title">Воронка Продаж и Узкие Горлышки SLA</h2>
+        <h2 class="slide-title">3. Воронка Продаж и Узкие Горлышки SLA</h2>
       </div>
       <div class="slide-meta">Лист: 🎯 Воронка_и_SLA / ⚡ Пульс_Компании</div>
     </div>
@@ -155,19 +150,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Анализ воронки SLA</span>
-      <span>Слайд {{ page_numbers['slide_3'] }} из {{ total_pages }}</span>
+      <span>Слайд 3 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 4: ТОП-5 РИСКОВ ВЫРУЧКИ ==================== -->
-  {% if 'slide_4' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">ACTION CENTER</span>
-        <h2 class="slide-title">Топ-5 Рисков Выручки (Action Center)</h2>
+        <h2 class="slide-title">4. Топ-5 Рисков Выручки (Action Center)</h2>
       </div>
       <div class="slide-meta">Сумма в зоне риска: <strong style="color: #DC2626; font-size: 13px;">{{ risks.total }}</strong></div>
     </div>
@@ -216,19 +209,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Оперативный Action Center</span>
-      <span>Слайд {{ page_numbers['slide_4'] }} из {{ total_pages }}</span>
+      <span>Слайд 4 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 5: 7 СМЕРТНЫХ ГРЕХОВ ОП ==================== -->
-  {% if 'slide_5' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">DIAGNOSTICS</span>
-        <h2 class="slide-title">Диагностика 7 Смертных Грехов Отдела Продаж</h2>
+        <h2 class="slide-title">5. Диагностика 7 Смертных Грехов Отдела Продаж</h2>
       </div>
       <div class="slide-meta">Общие потери: <strong style="color: #DC2626; font-size: 13px;">{{ sins.total }} / мес</strong></div>
     </div>
@@ -278,19 +269,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Аудит As-Is</span>
-      <span>Слайд {{ page_numbers['slide_5'] }} из {{ total_pages }}</span>
+      <span>Слайд 5 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 6: EXPRESS КАЛЬКУЛЯТОР ==================== -->
-  {% if 'slide_6' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">EXPRESS</span>
-        <h2 class="slide-title">Экспресс-Калькулятор Окупаемости (3 Цифры Бизнеса)</h2>
+        <h2 class="slide-title">6. Экспресс-Калькулятор Окупаемости (3 Цифры Бизнеса)</h2>
       </div>
       <div class="slide-meta">Входные данные: 150 лидов • Чек 400 000 ₽ • 4 менеджера</div>
     </div>
@@ -357,19 +346,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Экспресс-моделирование</span>
-      <span>Слайд {{ page_numbers['slide_6'] }} из {{ total_pages }}</span>
+      <span>Слайд 6 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 7: ИИ-АУДИТ РЕЧИ ==================== -->
-  {% if 'slide_7' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">AI SPEECH</span>
-        <h2 class="slide-title">Речевой ИИ-Аудит Звонков (Whisper + LLM)</h2>
+        <h2 class="slide-title">7. Речевой ИИ-Аудит Звонков (Whisper + LLM, 13 параметров)</h2>
       </div>
       <div class="slide-meta">6 звонков оцифровано • 880 000 ₽ под угрозой</div>
     </div>
@@ -437,19 +424,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Whisper AI Speech Engine</span>
-      <span>Слайд {{ page_numbers['slide_7'] }} из {{ total_pages }}</span>
+      <span>Слайд 7 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 8: ФИНАНСЫ И AI-ДОЖИМ ==================== -->
-  {% if 'slide_8' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">FINANCE</span>
-        <h2 class="slide-title">Финансовый Контур и Agentic AI-Дожим Дебиторки</h2>
+        <h2 class="slide-title">8. Финансовый Контур и Agentic AI-Дожим Отказников</h2>
       </div>
       <div class="slide-meta">DSO: 6 дней • Касса: 1 650 000 ₽</div>
     </div>
@@ -517,19 +502,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Cash Flow &amp; AI Recovery</span>
-      <span>Слайд {{ page_numbers['slide_8'] }} из {{ total_pages }}</span>
+      <span>Слайд 8 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 9: СИМУЛЯТОР РОСТА (MONTE CARLO) ==================== -->
-  {% if 'slide_9' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">MONTE CARLO</span>
-        <h2 class="slide-title">Симулятор Роста &amp; Стохастический Коридор 95%</h2>
+        <h2 class="slide-title">9. Симулятор Роста &amp; Стохастический Коридор 95%</h2>
       </div>
       <div class="slide-meta">Прогноз To-Be: <strong>{{ simulator.to_be }}</strong> ({{ simulator.delta }})</div>
     </div>
@@ -569,19 +552,17 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Monte Carlo Engine</span>
-      <span>Слайд {{ page_numbers['slide_9'] }} из {{ total_pages }}</span>
+      <span>Слайд 9 из 10</span>
     </div>
   </section>
-  {% endif %}
 
   <!-- ==================== SLIDE 10: СЛЕДУЮЩИЙ ШАГ ==================== -->
-  {% if 'slide_10' in active_slides %}
   <section class="slide">
     <div class="slide-header">
       <div class="slide-header-left">
         <span class="brand-tag">{{ meta.title }}</span>
         <span class="version-pill">NEXT STEPS</span>
-        <h2 class="slide-title">План Спринта Внедрения: Условия, Окупаемость и Запуск</h2>
+        <h2 class="slide-title">10. Спринт Внедрения: Условия, Окупаемость и Запуск</h2>
       </div>
       <div class="slide-meta">Пакет 4 недели • Гарантия окупаемости</div>
     </div>
@@ -655,10 +636,9 @@
 
     <div class="slide-footer">
       <span>RevOps Platform V17.6 Enterprise • Финальный слайд</span>
-      <span>Слайд {{ page_numbers['slide_10'] }} из {{ total_pages }}</span>
+      <span>Слайд 10 из 10</span>
     </div>
   </section>
-  {% endif %}
 
 </body>
 </html>

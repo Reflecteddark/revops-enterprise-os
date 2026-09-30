@@ -1,0 +1,12 @@
+﻿timestamp;user_login;role;report_type;duration_sec;status;error_message;pdf_size_kb
+2026-09-30 15:53:05;strel;ceo;Executive_Summary;4.83;success;;1862.0
+2026-09-30 15:55:49;strel;all;Report_ALL;4.18;error;'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>;0.0
+2026-09-30 15:56:07;strel;all;Report_ALL;4.1;success;;1861.2
+2026-09-30 15:56:11;strel;ceo;Report_CEO;3.22;success;;1339.1
+2026-09-30 15:56:14;strel;rop;Report_ROP;3.21;success;;1074.2
+2026-09-30 15:56:18;strel;cfo;Report_CFO;3.86;success;;1145.2
+2026-09-30 16:00:44;strel;all;Report_ALL;5.5;success;;1861.6
+2026-09-30 16:00:48;strel;ceo;Report_CEO;4.51;success;;1337.8
+2026-09-30 16:00:52;strel;rop;Report_ROP;4.14;success;;1073.3
+2026-09-30 16:00:56;strel;cfo;Report_CFO;4.1;success;;1143.8
+2026-09-30 16:01:01;strel;full;Role_Report;4.28;success;;2673.8
