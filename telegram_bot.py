@@ -1,4 +1,4 @@
-"""
+r"""
 RevOps Telegram Bot — ежедневный брифинг отдела продаж.
 
 Два режима:
@@ -57,6 +57,29 @@ def tg_send(token: str, chat_id: str, text: str,
     return resp.ok
 
 
+def tg_send_document(token: str, chat_id: str, file_path: str,
+                     caption: str = "", timeout: int = 40) -> bool:
+    """Отправляет PDF-документ через Telegram Bot API."""
+    url = f"https://api.telegram.org/bot{token}/sendDocument"
+    if not os.path.exists(file_path):
+        print(f"[TG ERROR] Файл для отправки не найден: {file_path}")
+        return False
+    try:
+        with open(file_path, "rb") as f:
+            resp = requests.post(
+                url,
+                data={"chat_id": chat_id, "caption": caption},
+                files={"document": f},
+                timeout=timeout
+            )
+        if not resp.ok:
+            print(f"[TG ERROR] {resp.status_code}: {resp.text[:200]}")
+        return resp.ok
+    except Exception as e:
+        print(f"[TG ERROR] Ошибка при отправке документа: {e}")
+        return False
+
+
 def tg_get_updates(token: str, offset: int = 0) -> list[dict]:
     url = f"https://api.telegram.org/bot{token}/getUpdates"
     resp = requests.get(url, params={"offset": offset, "timeout": 20}, timeout=25)
@@ -87,6 +110,24 @@ def find_wb() -> str:
         print(f"[ОШИБКА] Excel не найден: {XLSX_PATTERN}")
         sys.exit(1)
     return max(candidates, key=os.path.getmtime)
+
+
+def find_latest_report_pdf() -> str | None:
+    """Находит самый свежий PDF-отчёт в рабочей папке или на Рабочем столе."""
+    candidates = []
+    for pattern in ["RevOps*.pdf", "*.pdf"]:
+        candidates.extend(glob.glob(str(BASE_DIR / pattern)))
+        try:
+            candidates.extend(glob.glob(str(Path.home() / "Desktop" / pattern)))
+        except Exception:
+            pass
+    valid = [
+        f for f in candidates
+        if os.path.isfile(f) and os.path.getsize(f) > 0 and not os.path.basename(f).startswith("~$")
+    ]
+    if not valid:
+        return None
+    return max(valid, key=os.path.getmtime)
 
 
 def _col(header: list, name: str, default: int) -> int:
@@ -214,7 +255,7 @@ def _fmt_m(v: float) -> str:
 def build_morning_brief(kpi: dict) -> str:
     pct = kpi["plan_pct"]
     pct_emoji = "🔴" if pct < 60 else ("🟡" if pct < 85 else "🟢")
-    dl = kpi["days_left"]
+    dl = kpi.get("days_left", 0)
     dl_str = ("⚠️ СЕГОДНЯ ПОСЛЕДНИЙ ДЕНЬ!" if dl == 0
               else f"📅 До конца месяца: {dl} дн.")
 
@@ -246,7 +287,7 @@ def build_morning_brief(kpi: dict) -> str:
         for i, (mgr, amt) in enumerate(kpi["top_mgrs"], 1):
             lines.append(f"  {i}. {mgr} — {_fmt_m(amt)}")
 
-    lines += ["", "─────────────────", "Команды: /risk /hot /plan"]
+    lines += ["", "─────────────────", "Команды: /risk /hot /plan /summary /help"]
     return "\n".join(lines)
 
 
@@ -284,13 +325,25 @@ def build_plan_msg(kpi: dict) -> str:
     )
 
 
+def build_help_msg() -> str:
+    return (
+        "🤖 <b>RevOps Enterprise Bot — Команды:</b>\n\n"
+        "• /status или /start — Утренний брифинг отдела продаж\n"
+        "• /risk — Сделки в зоне риска (зависшие > 14 дней или низкий health score)\n"
+        "• /hot — Горячие сделки на стадиях КП и Подписание договора\n"
+        "• /plan — Детализация выполнения финансового плана\n"
+        "• /summary или /report — Получить свежий PDF-отчёт прямо в чат\n"
+        "• /help — Справка по доступным командам"
+    )
+
+
 # ── Polling (опциональный командный режим) ──────────────────────────
 
 def run_polling(token: str, chat_id: str, wb_path: str) -> None:
-    """Простой polling-бот. Отвечает на /start /status /risk /hot /plan."""
-    print(f"Polling... (Ctrl+C для выхода)")
+    """Простой polling-бот. Отвечает на /start /status /risk /hot /plan /summary /report /help."""
+    print("Polling... (Ctrl+C для выхода)")
     offset = 0
-    COMMANDS = {"/risk", "/hot", "/plan", "/status", "/start"}
+    COMMANDS = {"/risk", "/hot", "/plan", "/status", "/start", "/summary", "/report", "/help"}
 
     while True:
         try:
@@ -305,19 +358,38 @@ def run_polling(token: str, chat_id: str, wb_path: str) -> None:
                 if from_id != str(chat_id) or text not in COMMANDS:
                     continue
 
-                kpi = calc_kpi(wb_path)
                 if text in ("/start", "/status"):
+                    kpi = calc_kpi(wb_path)
                     reply = build_morning_brief(kpi)
+                    tg_send(token, chat_id, reply)
                 elif text == "/risk":
+                    kpi = calc_kpi(wb_path)
                     reply = build_risk_msg(kpi)
+                    tg_send(token, chat_id, reply)
                 elif text == "/hot":
+                    kpi = calc_kpi(wb_path)
                     reply = build_hot_msg(kpi)
+                    tg_send(token, chat_id, reply)
                 elif text == "/plan":
+                    kpi = calc_kpi(wb_path)
                     reply = build_plan_msg(kpi)
+                    tg_send(token, chat_id, reply)
+                elif text == "/help":
+                    reply = build_help_msg()
+                    tg_send(token, chat_id, reply)
+                elif text in ("/summary", "/report"):
+                    pdf = find_latest_report_pdf()
+                    if pdf:
+                        tg_send(token, chat_id, "⏳ Отправляю свежий PDF-отчёт...")
+                        caption = f"📄 RevOps Executive Report: {os.path.basename(pdf)}"
+                        ok = tg_send_document(token, chat_id, pdf, caption=caption)
+                        if not ok:
+                            tg_send(token, chat_id, "❌ Не удалось отправить документ через Telegram API.")
+                    else:
+                        tg_send(token, chat_id, "⚠️ Готовый PDF-отчёт не найден. Запустите генерацию через скрипт generate_full_report_pdf.py.")
                 else:
                     continue
 
-                tg_send(token, chat_id, reply)
                 print(f"  Ответил на {text} → {from_id}")
 
             time.sleep(1)
@@ -369,6 +441,7 @@ def main() -> int:
     )
     parser.add_argument("--setup",    action="store_true", help="Настройка бота")
     parser.add_argument("--send",     action="store_true", help="Отправить утренний брифинг")
+    parser.add_argument("--summary",  action="store_true", help="Отправить свежий PDF-отчёт")
     parser.add_argument("--polling",  action="store_true", help="Запустить polling-бот")
     parser.add_argument("--workbook", type=str, default=None, help="Путь к Excel")
     args = parser.parse_args()
@@ -381,6 +454,17 @@ def main() -> int:
     token    = creds["bot_token"]
     chat_id  = creds["chat_id"]
     wb_path  = args.workbook or find_wb()
+
+    if args.summary:
+        pdf = find_latest_report_pdf()
+        if pdf:
+            print(f"Отправляем PDF: {pdf}")
+            ok = tg_send_document(token, chat_id, pdf, caption=f"📄 RevOps Executive Report: {os.path.basename(pdf)}")
+            print("✓ PDF-отчет отправлен." if ok else "[ОШИБКА] Не удалось отправить PDF.")
+            return 0 if ok else 1
+        else:
+            print("[ОШИБКА] PDF-отчет не найден.")
+            return 1
 
     if args.send:
         print(f"Читаем данные: {wb_path}")

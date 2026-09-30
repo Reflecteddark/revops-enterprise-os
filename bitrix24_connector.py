@@ -669,7 +669,13 @@ def write_deals_to_excel(
     won_fill  = PatternFill(start_color="E6F4EA", end_color="E6F4EA", fill_type="solid")
     lost_fill = PatternFill(start_color="FCE8E8", end_color="FCE8E8", fill_type="solid")
 
-    next_row = ws.max_row + 1
+    # Находим первую свободную строку (учитываем шаблоны с пустыми строками до 1000)
+    last_filled = 1
+    for r in range(2, ws.max_row + 1):
+        v = ws.cell(r, deal_id_col).value
+        if v is not None and str(v).strip():
+            last_filled = r
+    next_row = last_filled + 1
 
     for deal in deals:
         deal_id = deal["deal_id"]

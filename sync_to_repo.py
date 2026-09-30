@@ -32,7 +32,12 @@ core_files = [
     'sync_local_xlsx_fixes.py',
     'apply_full_audit_fixes_v176.py',
     'RevOps_Enterprise_Executive_Summary.html',
-    'RevOps_Enterprise_Full_Report.html'
+    'RevOps_Enterprise_Full_Report.html',
+    'amocrm_connector.py',
+    'bitrix24_connector.py',
+    'telegram_bot.py',
+    'config.py',
+    'pytest.ini',
 ]
 
 updated = 0
@@ -48,5 +53,10 @@ pres_src = os.path.join(scratch_dir, 'presentation')
 pres_dst = os.path.join(repo_dir, 'presentation')
 if os.path.exists(pres_src) and pres_src != pres_dst:
     shutil.copytree(pres_src, pres_dst, dirs_exist_ok=True)
+
+tests_src = os.path.join(scratch_dir, 'tests')
+tests_dst = os.path.join(repo_dir, 'tests')
+if os.path.exists(tests_src) and tests_src != tests_dst:
+    shutil.copytree(tests_src, tests_dst, dirs_exist_ok=True)
 
 print(f"[SYNC] Синхронизировано измененных файлов: {updated}")

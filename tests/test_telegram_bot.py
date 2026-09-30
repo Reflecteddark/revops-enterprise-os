@@ -1,10 +1,12 @@
 """Тесты Telegram бота — без реального Telegram и Excel."""
 import pytest
 import openpyxl
-from pathlib import Path
+from unittest.mock import patch, MagicMock
 from telegram_bot import (
     calc_kpi, build_morning_brief, build_risk_msg,
-    build_hot_msg, build_plan_msg, _fmt_m, _col,
+    build_hot_msg, build_plan_msg, build_help_msg,
+    find_latest_report_pdf, tg_send, tg_send_document, tg_get_updates,
+    _fmt_m, _col,
 )
 
 
@@ -147,3 +149,83 @@ def test_plan_msg(excel_wb):
     msg = build_plan_msg(kpi)
     assert "30.0%" in msg
     assert "10" in msg   # план 10М присутствует
+
+
+def test_build_help_msg():
+    msg = build_help_msg()
+    assert "/status" in msg
+    assert "/summary" in msg
+    assert "/risk" in msg
+    assert "/help" in msg
+
+
+def test_morning_brief_commands():
+    kpi = {
+        "org": "Тест", "date_str": "30.09.2026", "plan_pct": 50.0,
+        "won_sum": 5_000_000, "plan": 10_000_000, "weighted": 2_000_000,
+        "active_count": 5, "at_risk": [], "hot": [], "top_mgrs": []
+    }
+    msg = build_morning_brief(kpi)
+    assert "/summary" in msg
+    assert "/help" in msg
+
+
+def test_find_latest_report_pdf(tmp_path, monkeypatch):
+    import telegram_bot
+    f1 = tmp_path / "RevOps_Enterprise_OS_V17.6_Full_Report_1.pdf"
+    f2 = tmp_path / "RevOps_Enterprise_OS_V17.6_Full_Report_2.pdf"
+    f1.write_text("dummy pdf 1", encoding="utf-8")
+    f2.write_text("dummy pdf 2", encoding="utf-8")
+    monkeypatch.setattr(telegram_bot, "BASE_DIR", tmp_path)
+    res = find_latest_report_pdf()
+    assert res is not None
+    assert "RevOps" in res
+
+
+def test_find_latest_report_pdf_none(tmp_path, monkeypatch):
+    from pathlib import Path
+    import telegram_bot
+    monkeypatch.setattr(telegram_bot, "BASE_DIR", tmp_path)
+    monkeypatch.setattr(Path, "home", lambda: tmp_path)
+    res = find_latest_report_pdf()
+    assert res is None
+
+
+def test_tg_send_success():
+    with patch("requests.post") as mock_post:
+        mock_post.return_value = MagicMock(ok=True)
+        ok = tg_send("token123", "chat123", "Hello")
+        assert ok is True
+        mock_post.assert_called_once()
+        assert "sendMessage" in mock_post.call_args[0][0]
+
+
+def test_tg_send_failure():
+    with patch("requests.post") as mock_post:
+        mock_post.return_value = MagicMock(ok=False, status_code=400, text="Bad Request")
+        ok = tg_send("token123", "chat123", "Hello")
+        assert ok is False
+
+
+def test_tg_send_document_file_not_found():
+    ok = tg_send_document("token123", "chat123", "non_existent_file.pdf")
+    assert ok is False
+
+
+def test_tg_send_document_success(tmp_path):
+    dummy_pdf = tmp_path / "test.pdf"
+    dummy_pdf.write_bytes(b"%PDF-1.4 test")
+    with patch("requests.post") as mock_post:
+        mock_post.return_value = MagicMock(ok=True)
+        ok = tg_send_document("token123", "chat123", str(dummy_pdf), caption="Test Report")
+        assert ok is True
+        mock_post.assert_called_once()
+        assert "sendDocument" in mock_post.call_args[0][0]
+
+
+def test_tg_get_updates():
+    with patch("requests.get") as mock_get:
+        mock_get.return_value = MagicMock(ok=True, json=lambda: {"result": [{"update_id": 100}]})
+        updates = tg_get_updates("token123")
+        assert len(updates) == 1
+        assert updates[0]["update_id"] == 100
