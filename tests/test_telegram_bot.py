@@ -6,6 +6,7 @@ from telegram_bot import (
     calc_kpi, build_morning_brief, build_risk_msg,
     build_hot_msg, build_plan_msg, build_help_msg,
     find_latest_report_pdf, tg_send, tg_send_document, tg_get_updates,
+    tg_get_me, check_crm_status, cmd_test,
     _fmt_m, _col,
 )
 
@@ -229,3 +230,41 @@ def test_tg_get_updates():
         updates = tg_get_updates("token123")
         assert len(updates) == 1
         assert updates[0]["update_id"] == 100
+
+
+def test_tg_get_me_success():
+    with patch("requests.get") as mock_get:
+        mock_get.return_value = MagicMock(ok=True, json=lambda: {"result": {"username": "revops_bot", "id": 12345}})
+        res = tg_get_me("token123")
+        assert res is not None
+        assert res["username"] == "revops_bot"
+
+
+def test_tg_get_me_failure():
+    with patch("requests.get") as mock_get:
+        mock_get.return_value = MagicMock(ok=False, status_code=401)
+        res = tg_get_me("invalid_token")
+        assert res is None
+
+
+def test_check_crm_status(tmp_path, monkeypatch):
+    import telegram_bot
+    monkeypatch.setattr(telegram_bot, "BASE_DIR", tmp_path)
+    status = check_crm_status()
+    assert "AmoCRM" in status
+    assert "Bitrix24" in status
+    assert "не настроена" in status
+
+    # Теперь создадим один credentials файл
+    (tmp_path / "bitrix24_credentials.json").write_text("{}", encoding="utf-8")
+    status2 = check_crm_status()
+    assert "Bitrix24:</b> настроена ✅" in status2
+
+
+def test_cmd_test_success(excel_wb):
+    with patch("telegram_bot.tg_get_me") as mock_get_me, \
+         patch("telegram_bot.tg_send") as mock_send:
+        mock_get_me.return_value = {"username": "test_bot", "id": 999}
+        mock_send.return_value = True
+        ok = cmd_test("token123", "chat123", excel_wb)
+        assert ok is True

@@ -88,6 +88,36 @@ def tg_get_updates(token: str, offset: int = 0) -> list[dict]:
     return []
 
 
+def tg_get_me(token: str) -> dict | None:
+    """Запрашивает информацию о боте через getMe. Возвращает dict с данными бота или None."""
+    url = f"https://api.telegram.org/bot{token}/getMe"
+    try:
+        resp = requests.get(url, timeout=10)
+        if resp.ok:
+            return resp.json().get("result")
+    except Exception as e:
+        print(f"[TG ERROR] getMe failed: {e}")
+    return None
+
+
+def check_crm_status() -> str:
+    """Проверяет наличие учетных данных CRM-коннекторов."""
+    amo_creds = BASE_DIR / "amocrm_credentials.json"
+    b24_creds = BASE_DIR / "bitrix24_credentials.json"
+    lines = ["🔄 <b>Статус CRM-интеграций:</b>", ""]
+    if amo_creds.exists():
+        lines.append("• <b>AmoCRM:</b> настроена ✅")
+    else:
+        lines.append("• <b>AmoCRM:</b> не настроена ⚠️ (нужен amocrm_credentials.json)")
+    if b24_creds.exists():
+        lines.append("• <b>Bitrix24:</b> настроена ✅")
+    else:
+        lines.append("• <b>Bitrix24:</b> не настроена ⚠️ (нужен bitrix24_credentials.json)")
+    lines.append("")
+    lines.append("Для синхронизации запустите соответствующий коннектор.")
+    return "\n".join(lines)
+
+
 # ── Учётные данные ──────────────────────────────────────────────────
 
 def load_creds() -> dict:
@@ -115,19 +145,27 @@ def find_wb() -> str:
 def find_latest_report_pdf() -> str | None:
     """Находит самый свежий PDF-отчёт в рабочей папке или на Рабочем столе."""
     candidates = []
-    for pattern in ["RevOps*.pdf", "*.pdf"]:
-        candidates.extend(glob.glob(str(BASE_DIR / pattern)))
+    for loc in [BASE_DIR, Path.home() / "Desktop"]:
         try:
-            candidates.extend(glob.glob(str(Path.home() / "Desktop" / pattern)))
+            candidates.extend(glob.glob(str(loc / "RevOps*.pdf")))
         except Exception:
             pass
-    valid = [
+
+    valid_revops = [
         f for f in candidates
         if os.path.isfile(f) and os.path.getsize(f) > 0 and not os.path.basename(f).startswith("~$")
     ]
-    if not valid:
-        return None
-    return max(valid, key=os.path.getmtime)
+    if valid_revops:
+        return max(valid_revops, key=os.path.getmtime)
+
+    # Фоллбек: любые PDF строго внутри BASE_DIR
+    fallback = [
+        f for f in glob.glob(str(BASE_DIR / "*.pdf"))
+        if os.path.isfile(f) and os.path.getsize(f) > 0 and not os.path.basename(f).startswith("~$")
+    ]
+    if fallback:
+        return max(fallback, key=os.path.getmtime)
+    return None
 
 
 def _col(header: list, name: str, default: int) -> int:
@@ -333,6 +371,7 @@ def build_help_msg() -> str:
         "• /hot — Горячие сделки на стадиях КП и Подписание договора\n"
         "• /plan — Детализация выполнения финансового плана\n"
         "• /summary или /report — Получить свежий PDF-отчёт прямо в чат\n"
+        "• /sync — Проверить статус CRM-интеграций (AmoCRM / Bitrix24)\n"
         "• /help — Справка по доступным командам"
     )
 
@@ -340,10 +379,10 @@ def build_help_msg() -> str:
 # ── Polling (опциональный командный режим) ──────────────────────────
 
 def run_polling(token: str, chat_id: str, wb_path: str) -> None:
-    """Простой polling-бот. Отвечает на /start /status /risk /hot /plan /summary /report /help."""
+    """Простой polling-бот. Отвечает на /start /status /risk /hot /plan /summary /report /sync /help."""
     print("Polling... (Ctrl+C для выхода)")
     offset = 0
-    COMMANDS = {"/risk", "/hot", "/plan", "/status", "/start", "/summary", "/report", "/help"}
+    COMMANDS = {"/risk", "/hot", "/plan", "/status", "/start", "/summary", "/report", "/help", "/sync"}
 
     while True:
         try:
@@ -373,6 +412,9 @@ def run_polling(token: str, chat_id: str, wb_path: str) -> None:
                 elif text == "/plan":
                     kpi = calc_kpi(wb_path)
                     reply = build_plan_msg(kpi)
+                    tg_send(token, chat_id, reply)
+                elif text == "/sync":
+                    reply = check_crm_status()
                     tg_send(token, chat_id, reply)
                 elif text == "/help":
                     reply = build_help_msg()
@@ -431,6 +473,51 @@ def cmd_setup() -> None:
         sys.exit(1)
 
 
+def cmd_test(token: str, chat_id: str, wb_path: str) -> bool:
+    """Проверяет подключение к Telegram API, Excel и отправляет тестовый пинг."""
+    print("\n" + "=" * 55)
+    print("  Диагностика RevOps Telegram Bot")
+    print("=" * 55)
+
+    # 1. Проверка getMe
+    bot_info = tg_get_me(token)
+    if not bot_info:
+        print("❌ Ошибка авторизации: неверный bot_token")
+        return False
+    bot_username = bot_info.get("username", "Unknown")
+    print(f"✓ Бот авторизован: @{bot_username} (ID: {bot_info.get('id')})")
+
+    # 2. Проверка книги Excel
+    if os.path.exists(wb_path):
+        print(f"✓ Книга данных найдена: {os.path.basename(wb_path)}")
+    else:
+        print(f"❌ Книга данных не найдена: {wb_path}")
+        return False
+
+    # 3. Проверка PDF
+    pdf = find_latest_report_pdf()
+    if pdf:
+        print(f"✓ Найден свежий PDF-отчёт: {os.path.basename(pdf)}")
+    else:
+        print("ℹ️ Свежий PDF-отчёт пока не сформирован")
+
+    # 4. Проверка тестовой отправки
+    print(f"Отправка тестового пинга в chat_id {chat_id}...")
+    ok = tg_send(
+        token,
+        chat_id,
+        "🔔 <b>Тест связи RevOps Bot</b>\n\nДиагностика пройдена успешно. Бот готов к рассылке и приёму команд."
+    )
+    if ok:
+        print("✓ Тестовое сообщение успешно доставлено в чат!")
+    else:
+        print("❌ Не удалось доставить сообщение в чат. Проверьте chat_id и права бота.")
+        return False
+
+    print("\n🎉 Все проверки успешно пройдены!")
+    return True
+
+
 # ── CLI ─────────────────────────────────────────────────────────────
 
 def main() -> int:
@@ -440,6 +527,9 @@ def main() -> int:
         description="RevOps Telegram Bot — ежедневный брифинг отдела продаж"
     )
     parser.add_argument("--setup",    action="store_true", help="Настройка бота")
+    parser.add_argument("--test",     action="store_true", help="Проверить подключение и отправить тестовый пинг")
+    parser.add_argument("--preview",  action="store_true", help="Предпросмотр утреннего дайджеста в консоли (без отправки)")
+    parser.add_argument("--dry-run",  action="store_true", help="Алиас для --preview")
     parser.add_argument("--send",     action="store_true", help="Отправить утренний брифинг")
     parser.add_argument("--summary",  action="store_true", help="Отправить свежий PDF-отчёт")
     parser.add_argument("--polling",  action="store_true", help="Запустить polling-бот")
@@ -450,10 +540,30 @@ def main() -> int:
         cmd_setup()
         return 0
 
+    wb_path = args.workbook or find_wb()
+
+    if args.preview or args.dry_run:
+        print(f"\n[PREVIEW] Чтение данных: {wb_path}")
+        kpi = calc_kpi(wb_path)
+        msg = build_morning_brief(kpi)
+        print("\n" + "=" * 55)
+        print("  ПРЕДПРОСМОТР УТРЕННЕГО БРИФИНГА (БЕЗ ОТПРАВКИ)")
+        print("=" * 55 + "\n")
+        clean_text = msg.replace("<b>", "").replace("</b>", "").replace("<i>", "").replace("</i>", "")
+        print(clean_text)
+        print("\n" + "=" * 55)
+        pdf = find_latest_report_pdf()
+        print(f"Свежий PDF-отчёт: {pdf if pdf else 'Не найден'}")
+        print("✓ Предпросмотр завершён успешно.")
+        return 0
+
     creds = load_creds()
     token    = creds["bot_token"]
     chat_id  = creds["chat_id"]
-    wb_path  = args.workbook or find_wb()
+
+    if args.test:
+        ok = cmd_test(token, chat_id, wb_path)
+        return 0 if ok else 1
 
     if args.summary:
         pdf = find_latest_report_pdf()
