@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экспресс-аудит звонков отдела продаж — RevOps Enterprise OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; }
+        .glass { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(99, 102, 241, 0.2); }
+        .glass-light { background: rgba(30, 41, 59, 0.5); }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen p-4 sm:p-8 flex items-center justify-center">
+    <div class="max-w-3xl w-full glass rounded-2xl p-6 sm:p-8 shadow-2xl shadow-indigo-950/50">
+        
+        <!-- Хедер отчета -->
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-5 mb-6">
+            <div>
+                <span class="text-xs uppercase tracking-wider font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/20">Протокол 152-ФЗ</span>
+                <h1 class="text-2xl font-bold text-white mt-2">Экспресс-аудит звонков отдела продаж</h1>
+                <p class="text-xs text-slate-400 mt-1">Обезличенный ИИ-анализ 3 реальных диалогов по 13 критериям Enterprise B2B</p>
+            </div>
+            <div class="text-right hidden sm:block">
+                <div class="text-xs text-slate-400">Дата аудита</div>
+                <div class="text-sm font-semibold text-slate-200">01.10.2026</div>
+            </div>
+        </div>
+
+        <!-- Сводные метрики -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="glass-light p-4 rounded-xl border border-slate-700/50">
+                <div class="text-xs text-slate-400 mb-1">Средний балл речи</div>
+                <div class="text-2xl font-bold text-indigo-400">7.3 <span class="text-sm text-slate-500">/ 13</span></div>
+                <div class="text-[11px] text-slate-400 mt-1">Норматив B2B: ≥ 10.5</div>
+            </div>
+            <div class="glass-light p-4 rounded-xl border border-slate-700/50">
+                <div class="text-xs text-slate-400 mb-1">Слив Next Step</div>
+                <div class="text-2xl font-bold text-red-400">1 из 3</div>
+                <div class="text-[11px] text-red-400/80 mt-1">33% контактов зависают</div>
+            </div>
+            <div class="glass-light p-4 rounded-xl border border-slate-700/50">
+                <div class="text-xs text-slate-400 mb-1">Утечка выручки (оценка)</div>
+                <div class="text-2xl font-bold text-amber-400">~1.9 М ₽</div>
+                <div class="text-[11px] text-emerald-400 mt-1">Возврат: ~680 000 ₽/мес</div>
+            </div>
+        </div>
+
+        <!-- Детализация звонков -->
+        <div class="mb-6">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-3">Результаты проверки аудиозаписей:</h2>
+            
+        <div class="glass-light rounded-xl p-5 border border-slate-700/60 mb-4 hover:border-indigo-500/40 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-white text-base">Звонок C-AUDIT-1</span>
+                    <span class="text-xs text-slate-400">(4 мин 40 сек)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-bold">Критический слив</span>
+                    <span class="text-lg font-bold text-white">6<span class="text-slate-500 text-sm">/13</span></span>
+                </div>
+            </div>
+            <div class="mb-3"><span class="text-red-400 text-xs font-bold flex items-center gap-1"><i class="fas fa-times-circle"></i> Слив Next Step (Дата не названа)</span></div>
+            <div class="mb-3">
+                <div class="text-xs text-slate-400 mb-1">Выявленные дефекты в диалоге:</div>
+                <div><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Жёсткий Next Step</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Инициатива диалога</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Квалификация ЛПР / ЛВПР</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Выявление болей и срочности</span></div>
+            </div>
+            <div class="bg-slate-900/60 rounded-lg p-3 border border-slate-800 text-xs">
+                <div class="text-indigo-400 font-semibold mb-1"><i class="fas fa-robot mr-1"></i> Рекомендация ИИ-Супервайзера:</div>
+                <div class="text-slate-300">Срочно связаться с клиентом и зафиксировать календарный слот следующей встречи.</div>
+            </div>
+        </div>
+        
+        <div class="glass-light rounded-xl p-5 border border-slate-700/60 mb-4 hover:border-indigo-500/40 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-white text-base">Звонок C-AUDIT-2</span>
+                    <span class="text-xs text-slate-400">(5 мин 20 сек)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">Требует доработки</span>
+                    <span class="text-lg font-bold text-white">7<span class="text-slate-500 text-sm">/13</span></span>
+                </div>
+            </div>
+            <div class="mb-3"><span class="text-emerald-400 text-xs font-bold flex items-center gap-1"><i class="fas fa-check-circle"></i> Next Step зафиксирован</span></div>
+            <div class="mb-3">
+                <div class="text-xs text-slate-400 mb-1">Выявленные дефекты в диалоге:</div>
+                <div><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Инициатива диалога</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Выявление болей и срочности</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Презентация ценности через кейсы</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Попытка закрытия сделки</span></div>
+            </div>
+            <div class="bg-slate-900/60 rounded-lg p-3 border border-slate-800 text-xs">
+                <div class="text-indigo-400 font-semibold mb-1"><i class="fas fa-robot mr-1"></i> Рекомендация ИИ-Супервайзера:</div>
+                <div class="text-slate-300">Проработать этапы квалификации и фиксации договоренностей.</div>
+            </div>
+        </div>
+        
+        <div class="glass-light rounded-xl p-5 border border-slate-700/60 mb-4 hover:border-indigo-500/40 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-white text-base">Звонок C-AUDIT-3</span>
+                    <span class="text-xs text-slate-400">(6 мин 0 сек)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">Требует доработки</span>
+                    <span class="text-lg font-bold text-white">9<span class="text-slate-500 text-sm">/13</span></span>
+                </div>
+            </div>
+            <div class="mb-3"><span class="text-emerald-400 text-xs font-bold flex items-center gap-1"><i class="fas fa-check-circle"></i> Next Step зафиксирован</span></div>
+            <div class="mb-3">
+                <div class="text-xs text-slate-400 mb-1">Выявленные дефекты в диалоге:</div>
+                <div><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Выявление болей и срочности</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Презентация ценности через кейсы</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Попытка закрытия сделки</span><span class="inline-block bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-md mr-1 mb-1">Слушание клиента</span></div>
+            </div>
+            <div class="bg-slate-900/60 rounded-lg p-3 border border-slate-800 text-xs">
+                <div class="text-indigo-400 font-semibold mb-1"><i class="fas fa-robot mr-1"></i> Рекомендация ИИ-Супервайзера:</div>
+                <div class="text-slate-300">Проработать этапы квалификации и фиксации договоренностей.</div>
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- Блок окупаемости и призыв к действию -->
+        <div class="bg-gradient-to-r from-indigo-900/40 to-emerald-950/40 rounded-xl p-5 border border-indigo-500/30">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-lg bg-indigo-600/30 flex items-center justify-center text-indigo-400 shrink-0">
+                    <i class="fas fa-chart-line text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white text-base">Что дает устранение этих 3 дефектов?</h3>
+                    <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                        Внедрение жесткого Next Step и отработки цены по опыту аналогичных проектов возвращает <strong class="text-emerald-400">от 35% зависших сделок</strong> уже в первый месяц.
+                    </p>
+                    <div class="mt-4 pt-3 border-t border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="text-xs text-slate-400">Пилотный спринт:</div>
+                            <div class="text-sm font-bold text-white">7 дней супервизии 100% звонков — 29 000 ₽</div>
+                        </div>
+                        <span class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition shadow-lg shadow-indigo-600/30">
+                            Окупаемость за 3 дня
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <div class="mt-6 text-center text-xs text-slate-500">
+            RevOps Enterprise OS V17.6 • Обработка персональных данных строго по 152-ФЗ (серверы в РФ)
+        </div>
+    </div>
+</body>
+</html>
