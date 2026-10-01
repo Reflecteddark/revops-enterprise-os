@@ -1595,42 +1595,70 @@
                 renderMessageItem(msg);
             }
 
-            function openChat() {
+            function playPopSound() {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return;
+                    const audioCtx = new AudioContext();
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.18);
+                } catch (e) {}
+            }
+
+            function openChat(playSound = false) {
                 chatWindow.classList.remove('scale-95', 'opacity-0', 'pointer-events-none');
                 chatWindow.classList.add('scale-100', 'opacity-100', 'pointer-events-auto');
                 if (chatTriggerWrapper) chatTriggerWrapper.classList.add('hidden');
                 if (chatBadge) chatBadge.classList.add('hidden');
                 if (chatBubbleHint) chatBubbleHint.classList.add('hidden');
-                setTimeout(() => chatInput?.focus(), 200);
+                if (playSound) playPopSound();
+                setTimeout(() => chatInput?.focus(), 250);
             }
 
             function closeChat() {
                 chatWindow.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
                 chatWindow.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto');
                 if (chatTriggerWrapper) chatTriggerWrapper.classList.remove('hidden');
+                try {
+                    sessionStorage.setItem('ai_rop_chat_dismissed', 'true');
+                } catch (e) {}
             }
 
             function resetChat() {
                 sessionStorage.removeItem(STORAGE_KEY);
+                sessionStorage.removeItem('ai_rop_chat_dismissed');
                 chatHistory = [];
                 loadChat();
             }
 
-            if (chatOpenBtn) chatOpenBtn.addEventListener('click', openChat);
+            if (chatOpenBtn) chatOpenBtn.addEventListener('click', () => openChat(true));
             if (chatCloseBtn) chatCloseBtn.addEventListener('click', closeChat);
             if (chatResetBtn) chatResetBtn.addEventListener('click', resetChat);
-            if (chatBubbleHint) chatBubbleHint.addEventListener('click', openChat);
+            if (chatBubbleHint) chatBubbleHint.addEventListener('click', () => openChat(true));
             if (closeHintBtn) closeHintBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 chatBubbleHint.classList.add('hidden');
             });
 
-            // Delayed hint preview
+            // Auto-open chat after 3.5 seconds if user has not explicitly closed it in this session
             setTimeout(() => {
-                if (chatBubbleHint && !chatWindow.classList.contains('opacity-100')) {
-                    chatBubbleHint.classList.remove('hidden');
-                }
-            }, 4000);
+                try {
+                    const isDismissed = sessionStorage.getItem('ai_rop_chat_dismissed');
+                    const isOpen = chatWindow && chatWindow.classList.contains('opacity-100');
+                    if (!isDismissed && !isOpen) {
+                        openChat(true);
+                    }
+                } catch (e) {}
+            }, 3500);
 
             // Smart bot knowledge responder
             function generateBotAnswer(userText) {
