@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevOps Enterprise OS V17.6 — ИИ-Супервайзер звонков и Радар Выручки</title>
+    <meta name="description" content="ИИ-Супервайзер звонков отдела продаж и Радар Выручки: контроль 100% звонков в amoCRM / Битрикс24 по 13 критериям. Ликвидация утечек от 1.2M ₽/мес.">
+    <meta property="og:title" content="RevOps Enterprise OS V17.6 — ИИ-Супервайзер звонков и Радар Выручки">
+    <meta property="og:description" content="Контроль 100% звонков в amoCRM / Битрикс24 по 13 критериям. Ликвидация утечек выручки от 1.2M ₽/мес. 152-ФЗ РФ.">
+    <meta property="og:type" content="website">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/plus-jakarta-sans@5.0.3/index.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .glass {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+        
+        .glass-light {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .glow-indigo {
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.15), 0 0 80px rgba(99, 102, 241, 0.05);
+        }
+        
+        .glow-emerald {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-border {
+            position: relative;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(16,185,129,0.2), rgba(99,102,241,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .timeline-line {
+            background: linear-gradient(180deg, #4f46e5 0%, #10b981 100%);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #4f46e5, #6366f1);
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            border: 3px solid #0f172a;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            border: 3px solid #0f172a;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+        
+        .pulse-dot {
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .telegram-mockup {
+            background: linear-gradient(145deg, #1a1f3a 0%, #0f172a 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .telegram-header {
+            background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .telegram-msg {
+            background: rgba(30, 41, 59, 0.8);
+            border-left: 3px solid;
+            border-radius: 0 12px 12px 0;
+            padding: 12px 16px;
+            margin: 8px 12px;
+            font-size: 13px;
+        }
+        
+        .criteria-row {
+            transition: all 0.2s ease;
+        }
+        .criteria-row:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .pricing-popular {
+            border: 2px solid #6366f1;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        .mobile-menu {
+            display: none;
+        }
+        .mobile-menu.active {
+            display: flex;
+        }
+        @media (min-width: 1024px) {
+            .mobile-menu {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 antialiased overflow-x-hidden">
+
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-18">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="font-display font-bold text-white text-lg">RevOps Enterprise OS</span>
+                        <span class="ml-2 px-2 py-0.5 text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-500/30">V17.6</span>
+                    </div>
+                </div>
+                
+                <nav class="hidden lg:flex items-center gap-6 text-sm">
+                    <a href="#product" class="nav-link text-slate-400 hover:text-white">Продукт</a>
+                    <a href="#criteria" class="nav-link text-slate-400 hover:text-white">13 критериев ИИ</a>
+                    <a href="#calculator" class="nav-link text-slate-400 hover:text-white">Калькулятор</a>
+                    <a href="#pricing" class="nav-link text-slate-400 hover:text-white">Тарифы</a>
+                    <a href="#security" class="nav-link text-slate-400 hover:text-white">152-ФЗ</a>
+                    <a href="#cases" class="nav-link text-slate-400 hover:text-white">Кейсы</a>
+                </nav>
+                
+                <div class="flex items-center gap-3">
+                    <a href="#cta" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-sm font-semibold rounded-lg transition-all shadow-lg shadow-indigo-500/25">
+                        <i class="fas fa-headphones-alt text-xs"></i>
+                        Тест-драйв 3 звонков (0 ₽)
+                    </a>
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-slate-400 hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu lg:hidden flex-col gap-2 px-4 pb-4 border-t border-slate-800/50">
+            <a href="#product" class="block py-2 text-slate-400 hover:text-white text-sm">Продукт</a>
+            <a href="#criteria" class="block py-2 text-slate-400 hover:text-white text-sm">13 критериев ИИ</a>
+            <a href="#calculator" class="block py-2 text-slate-400 hover:text-white text-sm">Калькулятор</a>
+            <a href="#pricing" class="block py-2 text-slate-400 hover:text-white text-sm">Тарифы</a>
+            <a href="#security" class="block py-2 text-slate-400 hover:text-white text-sm">152-ФЗ</a>
+            <a href="#cases" class="block py-2 text-slate-400 hover:text-white text-sm">Кейсы</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center hero-gradient pt-20">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+                        <span class="text-xs sm:text-sm font-medium text-indigo-300">ФЛАГМАН B2B-ПРОДАЖ 2026: ИИ-РЕЧЕВОЙ КОНТРОЛЬ + REVOPS</span>
+                    </div>
+                    
+                    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-[3.4rem] font-bold leading-tight text-white mb-6">
+                        ИИ-Супервайзер звонков и <span class="gradient-text">Радар Выручки</span>: контроль 100% звонков и ликвидация утечек в CRM
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-400 leading-relaxed mb-4 max-w-xl">
+                        <span class="text-slate-300 font-medium">Whisper + LLM</span> слушает все звонки → находит брошенные сделки в <span class="text-indigo-400">amoCRM / Битрикс24</span> → выдает РОПу готовый список спасения в <span class="text-sky-400">Telegram</span>. За 15 минут в день вы защищаете миллионы от слива.
+                    </p>
+                    
+                    <div class="border-l-2 border-indigo-500 pl-4 py-2 mb-8 max-w-xl bg-indigo-500/10 rounded-r-xl">
+                        <p class="text-sm text-indigo-200 italic font-medium">«Мы не просто слушаем ваши звонки. Мы находим, почему вы теряете деньги, и пишем пошаговый план, как это исправить».</p>
+                        <span class="text-[11px] text-indigo-400/80 uppercase tracking-wider font-bold">RevOps-Консалтинг нового поколения</span>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-3 mb-10">
+                        <a href="#cta" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold rounded-xl transition-all shadow-xl shadow-indigo-500/25 text-sm sm:text-base">
+                            <i class="fas fa-microphone-alt"></i>
+                            Бесплатный аудит 3 звонков
+                        </a>
+                        <button onclick="downloadDemoExcel()" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 font-semibold rounded-xl border border-emerald-500/30 transition-all text-sm sm:text-base">
+                            <i class="fas fa-file-excel text-emerald-400"></i>
+                            Скачать Excel (.xlsx)
+                        </button>
+                        <a href="#calculator" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 font-semibold rounded-xl border border-slate-700 transition-all text-sm sm:text-base">
+                            <i class="fas fa-calculator"></i>
+                            Калькулятор
+                        </a>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-6 text-sm text-slate-500">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-shield-alt text-emerald-500"></i>
+                            <span>152-ФЗ РФ (контур РФ)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-clock text-indigo-400"></i>
+                            <span>Запуск за 7 дней под ключ</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-undo text-emerald-500"></i>
+                            <span>100% гарантия возврата</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Telegram Mockup -->
+                <div class="float-animation">
+                    <div class="telegram-mockup glow-indigo max-w-md mx-auto">
+                        <div class="telegram-header">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <i class="fas fa-robot text-white text-xs"></i>
+                            </div>
+                            <div>
+                                <div class="text-white text-sm font-semibold">🤠 Шериф RevOps</div>
+                                <div class="text-slate-500 text-xs">Утренний Пульт • 08:30</div>
+                            </div>
+                            <div class="ml-auto flex gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+                                <span class="text-xs text-emerald-400">Online</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 space-y-3">
+                            <div class="telegram-msg border-red-500">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-red-400 text-xs font-bold">🚨 КРИТИЧЕСКИЙ РИСК</span>
+                                </div>
+                                <div class="text-slate-300 text-xs leading-relaxed">
+                                    <strong class="text-white">Сделка D-104</strong> (ООО «Вектор Плюс»)<br>
+                                    💰 <span class="text-red-400 font-bold">850 000 ₽</span> под угрозой слива<br>
+                                    ⚠️ КП без ответа 12 дней (норма SLA 48ч)<br>
+                                    🎯 Действие РОПа: Личный звонок ЛПР до 12:00
+                                </div>
+                            </div>
+                            
+                            <div class="telegram-msg border-yellow-500">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-yellow-400 text-xs font-bold">⚡ ДЕФЕКТ ЗВОНКА</span>
+                                </div>
+                                <div class="text-slate-300 text-xs leading-relaxed">
+                                    <strong class="text-white">Звонок C-505</strong> — балл речи <span class="text-red-400 font-bold">2/13</span><br>
+                                    💰 <span class="text-yellow-400 font-bold">600 000 ₽</span> — менеджер не взял дату встречи<br>
+                                    🎯 Перехват контакта РОПом
+                                </div>
+                            </div>
+                            
+                            <div class="telegram-msg border-emerald-500">
+                                <div class="text-slate-300 text-xs leading-relaxed">
+                                    📊 <strong class="text-white">Итого в зоне риска сегодня:</strong> <span class="text-red-400 font-bold">2 730 000 ₽</span><br>
+                                    ✅ 5 целевых действий спасут 100% кассы за 15 минут
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM SECTION -->
+    <section class="py-20 lg:py-28 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold mb-4">ДИАГНОСТИКА РЫНКА</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">3 хронические болезни B2B-продаж</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Почему собственник теряет до 47% потенциальной выручки каждый месяц, даже при сильном маркетинге</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Problem 1 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="w-14 h-14 rounded-xl bg-red-500/10 flex items-center justify-center mb-5">
+                        <i class="fas fa-comments text-red-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white mb-3">Менеджеры — «справочное бюро»</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-5">Консультируют, называют цену, но не берут инициативу. Не фиксируют дату следующего шага. Отпускают фразой «подумайте».</p>
+                    <div class="flex items-end gap-2 mb-2">
+                        <span class="text-4xl font-bold text-red-400">35%</span>
+                        <span class="text-slate-500 text-sm pb-1">лидов слито</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 to-red-400 h-2 rounded-full" style="width: 35%"></div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">на первом звонке без фиксации Next Step</p>
+                </div>
+                
+                <!-- Problem 2 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="w-14 h-14 rounded-xl bg-orange-500/10 flex items-center justify-center mb-5">
+                        <i class="fas fa-headphones text-orange-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white mb-3">РОП слушает &lt; 2% звонков</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-5">При 300–500 звонках в неделю руководитель физически не успевает контролировать качество. Разборы строятся на субъективных ощущениях.</p>
+                    <div class="flex items-end gap-2 mb-2">
+                        <span class="text-4xl font-bold text-orange-400">2%</span>
+                        <span class="text-slate-500 text-sm pb-1">контроль</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-400 h-2 rounded-full" style="width: 2%"></div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">случайных диалогов из 500 в неделю</p>
+                </div>
+                
+                <!-- Problem 3 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center mb-5">
+                        <i class="fas fa-skull-crossbones text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white mb-3">«Кладбище» зомби-сделок</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-5">В CRM висят миллионы на этапах «КП отправлено». При аудите 60–75% — брошенные сделки без контакта 14+ дней.</p>
+                    <div class="flex items-end gap-2 mb-2">
+                        <span class="text-4xl font-bold text-purple-400">47%</span>
+                        <span class="text-slate-500 text-sm pb-1">потеря клиентов</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-purple-500 to-purple-400 h-2 rounded-full" style="width: 47%"></div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">потенциальных клиентов теряется в воронке</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT ARCHITECTURE -->
+    <section id="product" class="py-20 lg:py-28 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">АРХИТЕКТУРА РЕШЕНИЯ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Три контура в одном продукте</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Единая бесшовная система: от транскрибации звонка до спасения сделки в Telegram</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Component 1 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover gradient-border fade-in">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-indigo-600/20 flex items-center justify-center">
+                            <i class="fas fa-microphone-alt text-indigo-400 text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-indigo-400 font-semibold">ФЛАГМАН</div>
+                            <h3 class="font-display text-lg font-bold text-white">ИИ-анализ речи</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-5">Whisper Large V3 анализирует <strong class="text-white">100% аудиозаписей</strong> всех звонков за сутки по 13 критериям Enterprise B2B-продаж в изолированном контуре.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-check-circle text-emerald-400 text-xs"></i>
+                            <span class="text-slate-300">Точность распознавания речи 95%+</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-check-circle text-emerald-400 text-xs"></i>
+                            <span class="text-slate-300">13 параметров качества диалога</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-check-circle text-emerald-400 text-xs"></i>
+                            <span class="text-slate-300">Обезличивание ПДн перед LLM</span>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-5 border-t border-slate-700/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-500">F1-Score модели</span>
+                            <span class="text-lg font-bold text-emerald-400">89.2%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Component 2 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover gradient-border fade-in">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center">
+                            <i class="fas fa-search-dollar text-emerald-400 text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-emerald-400 font-semibold">ДЕТЕКТИВ ВЫРУЧКИ</div>
+                            <h3 class="font-display text-lg font-bold text-white">Связка с CRM</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-5">Связывает дефекты диалогов со сделками в <strong class="text-white">amoCRM и Битрикс24</strong>. Находит просроченные КП (>48ч), зависшие счета и зомби-сделки.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-check-circle text-emerald-400 text-xs"></i>
+                            <span class="text-slate-300">Детекция SLA-нарушений этапов</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-check-circle text-emerald-400 text-xs"></i>
+                            <span class="text-slate-300">Контроль дебиторской задолженности</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-check-circle text-emerald-400 text-xs"></i>
+                            <span class="text-slate-300">Reverse ETL в CRM за 1.5 сек</span>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-5 border-t border-slate-700/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-500">Найденные утечки в базе</span>
+                            <span class="text-lg font-bold text-red-400">7 001 000 ₽</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Component 3 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover gradient-border fade-in">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500/20 to-sky-600/20 flex items-center justify-center">
+                            <i class="fab fa-telegram text-sky-400 text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-sky-400 font-semibold">ШЕРИФ В TELEGRAM</div>
+                            <h3 class="font-display text-lg font-bold text-white">Ежедневный надзор</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-5">Персонализированные сводки прямо в мессенджер. Собственник держит руку на пульсе за <strong class="text-white">2 минуты в день</strong>.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-sun text-yellow-400 text-xs"></i>
+                            <span class="text-slate-300">08:30 — Утренний фокус дня</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-xs"></i>
+                            <span class="text-slate-300">14:00 — SOS-алерты по горящим</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-moon text-indigo-400 text-xs"></i>
+                            <span class="text-slate-300">18:30 — Вечерний срез итогов</span>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-5 border-t border-slate-700/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-500">Время РОПа в день</span>
+                            <span class="text-lg font-bold text-emerald-400">15 мин</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13 CRITERIA SECTION -->
+    <section id="criteria" class="py-20 lg:py-28 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">ФЛАГМАНСКИЙ МОДУЛЬ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">13 критериев ИИ-оценки речи</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Каждый звонок расшифровывается Whisper и оценивается по 13 параметрам B2B-продаж с подтвержденной точностью</p>
+            </div>
+            
+            <div class="glass rounded-2xl overflow-hidden fade-in">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-700/50">
+                                <th class="text-left px-4 lg:px-6 py-4 text-slate-400 font-medium text-xs uppercase tracking-wider">№</th>
+                                <th class="text-left px-4 lg:px-6 py-4 text-slate-400 font-medium text-xs uppercase tracking-wider">Критерий оценки</th>
+                                <th class="text-left px-4 lg:px-6 py-4 text-slate-400 font-medium text-xs uppercase tracking-wider hidden md:table-cell">Что проверяет ИИ</th>
+                                <th class="text-right px-4 lg:px-6 py-4 text-slate-400 font-medium text-xs uppercase tracking-wider">F1 Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">1</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Жёсткий Next Step <span class="text-red-400 text-xs ml-1">Критично</span></td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Зафиксирована точная дата и время следующего контакта</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">94%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">2</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Инициатива диалога</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Менеджер ведёт клиента по этапам или просто отвечает</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">89%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">3</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Квалификация ЛПР / ЛВПР</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Установлен ли статус: принимает ли решения по бюджету</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">81%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">4</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Выявление болей и срочности</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Какую бизнес-задачу решает клиент и к какому дедлайну</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">85%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">5</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Отработка «Дорого»</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Альтернатива, рассрочка, обоснование — а не сразу скидка</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">87%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">6</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Отработка «Я подумаю»</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Вскрыто ли истинное сомнение или клиент отпущен</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">83%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">7</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Презентация ценности через кейсы</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Реальные примеры окупаемости и аналогичные проекты</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">86%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">8</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Попытка закрытия сделки</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Прямое предложение заключить договор / выставить счет</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">91%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">9</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Регламент приветствия</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Представление компании, имени и цели контакта</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">96%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">10</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Чистота речи и уверенность</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Нет слов-паразитов, пауз и неуверенности при озвучивании цены</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">88%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">11</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Слушание клиента <span class="text-emerald-400 text-xs ml-1">Talk/Listen</span></td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Менеджер не перебивает, слушает ≥ 50% времени</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">97%</span></td>
+                            </tr>
+                            <tr class="criteria-row border-b border-slate-800/50">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">12</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Фиксация договорённостей</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Резюмирование итогов: «Отправлю расчёт до 15:00»</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">92%</span></td>
+                            </tr>
+                            <tr class="criteria-row">
+                                <td class="px-4 lg:px-6 py-3.5 text-indigo-400 font-bold">13</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-white font-medium">Защита маржинальности</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-slate-400 hidden md:table-cell">Нет раздачи скидок без обоснованного запроса клиента</td>
+                                <td class="px-4 lg:px-6 py-3.5 text-right"><span class="text-emerald-400 font-bold">84%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mt-6 glass-light rounded-xl p-4 flex items-start gap-3 fade-in">
+                <i class="fas fa-info-circle text-indigo-400 mt-0.5"></i>
+                <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Исключение ложных штрафов:</strong> Все диалоги с уверенностью модели ниже 80% получают метку «Требует верификации РОПа». Штрафы и выводы никогда не выносятся автоматически без подтверждения человеком. Средневзвешенная точность — <strong class="text-emerald-400">89.2% F1</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALCULATOR SECTION -->
+    <section id="calculator" class="py-20 lg:py-28 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/10 to-slate-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-4">КАЛЬКУЛЯТОР ОКУПАЕМОСТИ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Сколько теряет ваш отдел продаж?</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Двигайте ползунки — увидите реальные цифры скрытых потерь и потенциал возврата в кассу</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Sliders -->
+                <div class="glass rounded-2xl p-6 lg:p-8 fade-in">
+                    <h3 class="font-display text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-sliders-h text-indigo-400"></i>
+                        Параметры вашего отдела
+                    </h3>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label class="text-sm text-slate-300 font-medium">Количество менеджеров</label>
+                                <span id="managersValue" class="text-lg font-bold text-indigo-400">5</span>
+                            </div>
+                            <input type="range" id="managers" min="3" max="20" value="5" class="w-full cursor-pointer">
+                            <div class="flex justify-between text-xs text-slate-600 mt-1">
+                                <span>3</span>
+                                <span>20</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label class="text-sm text-slate-300 font-medium">Входящих лидов / месяц</label>
+                                <span id="leadsValue" class="text-lg font-bold text-indigo-400">150</span>
+                            </div>
+                            <input type="range" id="leads" min="50" max="1000" value="150" step="10" class="w-full cursor-pointer">
+                            <div class="flex justify-between text-xs text-slate-600 mt-1">
+                                <span>50</span>
+                                <span>1 000</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label class="text-sm text-slate-300 font-medium">Средний чек сделки</label>
+                                <span id="checkValue" class="text-lg font-bold text-indigo-400">400 000 ₽</span>
+                            </div>
+                            <input type="range" id="check" min="50000" max="3000000" value="400000" step="50000" class="w-full cursor-pointer">
+                            <div class="flex justify-between text-xs text-slate-600 mt-1">
+                                <span>50 000 ₽</span>
+                                <span>3 000 000 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results -->
+                <div class="space-y-4 fade-in">
+                    <div class="glass rounded-2xl p-6 border-l-4 border-red-500">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-exclamation-triangle text-red-400"></i>
+                            <span class="text-sm text-slate-400 font-medium">Ежемесячные скрытые потери воронки</span>
+                        </div>
+                        <div id="lossResult" class="text-3xl lg:text-4xl font-bold text-red-400">1 944 000 ₽</div>
+                        <p class="text-xs text-slate-500 mt-2">Слив на этапе КП (SLA >48ч), отсутствие Next Step и отказники без перехвата</p>
+                    </div>
+                    
+                    <div class="glass rounded-2xl p-6 border-l-4 border-emerald-500">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-coins text-emerald-400"></i>
+                            <span class="text-sm text-slate-400 font-medium">Потенциал возврата в кассу (M1)</span>
+                        </div>
+                        <div id="recoveryResult" class="text-3xl lg:text-4xl font-bold text-emerald-400">680 400 ₽</div>
+                        <p class="text-xs text-slate-500 mt-2">Возврат 35% зависших сделок за счет ежедневных задач Шерифа</p>
+                    </div>
+                    
+                    <div class="glass rounded-2xl p-6 border-l-4 border-indigo-500">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-calendar-check text-indigo-400"></i>
+                            <span class="text-sm text-slate-400 font-medium">Срок окупаемости сервиса</span>
+                        </div>
+                        <div id="paybackResult" class="text-3xl lg:text-4xl font-bold text-indigo-400">3 дня</div>
+                        <p class="text-xs text-slate-500 mt-2">При тарифе 49 000 ₽/мес подписка окупается спасением одной сделки</p>
+                    </div>
+                    
+                    <div class="glass-light rounded-xl p-4 flex items-center gap-3">
+                        <i class="fas fa-lightbulb text-yellow-400"></i>
+                        <p class="text-xs text-slate-400">Расчёт основан на отраслевых бенчмарках B2B: ~18% лидов доходят до предметных переговоров, из них до 28% сгорает из-за отсутствия даты следующего контакта.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE SECTION -->
+    <section class="py-20 lg:py-28 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">БЫСТРЫЙ СТАРТ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Запуск за 7 рабочих дней</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">0 часов отвлечения менеджеров от звонков. Полная интеграция в вашу текущую инфраструктуру.</p>
+            </div>
+            
+            <div class="relative max-w-4xl mx-auto">
+                <div class="space-y-8 lg:space-y-12">
+                    <!-- Day 1 -->
+                    <div class="relative flex flex-col sm:flex-row items-start gap-4 lg:gap-8 fade-in">
+                        <div class="sm:w-1/2 lg:pr-12 lg:text-right pl-4 sm:pl-0">
+                            <div class="glass rounded-xl p-5 card-hover">
+                                <div class="inline-block px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-2">День 1</div>
+                                <h4 class="text-white font-bold mb-1">Договор и API-доступы</h4>
+                                <p class="text-slate-400 text-sm">NDA, получение ключей к CRM и телефонии. Старт проекта.</p>
+                                <div class="mt-2 text-xs text-slate-500"><i class="fas fa-clock mr-1"></i>30 мин директора</div>
+                            </div>
+                        </div>
+                        <div class="sm:w-1/2 hidden lg:block"></div>
+                    </div>
+                    
+                    <!-- Day 2-3 -->
+                    <div class="relative flex flex-col sm:flex-row items-start gap-4 lg:gap-8 fade-in">
+                        <div class="sm:w-1/2 hidden lg:block"></div>
+                        <div class="sm:w-1/2 lg:pl-12 pl-4 sm:pl-12">
+                            <div class="glass rounded-xl p-5 card-hover">
+                                <div class="inline-block px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-2">Дни 2–3</div>
+                                <h4 class="text-white font-bold mb-1">ИИ-рентген 100 звонков</h4>
+                                <p class="text-slate-400 text-sm">Подключение коннекторов. Выгрузка архива. Детектив выручки: зомби-сделки, нарушения SLA, зависшие счета.</p>
+                                <div class="mt-2 text-xs text-slate-500"><i class="fas fa-clock mr-1"></i>0 мин клиента</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Day 4 -->
+                    <div class="relative flex flex-col sm:flex-row items-start gap-4 lg:gap-8 fade-in">
+                        <div class="sm:w-1/2 lg:pr-12 lg:text-right pl-4 sm:pl-0">
+                            <div class="glass rounded-xl p-5 card-hover">
+                                <div class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold mb-2">День 4</div>
+                                <h4 class="text-white font-bold mb-1">Презентация карты потерь</h4>
+                                <p class="text-slate-400 text-sm">Разбор 10 худших звонков, оцифровка карты утечек, ранжирование менеджеров. Zoom-разбор с директором.</p>
+                                <div class="mt-2 text-xs text-slate-500"><i class="fas fa-clock mr-1"></i>45 мин (директор + РОП)</div>
+                            </div>
+                        </div>
+                        <div class="sm:w-1/2 hidden lg:block"></div>
+                    </div>
+                    
+                    <!-- Day 5-6 -->
+                    <div class="relative flex flex-col sm:flex-row items-start gap-4 lg:gap-8 fade-in">
+                        <div class="sm:w-1/2 hidden lg:block"></div>
+                        <div class="sm:w-1/2 lg:pl-12 pl-4 sm:pl-12">
+                            <div class="glass rounded-xl p-5 card-hover">
+                                <div class="inline-block px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold mb-2">Дни 5–6</div>
+                                <h4 class="text-white font-bold mb-1">Настройка Telegram-бота</h4>
+                                <p class="text-slate-400 text-sm">Утренний Пульт РОПа, ролевые алерты, ежедневный мониторинг. Система сдана под ключ.</p>
+                                <div class="mt-2 text-xs text-slate-500"><i class="fas fa-clock mr-1"></i>15 мин РОПа</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Day 7 -->
+                    <div class="relative flex flex-col sm:flex-row items-start gap-4 lg:gap-8 fade-in">
+                        <div class="sm:w-1/2 lg:pr-12 lg:text-right pl-4 sm:pl-0">
+                            <div class="glass rounded-xl p-5 card-hover border border-emerald-500/30">
+                                <div class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold mb-2">День 7</div>
+                                <h4 class="text-white font-bold mb-1">Сдача под ключ ✅</h4>
+                                <p class="text-slate-400 text-sm">Контрольный прогон алертов. Передача документации. Подписание Акта. Переход на регулярный надзор.</p>
+                                <div class="mt-2 text-xs text-slate-500"><i class="fas fa-clock mr-1"></i>15 мин клиента</div>
+                            </div>
+                        </div>
+                        <div class="sm:w-1/2 hidden lg:block"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing" class="py-20 lg:py-28 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">ПРОЗРАЧНЫЕ УСЛОВИЯ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Тарифы без скрытых платежей</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Платите только за реальный масштаб вашего отдела продаж</p>
+            </div>
+            
+            <!-- Pilot -->
+            <div class="max-w-xl mx-auto mb-12 fade-in">
+                <div class="glass rounded-2xl p-6 lg:p-8 text-center card-hover border border-indigo-500/30 glow-indigo">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-300 text-xs font-bold mb-4">🚀 ПИЛОТ «БЫСТРЫЙ СТАРТ»</div>
+                    <div class="flex items-baseline justify-center gap-1 mb-3">
+                        <span class="text-4xl lg:text-5xl font-bold text-white">29 000</span>
+                        <span class="text-lg text-slate-400">₽</span>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-5">7 рабочих дней под ключ • 100% гарантия возврата</p>
+                    <div class="grid grid-cols-2 gap-3 text-left text-sm mb-6">
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">ИИ-аудит 100 звонков</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Карта утечек CRM</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">13 критериев речи</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Отчёт CEO (5 стр.)</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Zoom-разбор</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Настройка Telegram</span></div>
+                    </div>
+                    <a href="#cta" class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-indigo-500/25">
+                        Начать пилот
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Monthly Plans -->
+            <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Basic -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="text-sm text-slate-400 font-medium mb-1">Базовый</div>
+                    <div class="text-xs text-slate-500 mb-4">3–5 менеджеров</div>
+                    <div class="flex items-baseline gap-1 mb-5">
+                        <span class="text-3xl font-bold text-white">49 000</span>
+                        <span class="text-slate-400">₽/мес</span>
+                    </div>
+                    <div class="space-y-3 text-sm mb-6">
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">100% звонков под ИИ-аудитом</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Утренний пульс в Telegram</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Пульт РОПа «15 минут»</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Детектив зомби-сделок</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Ролевые срезы: раз в месяц</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">До 3 000 звонков/мес</span></div>
+                    </div>
+                    <a href="#cta" class="block text-center py-3 rounded-xl border border-slate-700 hover:border-indigo-500 text-slate-300 hover:text-white font-medium transition-all text-sm">Выбрать</a>
+                </div>
+                
+                <!-- Advanced (Popular) -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover pricing-popular fade-in relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white text-xs font-bold rounded-full">ПОПУЛЯРНЫЙ</div>
+                    <div class="text-sm text-indigo-400 font-medium mb-1">Продвинутый</div>
+                    <div class="text-xs text-slate-500 mb-4">6–10 менеджеров</div>
+                    <div class="flex items-baseline gap-1 mb-5">
+                        <span class="text-3xl font-bold text-white">79 000</span>
+                        <span class="text-slate-400">₽/мес</span>
+                    </div>
+                    <div class="space-y-3 text-sm mb-6">
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Всё из «Базового»</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Еженедельные ролевые срезы</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Глубокий мониторинг дебиторки</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">До 5 доп. критериев оценки</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Приоритет в Telegram</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">До 6 000 звонков/мес</span></div>
+                    </div>
+                    <a href="#cta" class="block text-center py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold transition-all shadow-lg shadow-indigo-500/25 text-sm">Выбрать</a>
+                </div>
+                
+                <!-- Enterprise -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="text-sm text-slate-400 font-medium mb-1">Enterprise</div>
+                    <div class="text-xs text-slate-500 mb-4">11–15 менеджеров</div>
+                    <div class="flex items-baseline gap-1 mb-5">
+                        <span class="text-3xl font-bold text-white">120 000</span>
+                        <span class="text-slate-400">₽/мес</span>
+                    </div>
+                    <div class="space-y-3 text-sm mb-6">
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Всё из «Продвинутого»</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Еженедельные ролевые срезы</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Приоритетный радар дебиторки</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">До 15 индивидуальных критериев</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">Персональный RevOps-инженер</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-emerald-400 text-xs"></i><span class="text-slate-300">До 10 000 звонков/мес</span></div>
+                    </div>
+                    <a href="#cta" class="block text-center py-3 rounded-xl border border-slate-700 hover:border-indigo-500 text-slate-300 hover:text-white font-medium transition-all text-sm">Выбрать</a>
+                </div>
+            </div>
+            
+            <!-- Legal Block -->
+            <div class="mt-12 glass-light rounded-2xl p-6 lg:p-8 fade-in">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+                    <div class="flex items-center gap-3 shrink-0">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                            <i class="fas fa-file-invoice-dollar text-emerald-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold">Юридическая чистота для бухгалтерии</h4>
+                            <p class="text-slate-500 text-xs">НПД / ИП • ст. 15 Федерального закона № 422-ФЗ РФ</p>
+                        </div>
+                    </div>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
+                        <div class="text-center p-3 rounded-lg bg-slate-800/50">
+                            <div class="text-lg font-bold text-emerald-400">0%</div>
+                            <div class="text-xs text-slate-400">НДС</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-slate-800/50">
+                            <div class="text-lg font-bold text-emerald-400">0%</div>
+                            <div class="text-xs text-slate-400">Страховые взносы</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-slate-800/50">
+                            <div class="text-lg font-bold text-emerald-400">100%</div>
+                            <div class="text-xs text-slate-400">Списание в расходы</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-slate-800/50">
+                            <div class="text-lg font-bold text-emerald-400">Э-Чек</div>
+                            <div class="text-xs text-slate-400">«Мой налог» / УСН</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECURITY SECTION -->
+    <section id="security" class="py-20 lg:py-28 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-4">БЕЗОПАСНОСТЬ ДАННЫХ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Полное соответствие 152-ФЗ РФ</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Изолированный контур обработки. Персональные данные и коммерческая тайна под надёжной защитой.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass rounded-2xl p-6 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-server text-indigo-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">100% серверов в РФ</h4>
+                    <p class="text-slate-400 text-sm">Сертифицированный защищенный контур. Данные не покидают территорию Российской Федерации.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-user-shield text-emerald-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">Обезличивание ПДн</h4>
+                    <p class="text-slate-400 text-sm">ФИО клиентов и телефоны автоматически маскируются токенами <code class="text-indigo-300 bg-slate-800 px-1 rounded">[КЛИЕНТ_ID]</code> на этапе транскрибации.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-trash-alt text-red-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">Автоудаление через 30 дней</h4>
+                    <p class="text-slate-400 text-sm">Аудиофайлы удаляются с буферного сервера через 30 дней по регламенту РКН. Полное удаление при расторжении за 7 дней.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-lock text-purple-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">RBAC-матрица доступа</h4>
+                    <p class="text-slate-400 text-sm">7 ролей доступа (CEO, РОП, КАМ, SDR, CMO, CFO, Admin). Защита коммерческой тайны предприятия.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-file-contract text-sky-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">Готовый юрпакет</h4>
+                    <p class="text-slate-400 text-sm">NDA, согласия сотрудников на обработку биометрии (голоса), шаблоны для АТС. Всё включено в стоимость.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 card-hover fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-ban text-yellow-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">Нет передачи в публичные ИИ</h4>
+                    <p class="text-slate-400 text-sm">Коммерческие данные о сделках не используются для дообучения сторонних моделей. Полная изоляция.</p>
+                </div>
+            </div>
+            
+            <!-- Guarantee -->
+            <div class="mt-12 glass rounded-2xl p-6 lg:p-8 border border-emerald-500/20 glow-emerald fade-in">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="shrink-0">
+                        <div class="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-emerald-400 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-lg mb-2">🛡️ 100% гарантия возврата на пилоте</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">Если за 7 рабочих дней система не найдёт минимум <strong class="text-white">3 точки слива клиентов</strong> в звонках ИЛИ <strong class="text-white">2 зависшие сделки</strong> в CRM с документальным подтверждением сумм — возвращаем <strong class="text-emerald-400">100% стоимости пилота (29 000 ₽)</strong> за 3 рабочих дня без споров.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASES SECTION -->
+    <section id="cases" class="py-20 lg:py-28 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/5 to-slate-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-4">РЕАЛЬНЫЕ РЕЗУЛЬТАТЫ</span>
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Кейсы внедрения и ROI</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Конкретные цифры возврата инвестиций от наших клиентов</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+                <!-- Case 1 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+                            <i class="fas fa-industry text-indigo-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold">Оптовый поставщик пром. оборудования</h4>
+                            <p class="text-slate-500 text-xs">7 менеджеров • Средний чек 850 000 ₽ • 450 звонков/нед</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">Что выявил ИИ за 7 дней:</div>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-400 text-xs mt-1"></i>23 «зомби-сделки» на 4.2 млн ₽ без контакта 14+ дней</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-400 text-xs mt-1"></i>68% звонков без фиксации Next Step</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-400 text-xs mt-1"></i>3 менеджера сдавались при «дорого» без альтернатив</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-800/50">
+                        <div>
+                            <div class="text-2xl font-bold text-emerald-400">+1 850 000 ₽</div>
+                            <div class="text-xs text-slate-500">доп. выручка за месяц</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-emerald-400">×37</div>
+                            <div class="text-xs text-slate-500">окупаемость сервиса</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-indigo-400">11</div>
+                            <div class="text-xs text-slate-500">реактивированных сделок</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-indigo-400">8%→19%</div>
+                            <div class="text-xs text-slate-500">конверсия КП→оплата</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Case 2 -->
+                <div class="glass rounded-2xl p-6 lg:p-8 card-hover fade-in">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-laptop-code text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold">IT-интегратор корпоративного ПО (1С / ERP)</h4>
+                            <p class="text-slate-500 text-xs">5 менеджеров • Средний чек 1 200 000 ₽ • 200 звонков/нед</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">Что выявил ИИ за 7 дней:</div>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-400 text-xs mt-1"></i>4 крупных сделки на 6.1 млн ₽ — КП отправлено 5 дней назад, без перезвона</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-400 text-xs mt-1"></i>Топ-менеджер в 42% звонков не квалифицировал ЛПР</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-400 text-xs mt-1"></i>Коэффициент говорения — 78% (перебивал клиента)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-800/50">
+                        <div>
+                            <div class="text-2xl font-bold text-emerald-400">+1 900 000 ₽</div>
+                            <div class="text-xs text-slate-500">закрытая сделка после перехвата</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-emerald-400">5%→14%</div>
+                            <div class="text-xs text-slate-500">конверсия менеджеров</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-indigo-400">4</div>
+                            <div class="text-xs text-slate-500">спасённых контракта</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-indigo-400">6.1 млн</div>
+                            <div class="text-xs text-slate-500">выявлено в риске</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / FORM SECTION -->
+    <section id="cta" class="py-20 lg:py-28 relative">
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-10 fade-in">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">БЕСПЛАТНЫЙ АУДИТ</span>
+                    <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Получите разбор 3 звонков за 15 минут</h2>
+                    <p class="text-slate-400 text-lg">Отправьте 3 аудиозаписи любых вчерашних звонков — ИИ бесплатно разберёт их по 13 критериям и покажет точную сумму под угрозой слива.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 lg:p-10 fade-in">
+                    <form id="leadForm" class="space-y-5">
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm text-slate-300 font-medium mb-2">Ваше имя</label>
+                                <input type="text" id="formName" required placeholder="Дмитрий" class="w-full px-4 py-3 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder-slate-500 text-sm transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-300 font-medium mb-2">Телефон</label>
+                                <input type="tel" id="formPhone" required placeholder="+7 (999) 000-00-00" class="w-full px-4 py-3 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder-slate-500 text-sm transition-all outline-none">
+                            </div>
+                        </div>
+                        
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm text-slate-300 font-medium mb-2">Telegram</label>
+                                <input type="text" id="formTg" placeholder="@username" class="w-full px-4 py-3 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder-slate-500 text-sm transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-300 font-medium mb-2">Ваша CRM</label>
+                                <select id="formCrm" class="w-full px-4 py-3 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white text-sm transition-all outline-none appearance-none cursor-pointer">
+                                    <option value="" class="bg-slate-800">Выберите CRM</option>
+                                    <option value="amoCRM" class="bg-slate-800">amoCRM</option>
+                                    <option value="Битрикс24" class="bg-slate-800">Битрикс24</option>
+                                    <option value="Другая" class="bg-slate-800">Другая CRM / Телефония</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                                            <div class="flex items-start gap-2 text-left pt-1">
+                        <input type="checkbox" id="formConsent" required checked class="mt-1 rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="formConsent" class="text-xs text-slate-400 leading-tight">
+                            Я даю согласие на обработку персональных данных в соответствии с <span class="text-indigo-400 underline cursor-pointer">152-ФЗ РФ</span>. Гарантия конфиденциальности.
+                        </label>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold rounded-xl transition-all shadow-xl shadow-indigo-500/25 text-base flex items-center justify-center gap-3">
+                            <i class="fas fa-microphone-alt"></i>
+                            Получить бесплатный аудит 3 звонков
+                        </button>
+                        
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-slate-500">
+                            <div class="flex items-center gap-1.5"><i class="fas fa-lock text-emerald-500"></i>Конфиденциально</div>
+                            <div class="flex items-center gap-1.5"><i class="fas fa-shield-alt text-indigo-400"></i>152-ФЗ РФ</div>
+                            <div class="flex items-center gap-1.5"><i class="fas fa-clock text-slate-400"></i>Разбор за 15 минут</div>
+                        </div>
+                    </form>
+                    
+                    <!-- Success Message -->
+                    <div id="formSuccess" class="hidden text-center py-8">
+                        <div class="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-check text-emerald-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Заявка принята!</h3>
+                        <p class="text-slate-400 text-sm">Наш RevOps-инженер свяжется с вами в Telegram в течение 15 минут для получения записей 3 звонков на экспресс-тест.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xs"></i>
+                    </div>
+                    <span class="font-display font-bold text-white">RevOps Enterprise OS</span>
+                    <span class="px-2 py-0.5 text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 rounded-full">V17.6</span>
+                </div>
+                
+                <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500">
+                    <span>© 2026 RevOps Platform</span>
+                    <span>•</span>
+                    <span>НПД / ИП • 422-ФЗ</span>
+                    <span>•</span>
+                    <span>152-ФЗ РФ</span>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <a href="https://t.me/Reflecteddark" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать в Telegram">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="mailto:strelok15@bk.ru" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать на Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+            
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                });
+            });
+        }
+        
+        // Calculator logic (Calibrated for realistic B2B sales pipeline)
+        const managersSlider = document.getElementById('managers');
+        const leadsSlider = document.getElementById('leads');
+        const checkSlider = document.getElementById('check');
+        
+        const managersValue = document.getElementById('managersValue');
+        const leadsValue = document.getElementById('leadsValue');
+        const checkValue = document.getElementById('checkValue');
+        
+        const lossResult = document.getElementById('lossResult');
+        const recoveryResult = document.getElementById('recoveryResult');
+        const paybackResult = document.getElementById('paybackResult');
+        
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ru-RU').format(Math.round(num));
+        }
+        
+        
+        // Embedded Base64 Demo Excel (.xlsx)
+        const DEMO_EXCEL_B64 = "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";
+
+        function downloadDemoExcel() {
+            try {
+                const byteCharacters = atob(DEMO_EXCEL_B64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'RevOps_Platform_Demo_Sample.xlsx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error('Ошибка скачивания файла:', err);
+                alert('Не удалось скачать файл. Попробуйте еще раз.');
+            }
+        }
+
+        function calculate() {
+            const managers = parseInt(managersSlider.value);
+            const leads = parseInt(leadsSlider.value);
+            const avgCheck = parseInt(checkSlider.value);
+            
+            // Update display values
+            managersValue.textContent = managers;
+            leadsValue.textContent = formatNumber(leads);
+            checkValue.textContent = formatNumber(avgCheck) + ' ₽';
+            
+            // В B2B секторе из общего объема лидов до стадии предметного обсуждения и КП 
+            // доходит в среднем 18% лидов (SQL/Opportunity).
+            // Именно на этой стадии происходят критические потери выручки:
+            const qualifiedLeads = leads * 0.18;
+            const qualifiedPipeline = qualifiedLeads * avgCheck;
+            
+            // Реальные коэффициенты утечек:
+            // ~18% от объема квалифицированных сделок зависает или теряется из-за отсутствия Next Step
+            const totalLoss = qualifiedPipeline * 0.18;
+            
+            // Возврат 35% зависших сделок в первый месяц внедрения
+            const recovery = totalLoss * 0.35;
+            
+            // Тарифная сетка подписки
+            let monthlyPrice;
+            if (managers <= 5) {
+                monthlyPrice = 49000;
+            } else if (managers <= 10) {
+                monthlyPrice = 79000;
+            } else {
+                monthlyPrice = 120000;
+            }
+            
+            // Окупаемость в днях
+            const dailyRecovery = recovery / 30;
+            const paybackDays = Math.max(1, Math.ceil(monthlyPrice / dailyRecovery));
+            
+            // Отображение результатов
+            lossResult.textContent = formatNumber(totalLoss) + ' ₽';
+            recoveryResult.textContent = formatNumber(recovery) + ' ₽';
+            
+            if (paybackDays === 1) {
+                paybackResult.textContent = '1 день';
+            } else if (paybackDays < 5) {
+                paybackResult.textContent = paybackDays + ' дня';
+            } else {
+                paybackResult.textContent = paybackDays + ' дней';
+            }
+        }
+        
+        managersSlider.addEventListener('input', calculate);
+        leadsSlider.addEventListener('input', calculate);
+        checkSlider.addEventListener('input', calculate);
+        
+        calculate();
+        
+        // Form submission
+        const leadForm = document.getElementById('leadForm');
+        const formSuccess = document.getElementById('formSuccess');
+        
+        leadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('formName').value;
+            const phone = document.getElementById('formPhone').value;
+            const tg = document.getElementById('formTg').value;
+            const crm = document.getElementById('formCrm').value;
+            
+            console.log("Заявка с сайта:", { name, phone, tg, crm, date: new Date().toISOString() });
+            
+            leadForm.style.display = 'none';
+            formSuccess.classList.remove('hidden');
+            
+            const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков.\nИмя: ${name}\nТелефон: ${phone}\nTelegram: ${tg}\nCRM: ${crm}`);
+            const tgUrl = `https://t.me/Reflecteddark?text=${tgMsg}`;
+            const tgBtn = document.getElementById('tgDirectBtn');
+            if (tgBtn) {
+                tgBtn.href = tgUrl;
+            }
+            
+            const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков.\nИмя: ${name}\nТелефон: ${phone}\nTelegram: ${tg}\nCRM: ${crm}`);
+            const tgUrl = `https://t.me/Reflecteddark?text=${tgMsg}`;
+            const tgBtn = document.getElementById('tgDirectBtn');
+            if (tgBtn) {
+                tgBtn.href = tgUrl;
+            }
+        });
+        
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Header scroll effect
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 80) {
+                header.classList.add('shadow-lg', 'shadow-black/20');
+            } else {
+                header.classList.remove('shadow-lg', 'shadow-black/20');
+            }
+        });
+    </script>
+</body>
+</html>
