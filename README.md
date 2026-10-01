@@ -4,14 +4,14 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Excel](https://img.shields.io/badge/Excel-openpyxl-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white)
-![Chrome](https://img.shields.io/badge/Engine-Chrome_Headless-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)
+[![Website](https://img.shields.io/badge/Live_Site-ai--rop.ru-2563EB?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ai-rop.ru)
 ![Security](https://img.shields.io/badge/Compliance-152--ФЗ_Audit_Log-16A34A?style=for-the-badge)
 ![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.1_AAA-4F46E5?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 **Автономная операционная система управления выручкой (Revenue Operations), финансовым аудитом и автоматической генерацией C-Level PDF-отчетов.**
 
-[Обзор](#-обзор-системы) • [Архитектура](#-архитектура-решения) • [Компоненты](#-ключевые-компоненты) • [Быстрый старт](#-быстрый-старт) • [Безопасность и Аудит](#-безопасность-и-аудит-152-фз) • [Структура репозитория](#-структура-репозитория)
+[🌐 Живой сайт: ai-rop.ru](https://ai-rop.ru) • [Обзор](#-обзор-системы) • [Архитектура](#-архитектура-решения) • [Веб-раздел](#-веб-сайт-и-маркетинговая-витрина-ai-ropru) • [Компоненты](#-ключевые-компоненты) • [Быстрый старт](#-быстрый-старт) • [Структура репозитория](#-структура-репозитория)
 
 </div>
 
@@ -122,6 +122,17 @@ pip install -r requirements.txt
 
 ---
 
+## 🌐 Веб-сайт и Маркетинговая Витрина ([ai-rop.ru](https://ai-rop.ru))
+
+Публичный веб-сайт платформы полностью вынесен в **отдельный изолированный раздел [`web/`](web/)**:
+- 🔗 **Официальный домен**: **[https://ai-rop.ru](https://ai-rop.ru)**
+- 🎛️ **Интерактивный экспресс-калькулятор**: клиентское моделирование упущенной прибыли и сценариев роста (+15%, +30%, +50%) за 30 секунд.
+- 📥 **Скачивание презентационного отчета**: прямая выдача эталонной таблицы `RevOps_Platform_Demo_Sample.xlsx` с **13 критериями речевой аналитики** и «5 решениями месяца».
+- 🤖 **Лид-магнит тест-драйва**: интеграция с Telegram-ботом [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot) для разбора 3 звонков.
+- 🚀 **Автодеплой и CI/CD**: автоматическая публикация раздела `web/` на GitHub Pages через GitHub Actions при push в `main`.
+
+---
+
 ## 🔐 Безопасность и Аудит (152-ФЗ)
 
 - **Zero-Cloud Reporting**: все вычисления, парсинг Excel и рендер PDF происходят строго локально на машине или в защищенном контуре. Финансовые данные не передаются на сторонние серверы.
@@ -134,6 +145,20 @@ pip install -r requirements.txt
 
 ```
 revops-enterprise-os/
+│
+├── web/                                              # 🌐 ИЗОЛИРОВАННЫЙ РАЗДЕЛ ВЕБ-САЙТА (ai-rop.ru)
+│   ├── index.html                                    # Главная страница (лендинг платформы с ROI-калькулятором)
+│   ├── CNAME                                         # Привязка собственного домена ai-rop.ru
+│   ├── .nojekyll                                     # Отключение Jekyll для чистого HTML/JS
+│   ├── RevOps_Platform_Demo_Sample.xlsx              # Презентационный Excel-образец (13 критериев ИИ)
+│   └── README.md                                     # Документация раздела веб-сайта
+│
+├── speech_engine.py                                  # Модуль речевой аналитики Whisper + 152-ФЗ Sanitizer
+├── amocrm_connector.py                               # Промышленный коннектор к amoCRM (SLA, батчинг)
+├── bitrix24_connector.py                             # Промышленный коннектор к Битрикс24
+├── telegram_bot.py                                   # Telegram-бот супервайзера @RevOps_Super_Audit_Bot
+├── run_express_audit.py                              # Движок экспресс-аудита 3 звонков
+├── google_sheets_sync.py                             # Двусторонняя синхронизация с Google Sheets
 │
 ├── RevOps Platform V17.6 (RBAC Production Suite).xlsx # Мастер-книга с витринами
 ├── generate_full_report_pdf.py                       # Движок рендера полного отчета
@@ -153,16 +178,20 @@ revops-enterprise-os/
 │   ├── 📑 Сформировать Полный Отчет (15 витрин).bat
 │   └── 🚀 Сформировать ВСЕ Отчеты RevOps.bat
 │
-├── docs/                                             # Документация и ТЗ
+├── docs/                                             # Юридический контур, регламенты и ТЗ
+│   ├── 152-ФЗ_Комплект_Безопасности_RevOps_AI.docx  # 5 юридических документов по 152-ФЗ
+│   ├── Боевой_Протокол_Клиент_За_7_Дней.docx        # Внутренний регламент фаундера
+│   ├── Дорожная_Карта_Пилота_Для_Клиента_7_Дней.docx # Клиентская 1-page памятка
+│   ├── Партнерское_Предложение_Интеграторам_CRM.docx # Оффер для интеграторов CRM
 │   └── ТЗ_Архитектура_RevOps_Bot_Reporting_Engine.docx # Официальное ТЗ на внедрение
 │
 ├── samples/                                          # Примеры сгенерированных отчетов
 │   ├── RevOps_Enterprise_OS_V17.6_Executive_Summary.pdf
 │   └── RevOps_Enterprise_OS_V17.6_Full_Report.pdf
 │
-├── RevOps_B2B_Enterprise_Checkout.html               # Прототип Checkout-системы
-├── RevOps_Checkout_Design_System.md                  # Спецификация дизайн-системы
-├── business_plan_revops_ai.md                        # Бизнес-план и unit-экономика
+├── .github/workflows/                                # CI/CD Автодеплой
+│   └── deploy-pages.yml                              # Автоматический деплой web/ на ai-rop.ru
+│
 ├── requirements.txt                                  # Зависимости Python
 ├── .gitignore                                        # Исключения Git
 ├── LICENSE                                           # Лицензия MIT
