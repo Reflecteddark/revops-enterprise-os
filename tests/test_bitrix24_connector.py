@@ -463,3 +463,132 @@ def test_multiple_deals_all_added(excel_with_raw_deals):
     # Строки 2 (ручная) + 5 новых = max_row 6
     assert ws.max_row == 7
     wb.close()
+
+
+# ─────────────────────────────────────────────
+# Тесты RateLimiter и защиты от лимитов Bitrix24
+# ─────────────────────────────────────────────
+import time
+from unittest.mock import MagicMock
+from bitrix24_connector import (
+    RateLimiter,
+    normalize_phone,
+    extract_contact_phones,
+    resolve_target_deal,
+    find_deals_by_phone,
+    match_call_to_deal,
+    Bitrix24Client,
+)
+
+
+def test_b24_rate_limiter_pacing():
+    limiter = RateLimiter(max_per_sec=10.0)
+    t0 = time.time()
+    limiter.wait()
+    limiter.wait()
+    t1 = time.time()
+    assert (t1 - t0) >= 0.08
+
+
+def test_b24_call_batch_mock():
+    creds = B24Creds(webhook_url="https://test.bitrix24.ru/rest/1/abc/")
+    client = Bitrix24Client(creds)
+    client.call = MagicMock(return_value={"result": {"result": {"cmd1": {"ID": 10}, "cmd2": {"ID": 20}}}})
+
+    cmds = {"cmd1": "crm.deal.get?id=10", "cmd2": "crm.deal.get?id=20"}
+    res = client.call_batch(cmds)
+    assert "cmd1" in res
+    assert res["cmd1"]["ID"] == 10
+    client.call.assert_called_once_with("batch", {"halt": 0, "cmd": cmds})
+
+
+def test_b24_call_batch_limit_validation():
+    creds = B24Creds(webhook_url="https://test.bitrix24.ru/rest/1/abc/")
+    client = Bitrix24Client(creds)
+    cmds = {f"cmd_{i}": f"crm.deal.get?id={i}" for i in range(51)}
+    with pytest.raises(ValueError, match="максимум 50 команд"):
+        client.call_batch(cmds)
+
+
+# ─────────────────────────────────────────────
+# Тесты нормализации телефонов и извлечения
+# ─────────────────────────────────────────────
+@pytest.mark.parametrize("raw,expected", [
+    ("8 (800) 555-35-35", "+78005553535"),
+    ("+7 495 123-45-67", "+74951234567"),
+    ("9161234567", "+79161234567"),
+    ("", ""),
+    (None, ""),
+])
+def test_b24_normalize_phone(raw, expected):
+    assert normalize_phone(raw) == expected
+
+
+def test_b24_extract_contact_phones():
+    contact = {
+        "ID": "10",
+        "NAME": "Иван",
+        "PHONE": [
+            {"VALUE": "+7 (495) 111-22-33", "VALUE_TYPE": "WORK"},
+            {"VALUE": "89162223344", "VALUE_TYPE": "MOBILE"},
+            {"VALUE": "+74951112233"}, # дубль
+        ],
+    }
+    phones = extract_contact_phones(contact)
+    assert len(phones) == 2
+    assert "+74951112233" in phones
+    assert "+79162223344" in phones
+
+
+# ─────────────────────────────────────────────
+# Тесты SmartDealMatcher (Защита от псевдо-дублей в Bitrix24)
+# ─────────────────────────────────────────────
+def test_b24_resolve_target_deal_prefers_active():
+    """Открытая сделка (semantic P) всегда приоритетнее выигранных (S) или проигранных (F)."""
+    deals = [
+        {"ID": "1", "STAGE_SEMANTIC_ID": "S", "OPPORTUNITY": "5000000", "DATE_MODIFY": "2026-09-01"},
+        {"ID": "2", "STAGE_SEMANTIC_ID": "F", "OPPORTUNITY": "3000000", "DATE_MODIFY": "2026-09-05"},
+        {"ID": "3", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "450000",  "DATE_MODIFY": "2026-08-01"},
+    ]
+    chosen = resolve_target_deal(deals)
+    assert chosen["ID"] == "3"
+
+
+def test_b24_resolve_target_deal_prefers_higher_amount():
+    """При нескольких открытых сделках выбирается сделка с наибольшей суммой."""
+    deals = [
+        {"ID": "10", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "250000", "DATE_MODIFY": "2026-09-10"},
+        {"ID": "11", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "1800000", "DATE_MODIFY": "2026-09-01"},
+        {"ID": "12", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "90000",  "DATE_MODIFY": "2026-09-15"},
+    ]
+    chosen = resolve_target_deal(deals)
+    assert chosen["ID"] == "11"
+
+
+def test_b24_resolve_target_deal_prefers_latest_modify_on_tie():
+    """При равенстве сумм выбирается более свежая сделка."""
+    deals = [
+        {"ID": "20", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "500000", "DATE_MODIFY": "2026-09-01T10:00:00"},
+        {"ID": "21", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "500000", "DATE_MODIFY": "2026-09-20T12:00:00"},
+    ]
+    chosen = resolve_target_deal(deals)
+    assert chosen["ID"] == "21"
+
+
+def test_b24_match_call_to_deal_end_to_end():
+    """Сквозной матчинг звонка к сделке Bitrix24."""
+    contacts_map = {
+        "77": {
+            "ID": "77",
+            "NAME": "Клиент",
+            "PHONE": [{"VALUE": "+7 (916) 555-44-33"}],
+        }
+    }
+    all_deals = [
+        {"ID": "501", "CONTACT_ID": "77", "STAGE_SEMANTIC_ID": "F", "OPPORTUNITY": "100000"},
+        {"ID": "502", "CONTACT_ID": "77", "STAGE_SEMANTIC_ID": "P", "OPPORTUNITY": "950000"},
+    ]
+    res = match_call_to_deal("89165554433", all_deals, contacts_map)
+    assert res is not None
+    assert res["ID"] == "502"
+

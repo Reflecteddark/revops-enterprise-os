@@ -36,6 +36,8 @@ from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass, field, asdict
 from urllib.parse import urlencode
+import re
+import random
 
 import requests
 import openpyxl
@@ -152,18 +154,36 @@ class SyncResult:
 
 
 # ─────────────────────────────────────────────
-# Авторизация и HTTP
+# Авторизация, HTTP и Rate Limiting (Защита от лимитов API)
 # ─────────────────────────────────────────────
-class AmoCRMClient:
-    """HTTP-клиент для AmoCRM API v4 с auto-refresh токенов."""
+class RateLimiter:
+    """
+    Клиентский ограничитель скорости запросов (Token Bucket / Interval Pacing).
+    Защищает от превышения лимитов amoCRM API (~7 req/sec) и ошибок 429 Too Many Requests.
+    """
+    def __init__(self, max_per_sec: float = 6.0):
+        self.min_interval = 1.0 / max_per_sec if max_per_sec > 0 else 0.0
+        self.last_call_ts = 0.0
 
-    def __init__(self, creds: AmoCreds):
+    def wait(self) -> None:
+        elapsed = time.time() - self.last_call_ts
+        if elapsed < self.min_interval:
+            time.sleep(self.min_interval - elapsed)
+        self.last_call_ts = time.time()
+
+
+class AmoCRMClient:
+    """HTTP-клиент для AmoCRM API v4 с auto-refresh токенов и защитой от лимитов."""
+
+    def __init__(self, creds: AmoCreds, max_requests_per_sec: float = 6.0):
         self.creds = creds
+        self.rate_limiter = RateLimiter(max_per_sec=max_requests_per_sec)
         self.session = requests.Session()
         self.session.headers.update({
             "Content-Type": "application/json",
             "User-Agent": "RevOps-Enterprise-OS/17.6",
         })
+        self._cache: dict[str, dict] = {}
 
     def _refresh_token(self) -> None:
         """Обновляет access_token через refresh_token."""
@@ -194,10 +214,11 @@ class AmoCRMClient:
         self.session.headers["Authorization"] = f"Bearer {self.creds.access_token}"
 
     def get(self, url: str, params: dict | None = None,
-            retries: int = 3) -> dict:
-        """GET с auto-retry при 401/429/5xx."""
+            retries: int = 5) -> dict:
+        """GET с клиентским rate-limiting и экспоненциальным backoff при 401/429/5xx."""
         self._ensure_token()
         for attempt in range(retries):
+            self.rate_limiter.wait()
             try:
                 resp = self.session.get(url, params=params, timeout=30)
                 if resp.status_code == 401:
@@ -206,9 +227,11 @@ class AmoCRMClient:
                         f"Bearer {self.creds.access_token}"
                     )
                     continue
-                if resp.status_code == 429:
-                    wait = int(resp.headers.get("Retry-After", 5))
-                    print(f"  [RATE LIMIT] Ждём {wait}с...")
+                if resp.status_code in (429, 503):
+                    header_retry = resp.headers.get("Retry-After")
+                    base_wait = float(header_retry) if header_retry else (2 ** attempt)
+                    wait = base_wait + random.uniform(0.2, 0.8)
+                    print(f"  [RATE LIMIT {resp.status_code}] Ждём {wait:.1f}с (попытка {attempt+1}/{retries})...")
                     time.sleep(wait)
                     continue
                 if resp.status_code == 204:
@@ -218,8 +241,175 @@ class AmoCRMClient:
             except requests.RequestException as e:
                 if attempt == retries - 1:
                     raise
-                time.sleep(2 ** attempt)
+                backoff = (2 ** attempt) + random.uniform(0.2, 0.8)
+                time.sleep(backoff)
         return {}
+
+    def post(self, url: str, json_data: dict | None = None,
+             retries: int = 5) -> dict:
+        """POST с клиентским rate-limiting и защитой от перегрузок."""
+        self._ensure_token()
+        for attempt in range(retries):
+            self.rate_limiter.wait()
+            try:
+                resp = self.session.post(url, json=json_data, timeout=30)
+                if resp.status_code == 401:
+                    self._refresh_token()
+                    self.session.headers["Authorization"] = (
+                        f"Bearer {self.creds.access_token}"
+                    )
+                    continue
+                if resp.status_code in (429, 503):
+                    header_retry = resp.headers.get("Retry-After")
+                    base_wait = float(header_retry) if header_retry else (2 ** attempt)
+                    wait = base_wait + random.uniform(0.2, 0.8)
+                    print(f"  [RATE LIMIT {resp.status_code}] Ждём {wait:.1f}с (попытка {attempt+1}/{retries})...")
+                    time.sleep(wait)
+                    continue
+                resp.raise_for_status()
+                return resp.json() if resp.content else {}
+            except requests.RequestException as e:
+                if attempt == retries - 1:
+                    raise
+                backoff = (2 ** attempt) + random.uniform(0.2, 0.8)
+                time.sleep(backoff)
+        return {}
+
+
+# ─────────────────────────────────────────────
+# Нормализация телефонов и умный матчинг звонков (Защита от дублей)
+# ─────────────────────────────────────────────
+def normalize_phone(phone: str | None) -> str:
+    """
+    Нормализует телефон к формату E.164 (+7XXXXXXXXXX для РФ/СНГ).
+    Удаляет пробелы, тире, скобки.
+    89XXXXXXXXX -> +79XXXXXXXXX
+    79XXXXXXXXX -> +79XXXXXXXXX
+    9XXXXXXXXX  -> +79XXXXXXXXX
+    """
+    if not phone:
+        return ""
+    digits = re.sub(r"\D", "", str(phone))
+    if len(digits) == 11 and digits.startswith("8"):
+        return "+7" + digits[1:]
+    elif len(digits) == 11 and digits.startswith("7"):
+        return "+" + digits
+    elif len(digits) == 10 and digits.startswith("9"):
+        return "+7" + digits
+    elif digits:
+        return "+" + digits if not str(phone).strip().startswith("+") else "+" + digits
+    return ""
+
+
+def extract_contact_phones(contact: dict) -> list[str]:
+    """
+    Извлекает все телефоны контакта amoCRM из custom_fields_values (field_code='PHONE').
+    Возвращает список нормализованных номеров.
+    """
+    phones = []
+    cf_values = contact.get("custom_fields_values") or []
+    for cf in cf_values:
+        if cf.get("field_code") == "PHONE":
+            for item in cf.get("values", []):
+                val = item.get("value")
+                norm = normalize_phone(val)
+                if norm and norm not in phones:
+                    phones.append(norm)
+    return phones
+
+
+def resolve_target_deal(
+    candidate_deals: list[dict],
+    stage_mapping: dict | None = None,
+) -> dict | None:
+    """
+    Устранение коллизий псевдо-дублей: сопоставляет звонок с наиболее релевантной сделкой.
+    
+    Правила приоритизации (из исследований рынка RevOps):
+      1. Приоритет активных стадий: открытые сделки (RevOps 1-5, не выиграны 6 и не проиграны 0).
+      2. Приоритет суммы (amount / price): при наличии нескольких открытых сделок выбирается сделка с максимальной суммой.
+      3. Приоритет свежести (updated_at): при равенстве сумм выбирается сделка с самой свежей активностью.
+      4. Фоллбэк: если все сделки закрыты - выбирается наиболее свежая закрытая (кандидат на повторную продажу).
+    """
+    if not candidate_deals:
+        return None
+    if len(candidate_deals) == 1:
+        return candidate_deals[0]
+
+    def _is_active(d: dict) -> bool:
+        status_id = d.get("status_id", 0)
+        if stage_mapping and status_id in stage_mapping:
+            stage_id = stage_mapping[status_id]
+            return stage_id not in (0, 6)
+        # Дефолтные статусы amoCRM: 142=won, 143=lost
+        return status_id not in (142, 143)
+
+    active_deals = [d for d in candidate_deals if _is_active(d)]
+    pool = active_deals if active_deals else candidate_deals
+
+    def _deal_priority_key(d: dict):
+        price = d.get("price") or d.get("amount") or 0
+        try:
+            price = float(price)
+        except (ValueError, TypeError):
+            price = 0.0
+        updated = d.get("updated_at") or d.get("updated_ts") or 0
+        try:
+            updated = float(updated)
+        except (ValueError, TypeError):
+            updated = 0.0
+        return (price, updated)
+
+    return max(pool, key=_deal_priority_key)
+
+
+def find_deals_by_phone(
+    phone: str,
+    all_deals: list[dict],
+    contacts_map: dict[int, dict],
+) -> list[dict]:
+    """
+    Ищет все сделки, привязанные к контактам с данным телефонным номером.
+    """
+    norm_target = normalize_phone(phone)
+    if not norm_target:
+        return []
+
+    matched_contact_ids = set()
+    for cid, cdata in contacts_map.items():
+        phones = extract_contact_phones(cdata)
+        if norm_target in phones:
+            matched_contact_ids.add(cid)
+
+    if not matched_contact_ids:
+        return []
+
+    matched_deals = []
+    for d in all_deals:
+        main_cid = d.get("main_contact_id")
+        if main_cid in matched_contact_ids:
+            matched_deals.append(d)
+            continue
+        emb_contacts = d.get("_embedded", {}).get("contacts", [])
+        for ec in emb_contacts:
+            if ec.get("id") in matched_contact_ids:
+                matched_deals.append(d)
+                break
+
+    return matched_deals
+
+
+def match_call_to_deal(
+    call_phone: str,
+    all_deals: list[dict],
+    contacts_map: dict[int, dict],
+    stage_mapping: dict | None = None,
+) -> dict | None:
+    """
+    Сквозной матчинг аудиозвонка к целевой сделке в amoCRM с защитой от псевдо-дублей.
+    """
+    candidate_deals = find_deals_by_phone(call_phone, all_deals, contacts_map)
+    return resolve_target_deal(candidate_deals, stage_mapping)
 
 
 # ─────────────────────────────────────────────

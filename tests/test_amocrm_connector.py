@@ -361,3 +361,131 @@ def test_extract_custom_field_missing():
 def test_extract_custom_field_none_values():
     lead = {"custom_fields_values": None}
     assert _extract_custom_field(lead, "UTM_SOURCE") == ""
+
+
+# ─────────────────────────────────────────────
+# Тесты RateLimiter и защиты от лимитов
+# ─────────────────────────────────────────────
+from amocrm_connector import (
+    RateLimiter,
+    normalize_phone,
+    extract_contact_phones,
+    resolve_target_deal,
+    find_deals_by_phone,
+    match_call_to_deal,
+)
+
+
+def test_rate_limiter_pacing():
+    limiter = RateLimiter(max_per_sec=20.0)
+    t0 = time.time()
+    limiter.wait()
+    limiter.wait()
+    t1 = time.time()
+    assert (t1 - t0) >= 0.04
+
+
+# ─────────────────────────────────────────────
+# Тесты нормализации телефонов
+# ─────────────────────────────────────────────
+@pytest.mark.parametrize("raw,expected", [
+    ("8 (999) 123-45-67", "+79991234567"),
+    ("+7 999 123 45 67", "+79991234567"),
+    ("79991234567", "+79991234567"),
+    ("9991234567", "+79991234567"),
+    ("+375 29 123-45-67", "+375291234567"),
+    ("", ""),
+    (None, ""),
+])
+def test_normalize_phone(raw, expected):
+    assert normalize_phone(raw) == expected
+
+
+def test_extract_contact_phones():
+    contact = {
+        "id": 1001,
+        "custom_fields_values": [
+            {
+                "field_code": "PHONE",
+                "values": [
+                    {"value": "8 (999) 111-22-33"},
+                    {"value": "+7 999 444-55-66"},
+                    {"value": "89991112233"}, # дубль
+                ],
+            }
+        ],
+    }
+    phones = extract_contact_phones(contact)
+    assert len(phones) == 2
+    assert "+79991112233" in phones
+    assert "+79994445566" in phones
+
+
+# ─────────────────────────────────────────────
+# Тесты SmartDealMatcher (Защита от псевдо-дублей)
+# ─────────────────────────────────────────────
+def test_resolve_target_deal_prefers_active():
+    """Активная сделка всегда имеет приоритет над закрытыми."""
+    deals = [
+        {"id": 1, "status_id": 142, "price": 5_000_000, "updated_at": 1000}, # Won
+        {"id": 2, "status_id": 143, "price": 2_000_000, "updated_at": 2000}, # Lost
+        {"id": 3, "status_id": 303, "price": 500_000, "updated_at": 500},    # Active (In progress)
+    ]
+    mapping = {303: 3, 142: 6, 143: 0}
+    chosen = resolve_target_deal(deals, stage_mapping=mapping)
+    assert chosen["id"] == 3
+
+
+def test_resolve_target_deal_prefers_higher_amount():
+    """При нескольких активных сделках выбирается сделка с максимальной суммой."""
+    deals = [
+        {"id": 10, "status_id": 303, "price": 300_000, "updated_at": 2000},
+        {"id": 11, "status_id": 303, "price": 1_200_000, "updated_at": 1000},
+        {"id": 12, "status_id": 303, "price": 150_000, "updated_at": 3000},
+    ]
+    mapping = {303: 3}
+    chosen = resolve_target_deal(deals, stage_mapping=mapping)
+    assert chosen["id"] == 11
+
+
+def test_resolve_target_deal_prefers_latest_update_on_tie():
+    """При равенстве сумм выбирается наиболее свежая сделка."""
+    deals = [
+        {"id": 21, "status_id": 303, "price": 500_000, "updated_at": 1000},
+        {"id": 22, "status_id": 303, "price": 500_000, "updated_at": 5000},
+    ]
+    mapping = {303: 3}
+    chosen = resolve_target_deal(deals, stage_mapping=mapping)
+    assert chosen["id"] == 22
+
+
+def test_resolve_target_deal_fallback_when_all_closed():
+    """Если все сделки закрыты, выбирается наиболее свежая закрытая."""
+    deals = [
+        {"id": 31, "status_id": 143, "price": 100_000, "updated_at": 1000},
+        {"id": 32, "status_id": 142, "price": 200_000, "updated_at": 3000},
+    ]
+    mapping = {142: 6, 143: 0}
+    chosen = resolve_target_deal(deals, stage_mapping=mapping)
+    assert chosen["id"] == 32
+
+
+def test_match_call_to_deal_end_to_end():
+    """Сквозной тест матчинга звонка по телефону к сделке."""
+    contacts_map = {
+        501: {
+            "id": 501,
+            "custom_fields_values": [
+                {"field_code": "PHONE", "values": [{"value": "+7 (999) 777-88-99"}]}
+            ],
+        }
+    }
+    all_deals = [
+        {"id": 101, "main_contact_id": 501, "status_id": 143, "price": 50_000, "updated_at": 100},
+        {"id": 102, "main_contact_id": 501, "status_id": 303, "price": 750_000, "updated_at": 200},
+    ]
+    mapping = {303: 3, 143: 0}
+    res = match_call_to_deal("89997778899", all_deals, contacts_map, mapping)
+    assert res is not None
+    assert res["id"] == 102
+

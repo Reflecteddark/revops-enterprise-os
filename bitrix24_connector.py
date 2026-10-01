@@ -39,6 +39,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass, field, asdict
+import re
+import random
 
 import requests
 import openpyxl
@@ -157,16 +159,34 @@ class SyncResult:
 
 
 # ─────────────────────────────────────────────
-# HTTP-клиент Bitrix24
+# HTTP-клиент Bitrix24 и Rate Limiting
 # ─────────────────────────────────────────────
+class RateLimiter:
+    """
+    Клиентский ограничитель скорости запросов к Bitrix24 REST API.
+    Строгий лимит Bitrix24: 2 req/sec (с короткими всплесками до 5).
+    Гарантирует задержку между запросами не менее 0.5с для предотвращения ошибок 503/429.
+    """
+    def __init__(self, max_per_sec: float = 2.0):
+        self.min_interval = 1.0 / max_per_sec if max_per_sec > 0 else 0.0
+        self.last_call_ts = 0.0
+
+    def wait(self) -> None:
+        elapsed = time.time() - self.last_call_ts
+        if elapsed < self.min_interval:
+            time.sleep(self.min_interval - elapsed)
+        self.last_call_ts = time.time()
+
+
 class Bitrix24Client:
     """
-    REST-клиент для Bitrix24 через вебхук.
-    Автоматически обрабатывает пагинацию и rate-limit.
+    REST-клиент для Bitrix24 через вебхук с защитой от лимитов (RateLimiter)
+    и поддержкой пакетных запросов (Batch API).
     """
 
-    def __init__(self, creds: B24Creds):
+    def __init__(self, creds: B24Creds, max_requests_per_sec: float = 2.0):
         self.creds = creds
+        self.rate_limiter = RateLimiter(max_per_sec=max_requests_per_sec)
         self.session = requests.Session()
         self.session.headers.update({
             "Content-Type": "application/json",
@@ -174,19 +194,22 @@ class Bitrix24Client:
         })
 
     def call(self, method: str, params: dict | None = None,
-             retries: int = 3) -> dict:
-        """POST к методу Bitrix24 REST API."""
+             retries: int = 5) -> dict:
+        """POST к методу Bitrix24 REST API с клиентским rate-limiting и backoff."""
         url = self.creds.url(method)
         payload = params or {}
 
         for attempt in range(retries):
+            self.rate_limiter.wait()
             try:
                 resp = self.session.post(url, json=payload, timeout=30)
 
-                # Bitrix24 rate limit: 2 req/sec, при превышении → 503
-                if resp.status_code == 503:
-                    wait = 2 ** attempt
-                    print(f"  [RATE LIMIT] Ждём {wait}с...")
+                # Bitrix24 rate limit: 2 req/sec, при превышении → 503 или 429
+                if resp.status_code in (503, 429):
+                    header_retry = resp.headers.get("Retry-After")
+                    base_wait = float(header_retry) if header_retry else (2 ** attempt)
+                    wait = base_wait + random.uniform(0.2, 0.8)
+                    print(f"  [RATE LIMIT {resp.status_code}] Ждём {wait:.1f}с (попытка {attempt+1}/{retries})...")
                     time.sleep(wait)
                     continue
 
@@ -198,9 +221,13 @@ class Bitrix24Client:
                 resp.raise_for_status()
                 data = resp.json()
 
-                # Bitrix возвращает {"error": "...", "error_description": "..."}
                 if "error" in data:
                     err = data.get("error_description", data["error"])
+                    if "QUERY_LIMIT_EXCEEDED" in str(err):
+                        wait = (2 ** attempt) + random.uniform(0.5, 1.5)
+                        print(f"  [BITRIX QUERY LIMIT] Ждём {wait:.1f}с...")
+                        time.sleep(wait)
+                        continue
                     raise RuntimeError(f"Bitrix24 API error: {err}")
 
                 return data
@@ -208,9 +235,31 @@ class Bitrix24Client:
             except requests.RequestException as e:
                 if attempt == retries - 1:
                     raise
-                time.sleep(2 ** attempt)
+                backoff = (2 ** attempt) + random.uniform(0.2, 0.8)
+                time.sleep(backoff)
 
         return {}
+
+    def call_batch(self, commands: dict[str, str], halt_on_error: bool = False) -> dict:
+        """
+        Выполняет пакет запросов через Bitrix24 Batch API (до 50 команд за 1 HTTP-запрос).
+        Формат: {"deal_1": "crm.deal.get?id=1", "deal_2": "crm.deal.get?id=2"}
+        Позволяет обходить лимит 2 req/sec за счет объединения запросов.
+        """
+        if not commands:
+            return {}
+        if len(commands) > 50:
+            raise ValueError(f"Bitrix24 batch API принимает максимум 50 команд, передано: {len(commands)}")
+
+        payload = {
+            "halt": 1 if halt_on_error else 0,
+            "cmd": commands,
+        }
+        res = self.call("batch", payload)
+        batch_result = res.get("result", {})
+        if isinstance(batch_result, dict) and "result" in batch_result:
+            return batch_result.get("result", {})
+        return batch_result
 
     def list_all(self, method: str, params: dict | None = None,
                  result_key: str = "result", label: str = "") -> list[dict]:
@@ -236,14 +285,149 @@ class Bitrix24Client:
             print(f"  Страница {page_num}: загружено {len(items)}{suffix} "
                   f"(всего: {len(results)} / {data.get('total', '?')})")
 
-            # "next" присутствует если есть следующая страница
             if "next" not in data:
                 break
 
             start = data["next"]
-            time.sleep(0.5)  # Bitrix24: не более 2 req/sec
 
         return results
+
+
+# ─────────────────────────────────────────────
+# Нормализация телефонов и умный матчинг звонков (Защита от дублей)
+# ─────────────────────────────────────────────
+def normalize_phone(phone: str | None) -> str:
+    """
+    Нормализует телефон к формату E.164 (+7XXXXXXXXXX для РФ/СНГ).
+    Удаляет пробелы, тире, скобки.
+    89XXXXXXXXX -> +79XXXXXXXXX
+    79XXXXXXXXX -> +79XXXXXXXXX
+    9XXXXXXXXX  -> +79XXXXXXXXX
+    """
+    if not phone:
+        return ""
+    digits = re.sub(r"\D", "", str(phone))
+    if len(digits) == 11 and digits.startswith("8"):
+        return "+7" + digits[1:]
+    elif len(digits) == 11 and digits.startswith("7"):
+        return "+" + digits
+    elif len(digits) == 10 and digits.startswith("9"):
+        return "+7" + digits
+    elif digits:
+        return "+" + digits if not str(phone).strip().startswith("+") else "+" + digits
+    return ""
+
+
+def extract_contact_phones(contact: dict) -> list[str]:
+    """
+    Извлекает все телефоны контакта Bitrix24 из поля PHONE (список словарей с VALUE).
+    Возвращает список нормализованных номеров.
+    """
+    phones = []
+    raw_phones = contact.get("PHONE") or []
+    if isinstance(raw_phones, list):
+        for item in raw_phones:
+            if isinstance(item, dict):
+                norm = normalize_phone(item.get("VALUE"))
+                if norm and norm not in phones:
+                    phones.append(norm)
+            elif isinstance(item, str):
+                norm = normalize_phone(item)
+                if norm and norm not in phones:
+                    phones.append(norm)
+    elif isinstance(raw_phones, str):
+        norm = normalize_phone(raw_phones)
+        if norm:
+            phones.append(norm)
+    return phones
+
+
+def resolve_target_deal(
+    candidate_deals: list[dict],
+    stage_mapping: dict | None = None,
+) -> dict | None:
+    """
+    Устранение коллизий псевдо-дублей в Bitrix24: сопоставляет звонок с наиболее релевантной сделкой.
+    
+    Правила приоритизации:
+      1. Приоритет активных стадий: открытые сделки (STAGE_SEMANTIC_ID == 'P' или RevOps 1-5, не выиграны и не проиграны).
+      2. Приоритет суммы (OPPORTUNITY): при наличии нескольких открытых сделок выбирается сделка с максимальной суммой.
+      3. Приоритет свежести (DATE_MODIFY / DATE_CREATE): при равенстве сумм выбирается сделка с самой свежей активностью.
+      4. Фоллбэк: если все сделки закрыты - выбирается наиболее свежая закрытая (кандидат на повторную продажу).
+    """
+    if not candidate_deals:
+        return None
+    if len(candidate_deals) == 1:
+        return candidate_deals[0]
+
+    def _is_active(d: dict) -> bool:
+        semantic = d.get("STAGE_SEMANTIC_ID", "")
+        if semantic == "P":
+            return True
+        if semantic in ("S", "F"):
+            return False
+        stage_id = d.get("STAGE_ID", "")
+        if stage_mapping and stage_id in stage_mapping:
+            rev_stage = stage_mapping[stage_id]
+            return rev_stage not in (0, 6)
+        return True
+
+    active_deals = [d for d in candidate_deals if _is_active(d)]
+    pool = active_deals if active_deals else candidate_deals
+
+    def _deal_priority_key(d: dict):
+        opp = d.get("OPPORTUNITY") or 0
+        try:
+            opp = float(opp)
+        except (ValueError, TypeError):
+            opp = 0.0
+        mod_date = str(d.get("DATE_MODIFY") or d.get("DATE_CREATE") or "")
+        return (opp, mod_date)
+
+    return max(pool, key=_deal_priority_key)
+
+
+def find_deals_by_phone(
+    phone: str,
+    all_deals: list[dict],
+    contacts_map: dict[int, dict],
+) -> list[dict]:
+    """
+    Ищет все сделки Bitrix24, привязанные к контактам с данным телефонным номером.
+    """
+    norm_target = normalize_phone(phone)
+    if not norm_target:
+        return []
+
+    matched_contact_ids = set()
+    for cid, cdata in contacts_map.items():
+        phones = extract_contact_phones(cdata)
+        if norm_target in phones:
+            matched_contact_ids.add(str(cid))
+
+    if not matched_contact_ids:
+        return []
+
+    matched_deals = []
+    for d in all_deals:
+        contact_id = str(d.get("CONTACT_ID") or "")
+        if contact_id in matched_contact_ids:
+            matched_deals.append(d)
+
+    return matched_deals
+
+
+def match_call_to_deal(
+    call_phone: str,
+    all_deals: list[dict],
+    contacts_map: dict[int, dict],
+    stage_mapping: dict | None = None,
+) -> dict | None:
+    """
+    Сквозной матчинг аудиозвонка к целевой сделке в Bitrix24 с защитой от псевдо-дублей.
+    """
+    candidate_deals = find_deals_by_phone(call_phone, all_deals, contacts_map)
+    return resolve_target_deal(candidate_deals, stage_mapping)
 
 
 # ─────────────────────────────────────────────
