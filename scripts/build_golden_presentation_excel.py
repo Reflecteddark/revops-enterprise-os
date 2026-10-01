@@ -1301,10 +1301,10 @@ def build_presentation_workbook(target_path: Path):
     ws_sins["A28"].font = font_muted
     ws_sins["A28"].alignment = Alignment(horizontal="center")
 
-    ws_sins.column_dimensions["A"].width = 6
+    ws_sins.column_dimensions["A"].width = 14
     ws_sins.column_dimensions["B"].width = 38
     ws_sins.column_dimensions["C"].width = 44
-    ws_sins.column_dimensions["D"].width = 22
+    ws_sins.column_dimensions["D"].width = 24
     ws_sins.column_dimensions["E"].width = 26
     ws_sins.column_dimensions["F"].width = 22
     ws_sins.column_dimensions["G"].width = 44
@@ -1314,53 +1314,53 @@ def build_presentation_workbook(target_path: Path):
     # SHEET 5: 📄 Executive_OnePager (gid 1377308911 replica)
     # =========================================================================
     ws_one = wb.create_sheet("📄 Executive_OnePager")
-    setup_header_and_nav(ws_one, "📄 REVOPS ENTERPRISE EXECUTIVE ONE-PAGER (УПРАВЛЕНЧЕСКИЙ ДАЙДЖЕСТ)", active_idx=0, max_col="I")
+    setup_header_and_nav(ws_one, "📄 REVOPS ENTERPRISE EXECUTIVE ONE-PAGER (УПРАВЛЕНЧЕСКИЙ ДАЙДЖЕСТ)", active_idx=4, max_col="I")
 
-    # Row 4 & 5: 8 Core Executive KPIs
-    one_kpis = [
-        ("A", "Выручка (Факт Closed-Won)", 1650000, font_card_val, "#,##0 \"₽\""),
-        ("B", "% Выполнения плана", "33.0%", font_card_val, None),
-        ("C", "Взвешенный прогноз (SSOT)", 2754000, font_card_blue, "#,##0 \"₽\""),
-        ("D", "Run-Rate касса (Прогноз)", 1706897, font_card_val, "#,##0 \"₽\""),
-        ("E", "Активный пайплайн в работе", 5530000, font_card_val, "#,##0 \"₽\""),
-        ("F", "Сделок под угрозой SLA", "4", font_card_red, None),
-        ("G", "Качество речи ОП (ИИ)", "73.1%", font_card_val, None),
-        ("H", "I", "Data Quality Index", "100.0%", font_card_green, None)
+    # Row 4 & 5: 8 Core Executive KPIs (A-D Funnel, E spacer, F-I Action Center)
+    left_kpis = [
+        ("A", "Выручка (Closed-Won)", 1650000, font_card_val, fill_card, "#,##0 \"₽\""),
+        ("B", "% Выполнения плана", "33.0%", font_card_val, fill_card, None),
+        ("C", "Взвешенный прогноз", 2754000, font_card_blue, fill_indigo_light, "#,##0 \"₽\""),
+        ("D", "Run-Rate касса (Прогноз)", 1706897, font_card_val, fill_card, "#,##0 \"₽\"")
     ]
-
-    for item in one_kpis[:7]:
-        col_l, label, val, font_v, num_fmt = item
+    for col_l, label, val, font_v, fill_c, num_fmt in left_kpis:
         ws_one[f"{col_l}4"] = label
         ws_one[f"{col_l}4"].font = font_card_lbl
-        ws_one[f"{col_l}4"].fill = fill_card
+        ws_one[f"{col_l}4"].fill = fill_c
         ws_one[f"{col_l}4"].alignment = Alignment(horizontal="center", vertical="center")
         ws_one[f"{col_l}4"].border = card_border
 
         ws_one[f"{col_l}5"] = val
         ws_one[f"{col_l}5"].font = font_v
-        ws_one[f"{col_l}5"].fill = fill_card
+        ws_one[f"{col_l}5"].fill = fill_c
         ws_one[f"{col_l}5"].alignment = Alignment(horizontal="center", vertical="center")
         ws_one[f"{col_l}5"].border = card_border
         if num_fmt:
             ws_one[f"{col_l}5"].number_format = num_fmt
 
-    # Merge H4:I4 and H5:I5 for Data Quality
-    ws_one.merge_cells("H4:I4")
-    ws_one["H4"] = "Data Quality Index"
-    ws_one["H4"].font = font_card_lbl
-    ws_one["H4"].fill = fill_success
-    ws_one["H4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_one["H4"].border = card_border
+    right_kpis = [
+        ("F", "Активный пайплайн в работе", 5530000, font_card_val, fill_card, "#,##0 \"₽\""),
+        ("G", "Сделок под угрозой SLA", "4 сделки", font_card_red, fill_alert, None),
+        ("H", "Качество речи ОП (ИИ)", "73.1%", font_card_val, fill_card, None),
+        ("I", "Data Quality Index", "100.0% (Эталон)", font_card_green, fill_success, None)
+    ]
+    for col_l, label, val, font_v, fill_c, num_fmt in right_kpis:
+        ws_one[f"{col_l}4"] = label
+        ws_one[f"{col_l}4"].font = font_card_lbl
+        ws_one[f"{col_l}4"].fill = fill_c
+        ws_one[f"{col_l}4"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_one[f"{col_l}4"].border = card_border
 
-    ws_one.merge_cells("H5:I5")
-    ws_one["H5"] = "100.0%"
-    ws_one["H5"].font = font_card_green
-    ws_one["H5"].fill = fill_success
-    ws_one["H5"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_one["H5"].border = card_border
+        ws_one[f"{col_l}5"] = val
+        ws_one[f"{col_l}5"].font = font_v
+        ws_one[f"{col_l}5"].fill = fill_c
+        ws_one[f"{col_l}5"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_one[f"{col_l}5"].border = card_border
+        if num_fmt:
+            ws_one[f"{col_l}5"].number_format = num_fmt
 
-    ws_one.row_dimensions[4].height = 20
-    ws_one.row_dimensions[5].height = 30
+    ws_one.row_dimensions[4].height = 22
+    ws_one.row_dimensions[5].height = 32
 
     # Row 7: Section Headers
     ws_one.merge_cells("A7:D7")
@@ -1415,17 +1415,19 @@ def build_presentation_workbook(target_path: Path):
         f_stage, f_cnt, f_sum, f_sla = funnel_stages[idx]
         ws_one[f"A{r_num}"] = f_stage
         ws_one[f"A{r_num}"].font = font_reg
+        ws_one[f"A{r_num}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_one[f"A{r_num}"].border = thin_border
         ws_one[f"B{r_num}"] = f_cnt
-        ws_one[f"B{r_num}"].alignment = Alignment(horizontal="center")
+        ws_one[f"B{r_num}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_one[f"B{r_num}"].font = font_reg
         ws_one[f"B{r_num}"].border = thin_border
         ws_one[f"C{r_num}"] = f_sum
         ws_one[f"C{r_num}"].number_format = "#,##0 \"₽\""
         ws_one[f"C{r_num}"].font = font_bold
+        ws_one[f"C{r_num}"].alignment = Alignment(horizontal="right", vertical="center")
         ws_one[f"C{r_num}"].border = thin_border
         ws_one[f"D{r_num}"] = f_sla
-        ws_one[f"D{r_num}"].alignment = Alignment(horizontal="center")
+        ws_one[f"D{r_num}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_one[f"D{r_num}"].font = font_reg
         ws_one[f"D{r_num}"].border = thin_border
 
@@ -1434,44 +1436,43 @@ def build_presentation_workbook(target_path: Path):
             a_deal, a_symp, a_risk, a_act = action_risks[idx]
             ws_one[f"F{r_num}"] = a_deal
             ws_one[f"F{r_num}"].font = font_bold
+            ws_one[f"F{r_num}"].alignment = Alignment(horizontal="left", vertical="center")
             ws_one[f"F{r_num}"].border = thin_border
             ws_one[f"G{r_num}"] = a_symp
             ws_one[f"G{r_num}"].font = font_reg
+            ws_one[f"G{r_num}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
             ws_one[f"G{r_num}"].border = thin_border
             ws_one[f"H{r_num}"] = a_risk
             ws_one[f"H{r_num}"].number_format = "#,##0 \"₽\""
             ws_one[f"H{r_num}"].font = font_card_red
+            ws_one[f"H{r_num}"].alignment = Alignment(horizontal="right", vertical="center")
             ws_one[f"H{r_num}"].border = thin_border
             ws_one[f"I{r_num}"] = a_act
             ws_one[f"I{r_num}"].font = font_reg
+            ws_one[f"I{r_num}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
             ws_one[f"I{r_num}"].border = thin_border
 
-        ws_one.row_dimensions[r_num].height = 22
+        ws_one.row_dimensions[r_num].height = 28
 
     # Row 16: Chief Management Focus
-    ws_one.merge_cells("A16:I16")
-    ws_one["A16"] = "🎯 ГЛАВНЫЙ ФОКУС РУКОВОДСТВА ДО КОНЦА МЕСЯЦА: Перехват сделки D-104 (850 000 ₽) и перераспределение 3 лидов с перегруженного РОПа на КАМов."
-    ws_one["A16"].font = Font(name="Segoe UI", size=10, bold=True, color="1E293B")
-    ws_one["A16"].fill = fill_indigo_light
-    ws_one["A16"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_one["A16"].border = card_border
-    ws_one.row_dimensions[16].height = 28
+    merge_and_format(ws_one, "A16:I16", "🎯 ГЛАВНЫЙ ФОКУС РУКОВОДСТВА ДО КОНЦА МЕСЯЦА: Перехват сделки D-104 (850 000 ₽) и перераспределение 3 лидов с перегруженного РОПа на КАМов.", font=Font(name="Segoe UI", size=10, bold=True, color="1E293B"), fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center", wrap_text=True))
+    ws_one.row_dimensions[16].height = 32
 
     ws_one.column_dimensions["A"].width = 26
-    ws_one.column_dimensions["B"].width = 12
-    ws_one.column_dimensions["C"].width = 20
-    ws_one.column_dimensions["D"].width = 18
+    ws_one.column_dimensions["B"].width = 16
+    ws_one.column_dimensions["C"].width = 22
+    ws_one.column_dimensions["D"].width = 20
     ws_one.column_dimensions["E"].width = 6
     ws_one.column_dimensions["F"].width = 26
     ws_one.column_dimensions["G"].width = 28
-    ws_one.column_dimensions["H"].width = 20
+    ws_one.column_dimensions["H"].width = 22
     ws_one.column_dimensions["I"].width = 44
 
     # =========================================================================
     # SHEET 6: 🔐 152-ФЗ_Контур_Безопасности (Enterprise Compliance)
     # =========================================================================
     ws_sec = wb.create_sheet("🔐 152-ФЗ_Контур_Безопасности")
-    setup_header_and_nav(ws_sec, "🔐 ЮРИДИЧЕСКИЙ КОНТУР БЕЗОПАСНОСТИ И ОБЕЗЛИЧИВАНИЯ ПДН (152-ФЗ РФ)", active_idx=8, max_col="F")
+    setup_header_and_nav(ws_sec, "🔐 ЮРИДИЧЕСКИЙ КОНТУР БЕЗОПАСНОСТИ И ОБЕЗЛИЧИВАНИЯ ПДН (152-ФЗ РФ)", active_idx=5, max_col="F")
 
     ws_sec.merge_cells("A4:F4")
     ws_sec["A4"] = "🛡️ ГАРАНТИЯ СООТВЕТСТВИЯ ЗАКОНОДАТЕЛЬСТВУ И РЕГЛАМЕНТАМ БЕЗОПАСНОСТИ РФ"
@@ -1508,27 +1509,31 @@ def build_presentation_workbook(target_path: Path):
         ws_sec[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_sec[f"B{idx}"] = s[1]
         ws_sec[f"B{idx}"].font = font_bold
+        ws_sec[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_sec[f"C{idx}"] = s[2]
+        ws_sec[f"C{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_sec[f"D{idx}"] = s[3]
+        ws_sec[f"D{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_sec[f"E{idx}"] = s[4]
         ws_sec[f"E{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_sec[f"E{idx}"].font = font_card_green
         ws_sec[f"E{idx}"].fill = fill_success
         ws_sec[f"F{idx}"] = s[5]
         ws_sec[f"F{idx}"].font = font_reg
+        ws_sec[f"F{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
 
         for col_l in ["A", "B", "C", "D", "E", "F"]:
             ws_sec[f"{col_l}{idx}"].border = thin_border
             if col_l not in ["B", "E"]:
                 ws_sec[f"{col_l}{idx}"].font = font_reg
-        ws_sec.row_dimensions[idx].height = 28
+        ws_sec.row_dimensions[idx].height = 44
 
-    ws_sec.column_dimensions["A"].width = 6
-    ws_sec.column_dimensions["B"].width = 30
-    ws_sec.column_dimensions["C"].width = 44
-    ws_sec.column_dimensions["D"].width = 54
+    ws_sec.column_dimensions["A"].width = 14
+    ws_sec.column_dimensions["B"].width = 32
+    ws_sec.column_dimensions["C"].width = 46
+    ws_sec.column_dimensions["D"].width = 56
     ws_sec.column_dimensions["E"].width = 24
-    ws_sec.column_dimensions["F"].width = 36
+    ws_sec.column_dimensions["F"].width = 38
 
     # Set active sheet to ⚡ Экспресс_Калькулятор_3_Цифры
     wb.active = ws_calc
