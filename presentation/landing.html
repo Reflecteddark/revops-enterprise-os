@@ -1387,6 +1387,13 @@
             if (tgBtn) {
                 tgBtn.href = tgUrl;
             }
+            
+            const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков.\nИмя: ${name}\nТелефон: ${phone}\nTelegram: ${tg}\nCRM: ${crm}`);
+            const tgUrl = `https://t.me/Reflecteddark?text=${tgMsg}`;
+            const tgBtn = document.getElementById('tgDirectBtn');
+            if (tgBtn) {
+                tgBtn.href = tgUrl;
+            }
         });
         
         // Scroll animations
