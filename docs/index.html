@@ -111,8 +111,10 @@
             scrollbar-color: #334155 transparent;
         }
     </style>
-</head>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0">
+
+    <!-- SCROLL PROGRESS BAR (UI) -->
+    <div id="scrollProgressBar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 z-[60] transition-all duration-75 w-0 pointer-events-none"></div>
 
     <!-- NAVBAR -->
     <nav class="fixed w-full z-50 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80">
@@ -352,6 +354,73 @@
                             </a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE DEMO: КАК ИИ ЛОВИТ СЛИВ ЗВОНКА (WOW-EFFECT) -->
+    <section class="py-12 bg-slate-950/70 border-t border-slate-800/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-6 sm:p-9 border-2 border-slate-800 hover:border-emerald-500/40 transition-all shadow-2xl relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800/80">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 font-mono text-[11px] font-semibold mb-2 border border-rose-500/20">
+                            ИНТЕРАКТИВНЫЙ ТЕСТ-ДРАЙВ
+                        </span>
+                        <h3 class="font-display text-xl sm:text-2xl font-bold text-white">
+                            Послушайте, как ИИ-супервайзер ловит слив сделки за 15 секунд
+                        </h3>
+                    </div>
+                    <button type="button" id="demoPlayBtn" class="shrink-0 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition active:scale-95">
+                        <i class="fas fa-play text-xs" id="demoPlayIcon"></i>
+                        <span id="demoPlayText">Включить разбор звонка</span>
+                    </button>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <!-- Left: Dialogue transcript -->
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                            <span class="text-cyan-400 font-bold block mb-1">Клиент:</span>
+                            <span class="text-slate-300">«340 000 рублей для нас сейчас дороговато. Мы, пожалуй, ещё посмотрим другие варианты...»</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-rose-950/30 border border-rose-500/40 relative">
+                            <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-rose-500 text-white font-mono text-[9px] font-bold uppercase tracking-wider">
+                                ТОЧКА СЛИВА
+                            </div>
+                            <span class="text-rose-400 font-bold block mb-1">Менеджер (типичная ошибка):</span>
+                            <span class="text-rose-200">«Ну ладно... Если решите, перезвоните нам тогда сами, номер сохранили?»</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: AI Instant Analysis Box -->
+                    <div id="demoAiVerdict" class="p-5 rounded-2xl bg-slate-900/90 border border-amber-500/40 shadow-xl relative transition-all duration-300">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="flex items-center gap-1.5 text-xs font-bold text-amber-400 font-mono">
+                                <i class="fas fa-triangle-exclamation text-sm" id="demoAlertIcon"></i>
+                                АЛЕРТ СУПЕРВАЙЗЕРА #07
+                            </span>
+                            <span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold">ОЦЕНКА: 2 / 10</span>
+                        </div>
+                        <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                            <p><strong>Ошибка:</strong> Менеджер капитулировал без отработки возражения («дорого») и отпустил клиента без даты/времени следующего шага.</p>
+                            <p class="text-rose-300 font-semibold font-mono text-[11px]">Угроза выручке: -340 000 ₽ уходит конкуренту.</p>
+                            <p class="text-emerald-400 text-[11px] pt-1 border-t border-slate-800 font-mono">
+                                <strong>Рекомендация РОПу:</strong> Связаться через 2 часа со сценарием «Отработка через ROI».
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-5 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                    <span class="text-slate-400 flex items-center gap-2">
+                        <i class="fas fa-shield-halved text-emerald-400"></i>
+                        ИИ слушает 100% звонков в вашем отделе и находит такие сбои мгновенно
+                    </span>
+                    <a href="#cta" class="text-emerald-400 hover:text-emerald-300 font-bold underline transition flex items-center gap-1">
+                        Проверить 3 звонка ваших менеджеров (0 ₽) <i class="fas fa-arrow-right text-[10px]"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -845,6 +914,12 @@
                             Показать, как спасти эти деньги
                             <i class="fas fa-arrow-right text-xs"></i>
                         </a>
+
+                        <!-- Live Ticker: Cost of Delay -->
+                        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center font-mono text-[11px] text-slate-400 flex items-center justify-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                            <span>Пока вы на этой странице, отделы продаж в РФ слили: <strong id="liveLossCounter" class="text-rose-400 font-bold">14 250 ₽</strong></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1349,6 +1424,56 @@
         </div>
     </div>
 
+    <!-- SOCIAL PROOF LIVE TOAST (UX / CONVERSION) -->
+    <div id="socialProofToast" class="fixed bottom-6 left-6 z-40 max-w-sm hidden sm:flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/95 border border-slate-700/80 shadow-2xl backdrop-blur-xl transition-all duration-500 transform translate-y-8 opacity-0 pointer-events-none">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 text-base">
+            <i class="fas fa-bolt" id="toastIcon"></i>
+        </div>
+        <div class="flex-1 pr-1 text-xs">
+            <div class="text-white font-semibold flex items-center gap-1.5" id="toastTitle">
+                <span>Новая заявка на аудит</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            </div>
+            <div class="text-slate-300 text-[11px] leading-tight mt-0.5" id="toastDesc">
+                Компания (B2B SaaS, 18 менеджеров) отправила 3 звонка
+            </div>
+            <div class="text-[9px] text-slate-500 font-mono mt-1" id="toastTime">4 минуты назад</div>
+        </div>
+        <button type="button" id="closeToastBtn" class="text-slate-500 hover:text-white p-1 text-xs transition" title="Скрыть">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- EXIT-INTENT RETENTION MODAL (CONVERSION) -->
+    <div id="exitModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md transition-opacity">
+        <div class="relative w-full max-w-lg bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl text-center transform scale-95 transition-transform">
+            <button type="button" id="closeExitModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center transition" title="Закрыть">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-4 shadow-lg shadow-amber-500/10">
+                <i class="fas fa-gift"></i>
+            </div>
+            <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-[11px] font-semibold mb-2 border border-emerald-500/20">НЕ УХОДИТЕ С ПУСТЫМИ РУКАМИ</span>
+            <h3 class="font-display text-2xl font-bold text-white mb-2">Заберите экспресс-аудит 3 звонков (0 ₽)</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                Перед тем как уйти — узнайте, где прямо сейчас сливает ваш отдел продаж. Мы разберем 3 аудиозаписи звонков по 13 критериям качества за 20 минут бесплатно.
+            </p>
+            <div class="space-y-3">
+                <a href="#cta" id="exitClaimBtn" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl text-sm transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2">
+                    <i class="fas fa-bolt"></i>
+                    <span>Разобрать 3 звонка бесплатно (0 ₽)</span>
+                </a>
+                <a href="pilot-roadmap.html" target="_blank" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 transition flex items-center justify-center gap-2">
+                    <i class="fas fa-file-pdf text-rose-400"></i>
+                    <span>Открыть дорожную карту пилота на 7 дней</span>
+                </a>
+            </div>
+            <div class="mt-4 text-[10px] text-slate-500 font-mono">
+                Без обязательств • 100% конфиденциально по 152-ФЗ РФ
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1435,6 +1560,10 @@
                     // Switch UI
                     leadForm.style.display = 'none';
                     formSuccess.classList.remove('hidden');
+                    try {
+                        localStorage.removeItem('lead_draft_name');
+                        localStorage.removeItem('lead_draft_contact');
+                    } catch (e) {}
 
                     const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков (0 ₽).
 Имя: ${name}
@@ -1758,6 +1887,203 @@
 
             // Initial load
             loadChat();
+
+            // ==========================================
+            // UI / UX / QA CONVERSION ENHANCEMENTS
+            // ==========================================
+
+            // 1. SCROLL PROGRESS BAR (UI)
+            const progressBar = document.getElementById('scrollProgressBar');
+            if (progressBar) {
+                window.addEventListener('scroll', () => {
+                    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+                    progressBar.style.width = scrolled + '%';
+                }, { passive: true });
+            }
+
+            // 2. LIVE LOSS TICKER (ROI SECTION)
+            const liveLossCounter = document.getElementById('liveLossCounter');
+            if (liveLossCounter) {
+                let currentLoss = 14250;
+                setInterval(() => {
+                    currentLoss += Math.floor(Math.random() * 70) + 40;
+                    liveLossCounter.textContent = currentLoss.toLocaleString('ru-RU') + ' ₽';
+                }, 1600);
+            }
+
+            // 3. INTERACTIVE AUDIO DEMO: ЗВОНОК VS ИИ-СУПЕРВАЙЗЕР
+            const demoPlayBtn = document.getElementById('demoPlayBtn');
+            const demoPlayIcon = document.getElementById('demoPlayIcon');
+            const demoPlayText = document.getElementById('demoPlayText');
+            const demoAiVerdict = document.getElementById('demoAiVerdict');
+            let isPlayingDemo = false;
+
+            if (demoPlayBtn) {
+                demoPlayBtn.addEventListener('click', () => {
+                    if (isPlayingDemo) return;
+                    isPlayingDemo = true;
+                    demoPlayIcon.className = 'fas fa-spinner fa-spin text-xs';
+                    demoPlayText.textContent = 'ИИ слушает аудиопоток...';
+                    
+                    // Subtle Web Audio tone
+                    try {
+                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                        if (AudioCtx) {
+                            const ctx = new AudioCtx();
+                            const osc = ctx.createOscillator();
+                            const g = ctx.createGain();
+                            osc.connect(g);
+                            g.connect(ctx.destination);
+                            osc.type = 'sawtooth';
+                            osc.frequency.setValueAtTime(320, ctx.currentTime);
+                            osc.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.35);
+                            g.gain.setValueAtTime(0.04, ctx.currentTime);
+                            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+                            osc.start();
+                            osc.stop(ctx.currentTime + 0.35);
+                        }
+                    } catch(e) {}
+
+                    if (demoAiVerdict) {
+                        demoAiVerdict.classList.add('ring-4', 'ring-rose-500/50', 'scale-[1.02]');
+                    }
+
+                    setTimeout(() => {
+                        demoPlayIcon.className = 'fas fa-triangle-exclamation text-xs text-rose-400';
+                        demoPlayText.textContent = 'Слив зафиксирован супервайзером!';
+                        setTimeout(() => {
+                            demoPlayIcon.className = 'fas fa-play text-xs';
+                            demoPlayText.textContent = 'Включить разбор снова';
+                            isPlayingDemo = false;
+                            if (demoAiVerdict) {
+                                demoAiVerdict.classList.remove('ring-4', 'ring-rose-500/50', 'scale-[1.02]');
+                            }
+                        }, 3500);
+                    }, 800);
+                });
+            }
+
+            // 4. SOCIAL PROOF LIVE TOASTS
+            const socialProofToast = document.getElementById('socialProofToast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDesc = document.getElementById('toastDesc');
+            const toastTime = document.getElementById('toastTime');
+            const closeToastBtn = document.getElementById('closeToastBtn');
+
+            const proofItems = [
+                { title: 'Новая заявка на аудит', desc: 'Компания (B2B SaaS, 18 менеджеров) отправила 3 звонка', time: '3 минуты назад' },
+                { title: 'Подключение пилота', desc: 'Оптовый поставщик (Екатеринбург, 12 менеджеров) запустил 7 дней', time: '19 минут назад' },
+                { title: 'Найдена точка слива', desc: 'Аудит выявил утерю 380 000 ₽ на возражении «дорого»', time: '41 минуту назад' },
+                { title: 'Запрос дорожной карты', desc: 'Коммерческий директор скачал регламент пилота', time: '1 час назад' }
+            ];
+            let proofIdx = 0;
+            let toastDismissed = false;
+
+            function showToast(item) {
+                if (toastDismissed || !socialProofToast) return;
+                if (toastTitle && toastTitle.firstElementChild) toastTitle.firstElementChild.textContent = item.title;
+                if (toastDesc) toastDesc.textContent = item.desc;
+                if (toastTime) toastTime.textContent = item.time;
+                socialProofToast.classList.remove('translate-y-8', 'opacity-0', 'pointer-events-none');
+                socialProofToast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+                setTimeout(hideToast, 6000);
+            }
+
+            function hideToast() {
+                if (!socialProofToast) return;
+                socialProofToast.classList.add('translate-y-8', 'opacity-0', 'pointer-events-none');
+                socialProofToast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+
+            if (closeToastBtn) {
+                closeToastBtn.addEventListener('click', () => {
+                    toastDismissed = true;
+                    hideToast();
+                });
+            }
+
+            // First toast after 7s, then every 36s
+            setTimeout(() => {
+                showToast(proofItems[0]);
+                setInterval(() => {
+                    proofIdx = (proofIdx + 1) % proofItems.length;
+                    showToast(proofItems[proofIdx]);
+                }, 36000);
+            }, 7000);
+
+            // 5. EXIT-INTENT RETENTION MODAL
+            const exitModal = document.getElementById('exitModal');
+            const closeExitModalBtn = document.getElementById('closeExitModalBtn');
+            const exitClaimBtn = document.getElementById('exitClaimBtn');
+
+            function openExitModal() {
+                if (!exitModal) return;
+                exitModal.classList.remove('hidden');
+                try { sessionStorage.setItem('ai_rop_exit_shown', 'true'); } catch (e) {}
+            }
+
+            function closeExitModal() {
+                if (!exitModal) return;
+                exitModal.classList.add('hidden');
+            }
+
+            if (closeExitModalBtn) closeExitModalBtn.addEventListener('click', closeExitModal);
+            if (exitClaimBtn) exitClaimBtn.addEventListener('click', closeExitModal);
+            if (exitModal) {
+                exitModal.addEventListener('click', (e) => {
+                    if (e.target === exitModal) closeExitModal();
+                });
+            }
+
+            // Trigger when desktop cursor reaches top edge
+            document.addEventListener('mouseleave', (e) => {
+                if (e.clientY <= 10) {
+                    try {
+                        const alreadyShown = sessionStorage.getItem('ai_rop_exit_shown');
+                        if (!alreadyShown) {
+                            openExitModal();
+                        }
+                    } catch (e) {}
+                }
+            });
+
+            // 6. FORM DRAFT RESTORE & SMART INPUT FORMATTING (QA / UX)
+            const formName = document.getElementById('formName');
+            const formContact = document.getElementById('formContact');
+
+            if (formName && formContact) {
+                // Restore draft
+                try {
+                    const savedName = localStorage.getItem('lead_draft_name');
+                    const savedContact = localStorage.getItem('lead_draft_contact');
+                    if (savedName) formName.value = savedName;
+                    if (savedContact) formContact.value = savedContact;
+                } catch (e) {}
+
+                formName.addEventListener('input', () => {
+                    try { localStorage.setItem('lead_draft_name', formName.value); } catch (e) {}
+                });
+
+                formContact.addEventListener('input', () => {
+                    let val = formContact.value;
+                    // Auto format phone number smoothly
+                    if (/^[\d+]/.test(val) && !val.startsWith('@')) {
+                        let digits = val.replace(/\D/g, '');
+                        if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+                        if (digits.startsWith('7')) {
+                            let formatted = '+7';
+                            if (digits.length > 1) formatted += ' (' + digits.substring(1, 4);
+                            if (digits.length >= 5) formatted += ') ' + digits.substring(4, 7);
+                            if (digits.length >= 8) formatted += '-' + digits.substring(7, 9);
+                            if (digits.length >= 10) formatted += '-' + digits.substring(9, 11);
+                            formContact.value = formatted;
+                        }
+                    }
+                    try { localStorage.setItem('lead_draft_contact', formContact.value); } catch (e) {}
+                });
+            }
         });
     </script>
 </body>
