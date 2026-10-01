@@ -1,0 +1,39 @@
+name: RevOps Telegram Morning Brief & Reports
+
+on:
+  schedule:
+    # 06:00 UTC = 09:00 MSK every day
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/telegram-morning-brief.yml'
+
+jobs:
+  send_brief:
+    name: Send Morning Brief & PDF to Founder
+    runs-on: ubuntu-latest
+    env:
+      TELEGRAM_BOT_TOKEN: "8950801302:AAEENGC6cP5zQw6_a2C5EJgS6ji89wW4vEI"
+      TELEGRAM_CHAT_ID: "1422365475"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests openpyxl
+
+      - name: Send Morning Brief
+        run: |
+          python telegram_bot.py --send
+
+      - name: Send Latest Executive Report PDF
+        run: |
+          python telegram_bot.py --summary || true

@@ -42,25 +42,52 @@ CREDS_FILE = BASE_DIR / "telegram_credentials.json"
 
 # ── Telegram API (без лишних зависимостей) ──────────────────────────
 
+def _get_api_config():
+    """Возвращает (api_base, proxies) с учетом telegram_credentials.json и env vars."""
+    base = os.environ.get("TG_API_BASE", "https://api.telegram.org").rstrip("/")
+    proxies = None
+    if CREDS_FILE.exists():
+        try:
+            data = json.loads(CREDS_FILE.read_text(encoding="utf-8"))
+            if data.get("api_base"):
+                base = data["api_base"].rstrip("/")
+            if data.get("proxy"):
+                p = data["proxy"]
+                proxies = {"http": p, "https": p}
+        except Exception:
+            pass
+    if not proxies:
+        env_p = os.environ.get("HTTPS_PROXY") or os.environ.get("ALL_PROXY")
+        if env_p:
+            proxies = {"http": env_p, "https": env_p}
+    return base, proxies
+
+
 def tg_send(token: str, chat_id: str, text: str,
             parse_mode: str = "HTML") -> bool:
     """Отправляет сообщение через Bot API. Возвращает True при успехе."""
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    resp = requests.post(url, json={
-        "chat_id": chat_id,
-        "text": text,
-        "parse_mode": parse_mode,
-        "disable_web_page_preview": True,
-    }, timeout=15)
-    if not resp.ok:
-        print(f"[TG ERROR] {resp.status_code}: {resp.text[:200]}")
-    return resp.ok
+    base, proxies = _get_api_config()
+    url = f"{base}/bot{token}/sendMessage"
+    try:
+        resp = requests.post(url, json={
+            "chat_id": chat_id,
+            "text": text,
+            "parse_mode": parse_mode,
+            "disable_web_page_preview": True,
+        }, timeout=15, proxies=proxies)
+        if not resp.ok:
+            print(f"[TG ERROR] {resp.status_code}: {resp.text[:200]}")
+        return resp.ok
+    except Exception as e:
+        print(f"[TG ERROR] Ошибка при отправке сообщения: {e}")
+        return False
 
 
 def tg_send_document(token: str, chat_id: str, file_path: str,
                      caption: str = "", timeout: int = 40) -> bool:
     """Отправляет PDF-документ через Telegram Bot API."""
-    url = f"https://api.telegram.org/bot{token}/sendDocument"
+    base, proxies = _get_api_config()
+    url = f"{base}/bot{token}/sendDocument"
     if not os.path.exists(file_path):
         print(f"[TG ERROR] Файл для отправки не найден: {file_path}")
         return False
@@ -70,7 +97,8 @@ def tg_send_document(token: str, chat_id: str, file_path: str,
                 url,
                 data={"chat_id": chat_id, "caption": caption},
                 files={"document": f},
-                timeout=timeout
+                timeout=timeout,
+                proxies=proxies
             )
         if not resp.ok:
             print(f"[TG ERROR] {resp.status_code}: {resp.text[:200]}")
@@ -81,18 +109,23 @@ def tg_send_document(token: str, chat_id: str, file_path: str,
 
 
 def tg_get_updates(token: str, offset: int = 0) -> list[dict]:
-    url = f"https://api.telegram.org/bot{token}/getUpdates"
-    resp = requests.get(url, params={"offset": offset, "timeout": 20}, timeout=25)
-    if resp.ok:
-        return resp.json().get("result", [])
+    base, proxies = _get_api_config()
+    url = f"{base}/bot{token}/getUpdates"
+    try:
+        resp = requests.get(url, params={"offset": offset, "timeout": 20}, timeout=25, proxies=proxies)
+        if resp.ok:
+            return resp.json().get("result", [])
+    except Exception as e:
+        print(f"[TG ERROR] getUpdates failed: {e}")
     return []
 
 
 def tg_get_me(token: str) -> dict | None:
     """Запрашивает информацию о боте через getMe. Возвращает dict с данными бота или None."""
-    url = f"https://api.telegram.org/bot{token}/getMe"
+    base, proxies = _get_api_config()
+    url = f"{base}/bot{token}/getMe"
     try:
-        resp = requests.get(url, timeout=10)
+        resp = requests.get(url, timeout=10, proxies=proxies)
         if resp.ok:
             return resp.json().get("result")
     except Exception as e:
@@ -121,6 +154,10 @@ def check_crm_status() -> str:
 # ── Учётные данные ──────────────────────────────────────────────────
 
 def load_creds() -> dict:
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if token and chat_id:
+        return {"bot_token": token, "chat_id": chat_id}
     if not CREDS_FILE.exists():
         print(f"[ОШИБКА] {CREDS_FILE} не найден. Запустите: python telegram_bot.py --setup")
         sys.exit(1)
