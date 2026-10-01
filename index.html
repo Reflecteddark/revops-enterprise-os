@@ -359,43 +359,80 @@
         </div>
     </section>
 
-    <!-- INTERACTIVE DEMO: КАК ИИ ЛОВИТ СЛИВ ЗВОНКА (WOW-EFFECT) -->
+    <!-- INTERACTIVE DEMO: КАК ИИ ЛОВИТ СЛИВ ЗВОНКА (WOW-EFFECT С РЕАЛЬНЫМ АУДИО) -->
     <section class="py-12 bg-slate-950/70 border-t border-slate-800/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="glass-card rounded-3xl p-6 sm:p-9 border-2 border-slate-800 hover:border-emerald-500/40 transition-all shadow-2xl relative overflow-hidden">
+                <!-- HTML5 Audio Element with real MP3 recording -->
+                <audio id="demoAudioPlayer" src="audio/demo-call.mp3" preload="auto"></audio>
+
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800/80">
                     <div>
                         <span class="inline-block px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 font-mono text-[11px] font-semibold mb-2 border border-rose-500/20">
                             ИНТЕРАКТИВНЫЙ ТЕСТ-ДРАЙВ
                         </span>
                         <h3 class="font-display text-xl sm:text-2xl font-bold text-white">
-                            Послушайте, как ИИ-супервайзер ловит слив сделки за 15 секунд
+                            Послушайте реальный слив сделки за 13 секунд
                         </h3>
+                        <p class="text-xs text-slate-400 mt-1">Нажмите кнопку: включится реальная аудиозапись диалога клиента и менеджера</p>
                     </div>
-                    <button type="button" id="demoPlayBtn" class="shrink-0 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition active:scale-95">
-                        <i class="fas fa-play text-xs" id="demoPlayIcon"></i>
-                        <span id="demoPlayText">Включить разбор звонка</span>
-                    </button>
+
+                    <!-- Audio Player Control Button with animated waveform -->
+                    <div class="flex items-center gap-3 shrink-0">
+                        <!-- Waveform animation bars -->
+                        <div id="demoWaveform" class="hidden sm:flex items-center gap-1 h-6 px-2">
+                            <span class="w-1 bg-emerald-400 rounded-full h-2 transition-all duration-150"></span>
+                            <span class="w-1 bg-cyan-400 rounded-full h-5 transition-all duration-150"></span>
+                            <span class="w-1 bg-emerald-400 rounded-full h-3 transition-all duration-150"></span>
+                            <span class="w-1 bg-cyan-400 rounded-full h-6 transition-all duration-150"></span>
+                            <span class="w-1 bg-emerald-400 rounded-full h-2 transition-all duration-150"></span>
+                        </div>
+
+                        <button type="button" id="demoPlayBtn" class="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition active:scale-95">
+                            <i class="fas fa-play text-xs" id="demoPlayIcon"></i>
+                            <span id="demoPlayText">Слушать аудиозапись</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Audio timeline / scrubber -->
+                <div class="mb-6 px-1">
+                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
+                        <span id="demoCurrentTime" class="text-emerald-400 font-bold">0:00</span>
+                        <span class="text-slate-500">Запись звонка #A-4892 (SaaS / Оптовая торговля)</span>
+                        <span id="demoDuration">0:13</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2 cursor-pointer overflow-hidden relative" id="demoTimeline" title="Нажмите для перемотки">
+                        <div id="demoAudioProgress" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full w-0 transition-all duration-75"></div>
+                    </div>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-6 items-center">
-                    <!-- Left: Dialogue transcript -->
+                    <!-- Left: Dialogue transcript with real-time speech highlight -->
                     <div class="space-y-3 font-mono text-xs">
-                        <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-                            <span class="text-cyan-400 font-bold block mb-1">Клиент:</span>
-                            <span class="text-slate-300">«340 000 рублей для нас сейчас дороговато. Мы, пожалуй, ещё посмотрим другие варианты...»</span>
-                        </div>
-                        <div class="p-3.5 rounded-xl bg-rose-950/30 border border-rose-500/40 relative">
-                            <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-rose-500 text-white font-mono text-[9px] font-bold uppercase tracking-wider">
-                                ТОЧКА СЛИВА
+                        <div id="demoClientBubble" class="p-4 rounded-xl bg-slate-900 border border-slate-800 transition-all duration-300">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-cyan-400 font-bold flex items-center gap-1.5">
+                                    <i class="fas fa-user text-[10px]"></i> Клиент (0:00 - 0:05):
+                                </span>
+                                <span id="clientStatusBadge" class="hidden text-[9px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-semibold animate-pulse">ГОВОРИТ КЛИЕНТ 🎙️</span>
                             </div>
-                            <span class="text-rose-400 font-bold block mb-1">Менеджер (типичная ошибка):</span>
-                            <span class="text-rose-200">«Ну ладно... Если решите, перезвоните нам тогда сами, номер сохранили?»</span>
+                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«340 000 рублей для нас сейчас дороговато. Мы, пожалуй, ещё посмотрим другие варианты...»</span>
+                        </div>
+
+                        <div id="demoManagerBubble" class="p-4 rounded-xl bg-slate-900 border border-slate-800 relative transition-all duration-300">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-slate-400 font-bold flex items-center gap-1.5">
+                                    <i class="fas fa-headset text-[10px]"></i> Менеджер (0:05 - 0:09):
+                                </span>
+                                <span id="managerStatusBadge" class="hidden text-[9px] px-2 py-0.5 rounded bg-rose-500 text-white font-bold tracking-wider animate-bounce">СЛИВ СДЕЛКИ ⚠️</span>
+                            </div>
+                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«Ну ладно... Если решите, перезвоните нам тогда сами, номер сохранили?»</span>
                         </div>
                     </div>
 
                     <!-- Right: AI Instant Analysis Box -->
-                    <div id="demoAiVerdict" class="p-5 rounded-2xl bg-slate-900/90 border border-amber-500/40 shadow-xl relative transition-all duration-300">
+                    <div id="demoAiVerdict" class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl relative transition-all duration-300">
                         <div class="flex items-center justify-between mb-3">
                             <span class="flex items-center gap-1.5 text-xs font-bold text-amber-400 font-mono">
                                 <i class="fas fa-triangle-exclamation text-sm" id="demoAlertIcon"></i>
@@ -1913,56 +1950,118 @@
                 }, 1600);
             }
 
-            // 3. INTERACTIVE AUDIO DEMO: ЗВОНОК VS ИИ-СУПЕРВАЙЗЕР
+            // 3. REAL AUDIO DEMO PLAYER (MP3 & WAVEFORM SYNC)
+            const demoAudioPlayer = document.getElementById('demoAudioPlayer');
             const demoPlayBtn = document.getElementById('demoPlayBtn');
             const demoPlayIcon = document.getElementById('demoPlayIcon');
             const demoPlayText = document.getElementById('demoPlayText');
+            const demoTimeline = document.getElementById('demoTimeline');
+            const demoAudioProgress = document.getElementById('demoAudioProgress');
+            const demoCurrentTime = document.getElementById('demoCurrentTime');
+            const demoDuration = document.getElementById('demoDuration');
+            const demoClientBubble = document.getElementById('demoClientBubble');
+            const demoManagerBubble = document.getElementById('demoManagerBubble');
             const demoAiVerdict = document.getElementById('demoAiVerdict');
-            let isPlayingDemo = false;
+            const clientStatusBadge = document.getElementById('clientStatusBadge');
+            const managerStatusBadge = document.getElementById('managerStatusBadge');
+            const demoWaveform = document.getElementById('demoWaveform');
 
-            if (demoPlayBtn) {
+            function formatAudioTime(sec) {
+                if (isNaN(sec)) return '0:13';
+                const m = Math.floor(sec / 60);
+                const s = Math.floor(sec % 60);
+                return `${m}:${s < 10 ? '0' : ''}${s}`;
+            }
+
+            if (demoAudioPlayer && demoPlayBtn) {
+                demoAudioPlayer.addEventListener('loadedmetadata', () => {
+                    if (demoDuration) demoDuration.textContent = formatAudioTime(demoAudioPlayer.duration || 13);
+                });
+
                 demoPlayBtn.addEventListener('click', () => {
-                    if (isPlayingDemo) return;
-                    isPlayingDemo = true;
-                    demoPlayIcon.className = 'fas fa-spinner fa-spin text-xs';
-                    demoPlayText.textContent = 'ИИ слушает аудиопоток...';
-                    
-                    // Subtle Web Audio tone
-                    try {
-                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                        if (AudioCtx) {
-                            const ctx = new AudioCtx();
-                            const osc = ctx.createOscillator();
-                            const g = ctx.createGain();
-                            osc.connect(g);
-                            g.connect(ctx.destination);
-                            osc.type = 'sawtooth';
-                            osc.frequency.setValueAtTime(320, ctx.currentTime);
-                            osc.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.35);
-                            g.gain.setValueAtTime(0.04, ctx.currentTime);
-                            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-                            osc.start();
-                            osc.stop(ctx.currentTime + 0.35);
-                        }
-                    } catch(e) {}
+                    if (demoAudioPlayer.paused) {
+                        demoAudioPlayer.play().catch(e => {
+                            console.log('Audio play blocked:', e);
+                        });
+                    } else {
+                        demoAudioPlayer.pause();
+                    }
+                });
 
-                    if (demoAiVerdict) {
-                        demoAiVerdict.classList.add('ring-4', 'ring-rose-500/50', 'scale-[1.02]');
+                demoAudioPlayer.addEventListener('play', () => {
+                    if (demoPlayIcon) demoPlayIcon.className = 'fas fa-pause text-xs';
+                    if (demoPlayText) demoPlayText.textContent = 'Пауза';
+                });
+
+                demoAudioPlayer.addEventListener('pause', () => {
+                    if (demoPlayIcon) demoPlayIcon.className = 'fas fa-play text-xs';
+                    if (demoPlayText) demoPlayText.textContent = 'Слушать аудиозапись';
+                });
+
+                demoAudioPlayer.addEventListener('ended', () => {
+                    if (demoPlayIcon) demoPlayIcon.className = 'fas fa-rotate-right text-xs';
+                    if (demoPlayText) demoPlayText.textContent = 'Слушать снова';
+                    resetAudioHighlights();
+                });
+
+                demoAudioPlayer.addEventListener('timeupdate', () => {
+                    const cur = demoAudioPlayer.currentTime;
+                    const dur = demoAudioPlayer.duration || 13;
+                    const pct = (cur / dur) * 100;
+                    if (demoAudioProgress) demoAudioProgress.style.width = pct + '%';
+                    if (demoCurrentTime) demoCurrentTime.textContent = formatAudioTime(cur);
+
+                    // Animate waveform
+                    if (demoWaveform && !demoAudioPlayer.paused) {
+                        const bars = demoWaveform.querySelectorAll('span');
+                        bars.forEach((bar, i) => {
+                            const heights = ['h-2', 'h-4', 'h-6', 'h-3', 'h-5'];
+                            const rnd = Math.floor(Math.random() * heights.length);
+                            bar.className = `w-1 ${i % 2 === 0 ? 'bg-emerald-400' : 'bg-cyan-400'} rounded-full ${heights[rnd]} transition-all duration-150`;
+                        });
                     }
 
-                    setTimeout(() => {
-                        demoPlayIcon.className = 'fas fa-triangle-exclamation text-xs text-rose-400';
-                        demoPlayText.textContent = 'Слив зафиксирован супервайзером!';
-                        setTimeout(() => {
-                            demoPlayIcon.className = 'fas fa-play text-xs';
-                            demoPlayText.textContent = 'Включить разбор снова';
-                            isPlayingDemo = false;
-                            if (demoAiVerdict) {
-                                demoAiVerdict.classList.remove('ring-4', 'ring-rose-500/50', 'scale-[1.02]');
-                            }
-                        }, 3500);
-                    }, 800);
+                    // Synchronous highlights:
+                    // 0s - 4.8s: Client
+                    if (cur >= 0 && cur < 4.8) {
+                        demoClientBubble?.classList.add('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
+                        clientStatusBadge?.classList.remove('hidden');
+                        demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
+                        managerStatusBadge?.classList.add('hidden');
+                        demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
+                    }
+                    // 4.8s - 8.8s: Manager (Leak point!)
+                    else if (cur >= 4.8 && cur < 8.8) {
+                        demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
+                        clientStatusBadge?.classList.add('hidden');
+                        demoManagerBubble?.classList.add('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
+                        managerStatusBadge?.classList.remove('hidden');
+                        demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
+                    }
+                    // 8.8s+: Supervisor Alert
+                    else if (cur >= 8.8) {
+                        demoAiVerdict?.classList.add('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
+                    }
                 });
+
+                function resetAudioHighlights() {
+                    demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
+                    clientStatusBadge?.classList.add('hidden');
+                    demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
+                    managerStatusBadge?.classList.add('hidden');
+                    demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
+                    if (demoAudioProgress) demoAudioProgress.style.width = '0%';
+                    if (demoCurrentTime) demoCurrentTime.textContent = '0:00';
+                }
+
+                if (demoTimeline) {
+                    demoTimeline.addEventListener('click', (e) => {
+                        const rect = demoTimeline.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left;
+                        const pct = Math.max(0, Math.min(1, clickX / rect.width));
+                        demoAudioPlayer.currentTime = pct * (demoAudioPlayer.duration || 13);
+                    });
+                }
             }
 
             // 4. SOCIAL PROOF LIVE TOASTS
