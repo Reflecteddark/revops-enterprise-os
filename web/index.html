@@ -356,18 +356,21 @@
                 
                 <!-- Telegram Mockup -->
                 <div class="float-animation">
-                    <div class="telegram-mockup glow-indigo max-w-md mx-auto">
+                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="block telegram-mockup glow-indigo max-w-md mx-auto group hover:border-indigo-500/50 transition-all text-left no-underline cursor-pointer" title="Нажмите, чтобы открыть бота в Telegram">
                         <div class="telegram-header">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shrink-0">
                                 <i class="fas fa-robot text-white text-xs"></i>
                             </div>
-                            <div>
-                                <div class="text-white text-sm font-semibold">🤠 Шериф RevOps</div>
-                                <div class="text-slate-500 text-xs">Утренний Пульт • 08:30</div>
+                            <div class="min-w-0">
+                                <div class="text-white text-sm font-semibold flex items-center gap-1.5">
+                                    <span>🤠 Шериф RevOps</span>
+                                    <span class="text-[11px] text-sky-400 group-hover:underline">@RevOps_Super_Audit_Bot ↗</span>
+                                </div>
+                                <div class="text-slate-400 text-xs">Утренний Пульт • 08:30</div>
                             </div>
-                            <div class="ml-auto flex gap-2">
+                            <div class="ml-auto flex items-center gap-2 shrink-0">
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
-                                <span class="text-xs text-emerald-400">Online</span>
+                                <span class="text-xs text-emerald-400 font-medium">Online</span>
                             </div>
                         </div>
                         
@@ -402,7 +405,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="px-4 py-2.5 bg-indigo-950/40 border-t border-slate-800 text-center">
+                            <span class="text-xs text-sky-400 group-hover:text-sky-300 font-semibold flex items-center justify-center gap-1.5 transition-colors">
+                                <i class="fab fa-telegram-plane"></i> Протестировать боевого бота в Telegram →
+                            </span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1366,8 +1375,12 @@
                     <span>152-ФЗ РФ</span>
                 </div>
                 
-                <div class="flex items-center gap-4">
-                    <a href="https://t.me/Reflecteddark" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать в Telegram">
+                <div class="flex items-center gap-3">
+                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all text-xs font-semibold" title="Открыть Telegram-бота">
+                        <i class="fas fa-robot text-sm"></i>
+                        <span class="hidden sm:inline">@RevOps_Super_Audit_Bot</span>
+                    </a>
+                    <a href="https://t.me/Reflecteddark" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать инженеру в Telegram">
                         <i class="fab fa-telegram"></i>
                     </a>
                     <a href="mailto:strelok15@bk.ru" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать на Email">
@@ -1547,6 +1560,30 @@
                 const tgBtn = document.getElementById('tgDirectBtn');
                 if (tgBtn) {
                     tgBtn.href = tgUrl;
+                }
+
+                // Фоновая отправка заявки в Telegram-бот фаундера
+                try {
+                    const notifyText = `🔔 <b>Новая заявка на аудит 3 звонков с сайта ai-rop.ru!</b>\n\n` +
+                        `👤 <b>Имя:</b> ${name}\n` +
+                        `📞 <b>Телефон:</b> ${phone}\n` +
+                        `💬 <b>Telegram:</b> ${tg || 'Не указан'}\n` +
+                        `🏢 <b>CRM:</b> ${crm || 'Не указана'}\n` +
+                        `⏱ <b>Время:</b> ${new Date().toLocaleString('ru-RU')}`;
+                        
+                    fetch('https://api.telegram.org/bot8950801302:AAEENGC6cP5zQw6_a2C5EJgS6ji89wW4vEI/sendMessage', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: '1422365475',
+                            text: notifyText,
+                            parse_mode: 'HTML'
+                        })
+                    }).catch(err => {
+                        console.log('Direct TG alert notification:', err);
+                    });
+                } catch (e) {
+                    console.log('Notification error:', e);
                 }
             });
         }
