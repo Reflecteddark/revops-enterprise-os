@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дорожная карта пилота AI-ROP (7 дней под ключ)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/plus-jakarta-sans@5.0.3/index.css">
+    <style>
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #0B0F19; color: #F1F5F9; }
+        h1, h2, h3, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+        a { text-decoration: none; color: inherit; }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+            html, body {
+                background-color: #0B0F19 !important;
+                color: #F1F5F9 !important;
+                margin: 0 !important;
+                padding: 16px !important;
+                min-height: auto !important;
+                height: 100% !important;
+            }
+            .no-print { display: none !important; }
+            .print-card {
+                border: 1px solid #1e293b !important;
+                background-color: rgba(15, 23, 42, 0.95) !important;
+                box-shadow: none !important;
+                padding: 24px !important;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 min-h-screen flex items-center justify-center">
+
+    <div class="max-w-5xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden print-card">
+        
+        <!-- Top Glow -->
+        <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none no-print"></div>
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
+            <div>
+                <div class="flex items-center gap-3 mb-1">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-indigo-500/30">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="font-display font-bold text-xl text-white tracking-tight">AI-ROP.RU</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Enterprise OS</span>
+                </div>
+                <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-white">Дорожная карта пилота: запуск за 7 дней</h1>
+                <p class="text-sm text-slate-400 mt-1">Как мы развертываем ИИ-контроль 100% звонков и находим скрытые потери выручки без нагрузки на ваш IT-отдел</p>
+            </div>
+            <div class="flex flex-wrap sm:flex-col items-end gap-2 shrink-0">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+                    <i class="fas fa-shield-alt text-[10px]"></i> 152-ФЗ РФ
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-medium">
+                    <i class="fas fa-calendar-check text-[10px] text-indigo-400"></i> Срок: 7 рабочих дней
+                </span>
+            </div>
+        </div>
+
+        <!-- Timeline Steps Table -->
+        <div class="my-8 space-y-4">
+            
+            <!-- Step 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-indigo-500/30 transition-all">
+                <div class="md:col-span-2 flex md:flex-col items-center md:items-start justify-between">
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs font-bold">ДЕНЬ 1</span>
+                    <span class="text-xs text-slate-400 font-medium">Тест-драйв</span>
+                </div>
+                <div class="md:col-span-5">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Ваша сторона (1 минута)</div>
+                    <p class="text-sm text-slate-200">Пересылаете <strong>3 аудиозаписи звонков</strong> в Telegram (где сделка зависла или клиент сказал «дорого / я подумаю»).</p>
+                </div>
+                <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
+                    <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP (20 минут)</div>
+                    <p class="text-sm text-slate-300">Транскрибируем звонки через Whisper, оцениваем по 13 критериям. Выдаем <strong>персональный ИИ-аудит (PDF)</strong> с картой сливов.</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-indigo-500/30 transition-all">
+                <div class="md:col-span-2 flex md:flex-col items-center md:items-start justify-between">
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs font-bold">ДЕНЬ 2</span>
+                    <span class="text-xs text-slate-400 font-medium">Старт пилота</span>
+                </div>
+                <div class="md:col-span-5">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Ваша сторона (15 минут)</div>
+                    <p class="text-sm text-slate-200">15 минут в Zoom: согласовываем критерии вашей ниши. Оплата пилота <strong>29 000 ₽</strong> со 100% гарантией возврата.</p>
+                </div>
+                <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
+                    <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP</div>
+                    <p class="text-sm text-slate-300">Калибруем промпты под специфику вашего продукта, чеков, регламентов и этапов сделки в CRM. Готовим договор и счет.</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-indigo-500/30 transition-all">
+                <div class="md:col-span-2 flex md:flex-col items-center md:items-start justify-between">
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs font-bold">ДНИ 3–4</span>
+                    <span class="text-xs text-slate-400 font-medium">Подключение</span>
+                </div>
+                <div class="md:col-span-5">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Ваша сторона (0 нагрузки на IT)</div>
+                    <p class="text-sm text-slate-200">Выдаете ключ API телефонии / CRM (amoCRM / Битрикс24) либо выгружаете архив из 100 звонков.</p>
+                </div>
+                <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
+                    <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP</div>
+                    <p class="text-sm text-slate-300">Настраиваем безопасный поток данных (152-ФЗ), проводим <strong>полный аудит 100 звонков</strong>, выявляем зависшие сделки.</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-2xl bg-slate-800/40 border border-slate-800 hover:border-indigo-500/30 transition-all">
+                <div class="md:col-span-2 flex md:flex-col items-center md:items-start justify-between">
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs font-bold">ДНИ 5–6</span>
+                    <span class="text-xs text-slate-400 font-medium">Пульт РОПа</span>
+                </div>
+                <div class="md:col-span-5">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Ваша сторона</div>
+                    <p class="text-sm text-slate-200">РОП и директор подключаются к приватному Telegram-боту. РОП тратит <strong>15 минут в день</strong> на контроль вместо 4 часов.</p>
+                </div>
+                <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
+                    <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP</div>
+                    <p class="text-sm text-slate-300">Активируем утреннюю рассылку: бот в 09:00 присылает готовый список: кого из клиентов спасать сегодня в первую очередь.</p>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 hover:border-indigo-500/60 transition-all">
+                <div class="md:col-span-2 flex md:flex-col items-center md:items-start justify-between">
+                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold">ДЕНЬ 7</span>
+                    <span class="text-xs text-slate-400 font-medium">Финал & ROI</span>
+                </div>
+                <div class="md:col-span-5">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Итоговый Zoom (20 минут)</div>
+                    <p class="text-sm text-slate-200">Участие генерального директора / собственника в защите оцифрованных результатов пилотной недели.</p>
+                </div>
+                <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
+                    <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP</div>
+                    <p class="text-sm text-slate-300">Презентуем «Карту спасенной выручки» (от 300 000 ₽ до 1.5M ₽) и план регулярного сопровождения (от 49 000 ₽/мес).</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Guarantee & Security Banner -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 pb-6">
+            <div class="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30">
+                <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-1">
+                    <i class="fas fa-check-circle"></i> 100% Финансовая гарантия возврата
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Если за 7 дней пилота мы не найдем у вас зависших сделок минимум на <strong>300 000 ₽</strong> — возвращаем вам <strong>29 000 ₽</strong> до копейки по первому требованию.
+                </p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-800/40 border border-slate-800">
+                <div class="flex items-center gap-2 text-white font-bold text-sm mb-1">
+                    <i class="fas fa-lock text-indigo-400"></i> Конфиденциальность и безопасность
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Строго по <strong>152-ФЗ РФ</strong>. Аудио анализируется в защищенном контуре с деперсонализацией данных. Оплата по безналичному расчету (0% НДС, чек «Мой Налог»).
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer Contacts -->
+        <div class="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <div class="flex items-center gap-5">
+                <a href="https://ai-rop.ru" class="flex items-center hover:text-indigo-300 transition-colors">
+                    <i class="fas fa-globe text-indigo-400 mr-1.5"></i> ai-rop.ru
+                </a>
+                <a href="https://t.me/dm1918" class="flex items-center hover:text-indigo-300 transition-colors" title="Личный Telegram">
+                    <i class="fab fa-telegram text-indigo-400 mr-1.5"></i> @dm1918
+                </a>
+                <a href="https://t.me/RevOps_Super_Audit_Bot" class="flex items-center hover:text-indigo-300 transition-colors" title="Telegram-бот">
+                    <i class="fas fa-robot text-indigo-400 mr-1.5"></i> @RevOps_Super_Audit_Bot
+                </a>
+                <a href="mailto:strelok15@bk.ru" class="flex items-center hover:text-indigo-300 transition-colors">
+                    <i class="fas fa-envelope text-indigo-400 mr-1.5"></i> strelok15@bk.ru
+                </a>
+            </div>
+            <button onclick="window.print()" class="no-print px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl text-xs transition-all shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+                <i class="fas fa-print"></i> Распечатать / Сохранить в PDF
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>
