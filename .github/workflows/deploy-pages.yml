@@ -11,41 +11,37 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  sync_gh_pages:
+    name: Sync web/ to gh-pages branch
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout main branch
         uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
         with:
-          path: './web'
+          ref: main
+          fetch-depth: 0
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-      - name: Sync to gh-pages branch
+      - name: Sync web/ files to gh-pages branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin gh-pages:gh-pages || git branch gh-pages
+          
+          # 1. Сохраняем свежие файлы из папки web/
+          mkdir -p /tmp/site_dist
+          cp -r web/* /tmp/site_dist/
+          
+          # 2. Переключаемся на ветку gh-pages
           git checkout gh-pages
-          cp -r web/* .
+          
+          # 3. Синхронизируем файлы в корень gh-pages
+          cp -r /tmp/site_dist/* .
           git add -A
-          git diff-index --quiet HEAD || (git commit -m "chore(pages): sync web/ to gh-pages [skip ci]" && git push origin gh-pages)
+          
+          # 4. Коммитим и пушим при наличии изменений
+          git diff-index --quiet HEAD || (git commit -m "chore(pages): auto-sync web/ to gh-pages [skip ci]" && git push origin gh-pages)
