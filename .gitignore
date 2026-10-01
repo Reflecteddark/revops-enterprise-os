@@ -39,6 +39,7 @@ telegram_credentials.json
 *.pem
 
 # Temporary files & Lock files
+scratch/
 *.bak
 *.testbak
 *.tmp
