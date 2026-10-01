@@ -336,10 +336,10 @@ def build_presentation_workbook(target_path: Path):
     ws_calc.row_dimensions[14].height = 24
 
     leaks_data = [
-        ("1", "Слив лидов на звонках (нет Next Step)", "30% выручки теряется из-за ошибок менеджеров", 412500, "Менеджеры консультируют, но не закрывают на дату", "ИИ-аудит 100% звонков + чек-лист Next Step"),
-        ("2", "Зависание сделок на этапе КП > 48ч", "18% выручки теряется из-за просрочки follow-up", 297000, "Клиент остывает, пока менеджер ждет звонка", "Авторадар SLA 48ч + эскалация РОПу на 3-й день"),
-        ("3", "Брошенные отказники без дожима (L1-L4)", "8% — потенциал реактивации списанных сделок", 132000, "Сделки списаны в архив без реактивации", "AI Recovery Engine: автодожим в WhatsApp/TG"),
-        ("4", "Зависшая дебиторка и задержка оплат", "12% выставленных счетов с просрочкой 20+ дней", 198000, "Нет платежного календаря и контроля сроков", "Платежный календарь DSO + автонапоминания")
+        ("1", "Слив лидов на звонках (нет Next Step)", "30% выручки теряется из-за ошибок менеджеров", "=ROUND(H6*0.3968, -2)", "Менеджеры консультируют, но не закрывают на дату", "ИИ-аудит 100% звонков + чек-лист Next Step"),
+        ("2", "Зависание сделок на этапе КП > 48ч", "18% выручки теряется из-за просрочки follow-up", "=ROUND(H6*0.2857, -2)", "Клиент остывает, пока менеджер ждет звонка", "Авторадар SLA 48ч + эскалация РОПу на 3-й день"),
+        ("3", "Брошенные отказники без дожима (L1-L4)", "8% — потенциал реактивации списанных сделок", "=ROUND(H6*0.1270, -2)", "Сделки списаны в архив без реактивации", "AI Recovery Engine: автодожим в WhatsApp/TG"),
+        ("4", "Зависшая дебиторка и задержка оплат", "12% выставленных счетов с просрочкой 20+ дней", "=H6-D15-D16-D17", "Нет платежного календаря и контроля сроков", "Платежный календарь DSO + автонапоминания")
     ]
 
     for row_idx, data in enumerate(leaks_data, start=15):
@@ -950,7 +950,7 @@ def build_presentation_workbook(target_path: Path):
         merge_and_format(ws_audit, f"E{idx}:F{idx}", defect, font=Font(name="Segoe UI", size=9, bold=True, color="DC2626"), fill=fill_card, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
         merge_and_format(ws_audit, f"G{idx}:M{idx}", quote, font=Font(name="Segoe UI", size=9, italic=True, color="334155"), fill=fill_card, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
         merge_and_format(ws_audit, f"N{idx}:V{idx}", action, font=Font(name="Segoe UI", size=9, bold=True, color="0F172A"), fill=fill_warn, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
-        ws_audit.row_dimensions[idx].height = 54
+        ws_audit.row_dimensions[idx].height = 60
 
     ws_audit.row_dimensions[36].height = 12
 
@@ -1023,7 +1023,7 @@ def build_presentation_workbook(target_path: Path):
         merge_and_format(ws_audit, f"E{idx}:G{idx}", c_desc, font=font_reg, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
         merge_and_format(ws_audit, f"H{idx}:L{idx}", c_defect, font=Font(name="Segoe UI", size=9, color="DC2626"), border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
         merge_and_format(ws_audit, f"M{idx}:V{idx}", c_tip, font=Font(name="Segoe UI", size=9, bold=True, color="0F172A"), border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
-        ws_audit.row_dimensions[idx].height = 34
+        ws_audit.row_dimensions[idx].height = 46
 
     ws_audit.row_dimensions[52].height = 12
 

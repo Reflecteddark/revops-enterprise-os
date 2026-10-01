@@ -83,6 +83,46 @@ def req_format(r_start, r_end, c_start, c_end, bg_color=None, text_color=None, b
         }
     }
 
+# Helper to set row height
+def req_row_height(r_start, r_end, pixel_size):
+    return {
+        "updateDimensionProperties": {
+            "range": {
+                "sheetId": sheet_id,
+                "dimension": "ROWS",
+                "startIndex": r_start,
+                "endIndex": r_end
+            },
+            "properties": {
+                "pixelSize": pixel_size
+            },
+            "fields": "pixelSize"
+        }
+    }
+
+# Helper to set table borders
+def req_border(r_start, r_end, c_start, c_end, border_color=None, border_style="SOLID"):
+    if not border_color:
+        border_color = c_border_gray
+    b_spec = {"style": border_style, "color": border_color}
+    return {
+        "updateBorders": {
+            "range": {
+                "sheetId": sheet_id,
+                "startRowIndex": r_start,
+                "endRowIndex": r_end,
+                "startColumnIndex": c_start,
+                "endColumnIndex": c_end
+            },
+            "top": b_spec,
+            "bottom": b_spec,
+            "left": b_spec,
+            "right": b_spec,
+            "innerHorizontal": b_spec,
+            "innerVertical": b_spec
+        }
+    }
+
 # 1. Unmerge previous merges to avoid collision
 requests.append({
     "unmergeCells": {
@@ -134,8 +174,9 @@ requests.append(req_merge(5, 6, 0, 22))
 requests.append(req_merge(6, 7, 9, 22))
 for r_idx in range(7, 12):
     requests.append(req_merge(r_idx, r_idx+1, 9, 22))
-# Row 13: Leaderboard total recommendation
-requests.append(req_merge(12, 13, 9, 22))
+# Row 13: Leaderboard total recommendation and label merge
+requests.append(req_merge(12, 13, 0, 2))  # A13:B13
+requests.append(req_merge(12, 13, 9, 22)) # J13:V13
 
 # Row 15: Section 13-criteria matrix (A15:V15)
 requests.append(req_merge(14, 15, 0, 22))
@@ -253,6 +294,56 @@ requests.append(req_format(38, 51, 12, 22, bold=True))
 requests.append(req_format(54, 60, 0, 22, bg_color=color_rgb(255, 255, 255), text_color=c_text_dark, bold=False, font_size=9, halign="LEFT", wrap=True))
 requests.append(req_format(54, 60, 0, 3, bold=True))
 requests.append(req_format(54, 60, 3, 5, halign="CENTER", bold=True, text_color=c_text_green))
+
+# 4. Explicit Row Heights (Executive Polish)
+row_heights = {
+    0: 42,    # Row 1: Title
+    1: 32,    # Row 2: Nav Bar
+    2: 24,    # Row 3: KPI Labels
+    3: 38,    # Row 4: KPI Values
+    4: 14,    # Row 5: Spacer
+    5: 28,    # Row 6: Leaderboard Section Header
+    6: 28,    # Row 7: Leaderboard Column Headers
+    12: 28,   # Row 13: Leaderboard Total
+    13: 14,   # Row 14: Spacer
+    14: 28,   # Row 15: Matrix Section Header
+    15: 28,   # Row 16: Matrix Column Headers
+    26: 28,   # Row 27: Matrix Total
+    27: 14,   # Row 28: Spacer
+    28: 28,   # Row 29: Quotes Section Header
+    29: 28,   # Row 30: Quotes Column Headers
+    35: 14,   # Row 36: Spacer
+    36: 28,   # Row 37: Criteria Section Header
+    37: 28,   # Row 38: Criteria Column Headers
+    51: 14,   # Row 52: Spacer
+    52: 28,   # Row 53: ROI Section Header
+    53: 28,   # Row 54: ROI Column Headers
+}
+for r in range(7, 12):
+    row_heights[r] = 26       # Rows 8-12: Leaderboard Data
+for r in range(16, 26):
+    row_heights[r] = 25       # Rows 17-26: Matrix Data
+for r in range(30, 35):
+    row_heights[r] = 72       # Rows 31-35: Verbatim Quotes (multi-line)
+for r in range(38, 51):
+    row_heights[r] = 52       # Rows 39-51: Criteria standard (multi-line)
+for r in range(54, 60):
+    row_heights[r] = 32       # Rows 55-60: ROI economics
+
+for r_idx, h_px in row_heights.items():
+    requests.append(req_row_height(r_idx, r_idx + 1, h_px))
+
+# 5. Table Borders (Crisp Corporate Aesthetic)
+# Leaderboard: Rows 6..13, Cols 0..22
+requests.append(req_border(6, 13, 0, 22, border_color=c_border_gray))
+# Matrix: Rows 15..27, Cols 0..22
+requests.append(req_border(15, 27, 0, 22, border_color=c_border_gray))
+# Quotes: Rows 29..35, Cols 0..22
+requests.append(req_border(29, 35, 0, 22, border_color=c_border_gray))
+# 13 Criteria: Rows 37..51, Cols 0..22
+requests.append(req_border(37, 51, 0, 22, border_color=c_border_gray))
+# ROI: Rows 53..60, Cols 0..22
+requests.append(req_border(53, 60, 0, 22, border_color=c_border_gray))
 
 # Send batch update
 print(f"Sending batchUpdate with {len(requests)} format requests...")
