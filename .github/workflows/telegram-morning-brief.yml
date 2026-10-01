@@ -14,8 +14,8 @@ jobs:
     name: Send Morning Brief & PDF to Founder
     runs-on: ubuntu-latest
     env:
-      TELEGRAM_BOT_TOKEN: "8950801302:AAEENGC6cP5zQw6_a2C5EJgS6ji89wW4vEI"
-      TELEGRAM_CHAT_ID: "1422365475"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '1422365475' }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

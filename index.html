@@ -842,35 +842,7 @@ CRM: ${crm}`);
                         console.log('Popup prevented:', err);
                     }
 
-                    // 1. Send to Telegram Bot
-                    try {
-                        const notifyText = `🔔 <b>Новая заявка на аудит 3 звонков с сайта ai-rop.ru!</b>
-
-` +
-                            `👤 <b>Имя:</b> ${name}
-` +
-                            `📞 <b>Телефон:</b> ${phone}
-` +
-                            `💬 <b>Telegram:</b> ${tg || 'Не указан'}
-` +
-                            `🏢 <b>CRM:</b> ${crm || 'Не указана'}
-` +
-                            `⏱ <b>Время:</b> ${new Date().toLocaleString('ru-RU')}`;
-
-                        fetch('https://api.telegram.org/bot8950801302:AAEENGC6cP5zQw6_a2C5EJgS6ji89wW4vEI/sendMessage', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                chat_id: '1422365475',
-                                text: notifyText,
-                                parse_mode: 'HTML'
-                            })
-                        }).catch(err => console.log('TG dispatch error:', err));
-                    } catch (err) {
-                        console.log('TG error:', err);
-                    }
-
-                    // 2. Send to Corporate Email info@ai-rop.ru (FormSubmit)
+                    // Send to Corporate Email info@ai-rop.ru (FormSubmit)
                     try {
                         fetch('https://formsubmit.co/ajax/info@ai-rop.ru', {
                             method: 'POST',
