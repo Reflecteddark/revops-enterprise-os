@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ai-rop-max-bot
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python services/max_bot.py"
+    envVars:
+      - key: MAX_BOT_TOKEN
+        value: "f9LHodD0cOJTnBPV68BrzK-RA3ZhV6cmttvWtFpfM_fJH8mCqoAKSL96wERe7SnOq4v_2fsgeesQI4-I8Q6c"
+      - key: PORT
+        value: "10000"

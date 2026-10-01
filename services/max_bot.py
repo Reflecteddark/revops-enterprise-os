@@ -6,6 +6,8 @@ import ssl
 import logging
 import urllib.request
 import urllib.parse
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime
 
 # Windows console encoding fix
@@ -56,6 +58,21 @@ KEYBOARD_BUTTONS = [
         {"type": "link", "text": "Основатель в TG (@dm1918)", "url": "https://t.me/dm1918"}
     ]
 ]
+
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(b'{"status": "ok", "service": "AI-ROP MAX Bot", "bot": "@se14526668_bot"}')
+
+    def log_message(self, format, *args):
+        return
+
+def start_health_server(port):
+    server = HTTPServer(("0.0.0.0", port), HealthCheckHandler)
+    logger.info(f"Health check HTTP server listening on 0.0.0.0:{port}")
+    server.serve_forever()
 
 def api_request(endpoint, method="GET", data=None, params=None):
     url = f"{BASE_URL}{endpoint}"
@@ -154,6 +171,16 @@ def run_bot():
         return
     
     logger.info(f"Connected to MAX as @{me.get('username')} (ID: {me.get('user_id')}, Name: {me.get('first_name')})")
+
+    # Start Health Check HTTP server for Render/Railway/Cloud Run if PORT is set
+    port_env = os.environ.get("PORT")
+    if port_env:
+        try:
+            port = int(port_env)
+            t = threading.Thread(target=start_health_server, args=(port,), daemon=True)
+            t.start()
+        except Exception as e:
+            logger.error(f"Failed to start health check server on port {port_env}: {e}")
 
     marker = None
     processed_msg_ids = set()
