@@ -1340,13 +1340,13 @@
                         <p class="text-slate-300 text-sm max-w-md mx-auto mb-6">Чтобы получить экспресс-разбор быстрее, отправьте 3 аудиозаписи напрямую в Telegram инженеру или запустите боевого ИИ-бота:</p>
                         
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-                            <a id="tgDirectBtn" href="https://t.me/Reflecteddark" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-sky-500/25 transition-all text-sm">
+                            <a id="tgDirectBtn" href="https://t.me/dm1918" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-sky-500/25 transition-all text-sm">
                                 <i class="fab fa-telegram-plane text-base"></i>
-                                Открыть диалог в Telegram
+                                Написать в Telegram (@dm1918)
                             </a>
                             <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold rounded-xl border border-slate-700 transition-all text-sm">
                                 <i class="fas fa-robot text-indigo-400"></i>
-                                Тест-драйв в боте
+                                Запустить ИИ-бота
                             </a>
                         </div>
                     </div>
@@ -1376,11 +1376,11 @@
                 </div>
                 
                 <div class="flex items-center gap-3">
-                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all text-xs font-semibold" title="Открыть Telegram-бота">
+                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all text-xs font-semibold" title="Открыть Telegram-бота (@RevOps_Super_Audit_Bot)">
                         <i class="fas fa-robot text-sm"></i>
                         <span class="hidden sm:inline">@RevOps_Super_Audit_Bot</span>
                     </a>
-                    <a href="https://t.me/Reflecteddark" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать инженеру в Telegram">
+                    <a href="https://t.me/dm1918" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать лично в Telegram (@dm1918)">
                         <i class="fab fa-telegram"></i>
                     </a>
                     <a href="mailto:strelok15@bk.ru" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Написать на Email">
@@ -1413,7 +1413,7 @@
                 
                 <p><strong>4. Сроки хранения и автоудаление:</strong> Аудиозаписи звонков хранятся в буферном защищенном хранилище и подлежат автоматическому удалению через 30 дней. По письменному требованию клиента данные удаляются немедленно.</p>
                 
-                <p><strong>5. Контакты оператора:</strong> По вопросам обработки персональных данных и условий соглашения о неразглашении (NDA) обращаться по адресу: <code>strelok15@bk.ru</code> или в Telegram: <code>@Reflecteddark</code>.</p>
+                <p><strong>5. Контакты оператора:</strong> По вопросам обработки персональных данных и условий соглашения о неразглашении (NDA) обращаться по адресу: <code>strelok15@bk.ru</code> или в Telegram: <code>@dm1918</code> (бот: <code>@RevOps_Super_Audit_Bot</code>).</p>
             </div>
             
             <div class="mt-6 pt-4 border-t border-slate-800 text-right">
@@ -1556,7 +1556,7 @@
                 formSuccess.classList.remove('hidden');
                 
                 const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков.\nИмя: ${name}\nТелефон: ${phone}\nTelegram: ${tg}\nCRM: ${crm}`);
-                const tgUrl = `https://t.me/Reflecteddark?text=${tgMsg}`;
+                const tgUrl = `https://t.me/dm1918?text=${tgMsg}`;
                 const tgBtn = document.getElementById('tgDirectBtn');
                 if (tgBtn) {
                     tgBtn.href = tgUrl;
