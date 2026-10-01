@@ -1570,29 +1570,7 @@
                     console.log('Popup prevented:', e);
                 }
 
-                // Фоновая отправка заявки в Telegram-бот фаундера
-                try {
-                    const notifyText = `🔔 <b>Новая заявка на аудит 3 звонков с сайта ai-rop.ru!</b>\n\n` +
-                        `👤 <b>Имя:</b> ${name}\n` +
-                        `📞 <b>Телефон:</b> ${phone}\n` +
-                        `💬 <b>Telegram:</b> ${tg || 'Не указан'}\n` +
-                        `🏢 <b>CRM:</b> ${crm || 'Не указана'}\n` +
-                        `⏱ <b>Время:</b> ${new Date().toLocaleString('ru-RU')}`;
-                        
-                    fetch('https://api.telegram.org/bot8950801302:AAEENGC6cP5zQw6_a2C5EJgS6ji89wW4vEI/sendMessage', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: '1422365475',
-                            text: notifyText,
-                            parse_mode: 'HTML'
-                        })
-                    }).catch(err => {
-                        console.log('Direct TG alert notification:', err);
-                    });
-                } catch (e) {
-                    console.log('Notification error:', e);
-                }
+                // Заявка открывается напрямую в Telegram-боте через deep-link
             });
         }
 
