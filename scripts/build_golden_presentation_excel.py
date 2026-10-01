@@ -87,19 +87,16 @@ def build_presentation_workbook(target_path: Path):
         bottom=Side(style="double", color=c_navy_dark)
     )
 
-    nav_items = [
-        "📄 1. One-Pager",
-        "⚡ 2. Пульс компании",
-        "📋 3. Пульт РОПа",
-        "💸 4. 7 Грехов ОП",
-        "🎯 5. Action Center",
-        "🎙️ 6. ИИ-Аудит",
-        "⚡ 7. Экспресс 3 цифры",
-        "🧪 8. QA Suite",
-        "⚙️ 9. Настройки"
+    nav_tabs_def = [
+        ("⚡ Экспресс-Калькулятор", "⚡ Экспресс_Калькулятор_3_Цифры", "⚡ Калькулятор 3 цифры"),
+        ("📋 Пульт РОПа (15 мин)", "📋 Пульт_РОПа_15_Минут", "📋 Пульт РОПа"),
+        ("🎙️ ИИ-Аудит звонков", "🎙️ ИИ_Аудит", "🎙️ ИИ-Аудит"),
+        ("💸 7 Грехов (Диагностика)", "💸 Диагностика_Утечек_ОП", "💸 7 Грехов ОП"),
+        ("📄 Executive One-Pager", "📄 Executive_OnePager", "📄 One-Pager"),
+        ("🔐 152-ФЗ Безопасность", "🔐 152-ФЗ_Контур_Безопасности", "🔐 152-ФЗ"),
     ]
 
-    def setup_header_and_nav(ws, title_text, active_idx=6, max_col="I"):
+    def setup_header_and_nav(ws, title_text, active_idx=0, max_col="I"):
         ws.views.sheetView[0].showGridLines = True
         ws.merge_cells(f"A1:{max_col}1")
         max_c = openpyxl.utils.column_index_from_string(max_col)
@@ -112,22 +109,44 @@ def build_presentation_workbook(target_path: Path):
         c1.alignment = Alignment(horizontal="center", vertical="center")
         ws.row_dimensions[1].height = 36
 
-        # Nav bar on Row 2
-        for col_idx, item in enumerate(nav_items, start=1):
-            if col_idx > max_c:
+        # Nav bar on Row 2: custom responsive column spans depending on max_col
+        if max_col == "V":
+            tab_ranges = ["A2:C2", "D2:F2", "G2:J2", "K2:M2", "N2:P2", "Q2:V2"]
+        elif max_col == "I":
+            tab_ranges = ["A2", "B2:C2", "D2:E2", "F2", "G2:H2", "I2"]
+        elif max_col == "H":
+            tab_ranges = ["A2:B2", "C2", "D2", "E2", "F2", "G2:H2"]
+        elif max_col == "F":
+            tab_ranges = ["A2", "B2", "C2", "D2", "E2", "F2"]
+        else:
+            tab_ranges = [f"{openpyxl.utils.get_column_letter(i)}2" for i in range(1, len(nav_tabs_def) + 1)]
+
+        for idx, (full_title, sheet_target, short_title) in enumerate(nav_tabs_def):
+            if idx >= len(tab_ranges):
                 break
-            cell = ws.cell(row=2, column=col_idx)
-            cell.value = item
-            cell.alignment = Alignment(horizontal="center", vertical="center")
-            cell.fill = fill_nav_bar
-            if col_idx == active_idx + 1:
-                cell.font = font_nav_active
+            cell_rng = tab_ranges[idx]
+            is_active = (idx == active_idx)
+            
+            f_style = font_nav_active if is_active else font_nav
+            bg_fill = PatternFill(start_color="2563EB", end_color="2563EB", fill_type="solid") if is_active else fill_nav_bar
+            
+            # Use full title if range is merged or wide, otherwise short title
+            title_to_use = full_title if (":" in cell_rng or max_col in ["V", "I", "F"]) else short_title
+            
+            if ":" in cell_rng:
+                merge_and_format(ws, cell_rng, title_to_use, font=f_style, fill=bg_fill, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+                first_c = ws[cell_rng.split(":")[0]]
             else:
-                cell.font = font_nav
-        for col_idx in range(len(nav_items) + 1, max_c + 1):
-            cell = ws.cell(row=2, column=col_idx)
-            cell.fill = fill_nav_bar
-        ws.row_dimensions[2].height = 22
+                first_c = ws[cell_rng]
+                first_c.value = title_to_use
+                first_c.font = f_style
+                first_c.fill = bg_fill
+                first_c.border = thin_border
+                first_c.alignment = Alignment(horizontal="center", vertical="center")
+            
+            first_c.hyperlink = f"#'{sheet_target}'!A1"
+
+        ws.row_dimensions[2].height = 24
 
     def merge_and_format(ws, cell_range, value=None, font=None, fill=None, border=None, alignment=None, number_format=None):
         ws.merge_cells(cell_range)
@@ -147,7 +166,7 @@ def build_presentation_workbook(target_path: Path):
     # =========================================================================
     ws_calc = wb.active
     ws_calc.title = "⚡ Экспресс_Калькулятор_3_Цифры"
-    setup_header_and_nav(ws_calc, "⚡ ЭКСПРЕСС-КАЛЬКУЛЯТОР УПУЩЕННОЙ ПРИБЫЛИ ОП (ДИАГНОСТИКА ЗА 30 СЕКУНД)", active_idx=6, max_col="I")
+    setup_header_and_nav(ws_calc, "⚡ ЭКСПРЕСС-КАЛЬКУЛЯТОР УПУЩЕННОЙ ПРИБЫЛИ ОП (ДИАГНОСТИКА ЗА 30 СЕКУНД)", active_idx=0, max_col="I")
 
     # Row 4: Section Headers
     ws_calc.merge_cells("A4:B4")
@@ -327,80 +346,74 @@ def build_presentation_workbook(target_path: Path):
         ws_calc[f"A{row_idx}"] = data[0]
         ws_calc[f"A{row_idx}"].alignment = Alignment(horizontal="center")
         ws_calc[f"B{row_idx}"] = data[1]
+        ws_calc[f"A{row_idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_calc[f"B{row_idx}"] = data[1]
+        ws_calc[f"B{row_idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_calc[f"C{row_idx}"] = data[2]
+        ws_calc[f"C{row_idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_calc[f"D{row_idx}"] = data[3]
         ws_calc[f"D{row_idx}"].number_format = "#,##0 \"₽\""
         ws_calc[f"D{row_idx}"].font = font_bold
+        ws_calc[f"D{row_idx}"].alignment = Alignment(horizontal="right", vertical="center")
         ws_calc[f"E{row_idx}"] = data[4]
+        ws_calc[f"E{row_idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_calc[f"F{row_idx}"] = data[5]
+        ws_calc[f"F{row_idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
 
         for col_l in ["A", "B", "C", "D", "E", "F"]:
             ws_calc[f"{col_l}{row_idx}"].border = thin_border
             if col_l != "D":
                 ws_calc[f"{col_l}{row_idx}"].font = font_reg
-        ws_calc.row_dimensions[row_idx].height = 20
+        ws_calc.row_dimensions[row_idx].height = 28
 
     # R19: Total Row
     ws_calc["B19"] = "ИТОГО УПУЩЕННОЙ ПРИБЫЛИ В МЕСЯЦ:"
     ws_calc["B19"].font = font_bold
+    ws_calc["B19"].alignment = Alignment(horizontal="right", vertical="center")
     ws_calc["D19"] = "=SUM(D15:D18)"
     ws_calc["D19"].font = font_card_red
     ws_calc["D19"].number_format = "#,##0 \"₽\""
+    ws_calc["D19"].alignment = Alignment(horizontal="right", vertical="center")
     ws_calc["E19"] = "ПОТЕНЦИАЛ БЫСТРОГО ВОЗВРАТА:"
     ws_calc["E19"].font = font_bold
+    ws_calc["E19"].alignment = Alignment(horizontal="right", vertical="center")
     ws_calc["F19"] = "=ROUND(D19*0.35, 0) & \" ₽ в первый месяц\""
     ws_calc["F19"].font = font_card_green
+    ws_calc["F19"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
+    ws_calc.row_dimensions[19].height = 26
 
     for col_l in ["A", "B", "C", "D", "E", "F"]:
         ws_calc[f"{col_l}{row_idx+1}"].border = total_top_border
 
-    # R21-R27: CTA Banner
-    ws_calc.merge_cells("A21:F21")
-    ws_calc["A21"] = "🎁 СЛЕДУЮЩИЙ ШАГ: БЕСПЛАТНЫЙ ТЕСТ-ДРАЙВ НА 3 ВАШИХ ЗВОНКАХ"
-    ws_calc["A21"].font = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF")
-    ws_calc["A21"].fill = fill_navy
-    ws_calc["A21"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_calc.row_dimensions[21].height = 26
+    # R21-R27: CTA Banner (spanning full sheet width A to I)
+    merge_and_format(ws_calc, "A21:I21", "🎁 СЛЕДУЮЩИЙ ШАГ: БЕСПЛАТНЫЙ ТЕСТ-ДРАЙВ НА 3 ВАШИХ ЗВОНКАХ", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=fill_navy, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_calc.row_dimensions[21].height = 28
 
-    ws_calc.merge_cells("A22:F22")
-    ws_calc["A22"] = "Хотите проверить эту математику на реальных данных вашей компании за 15 минут?"
-    ws_calc["A22"].font = font_bold
-    ws_calc["A22"].alignment = Alignment(horizontal="center")
+    merge_and_format(ws_calc, "A22:I22", "Хотите проверить эту математику на реальных данных вашей компании за 15 минут?", font=font_bold, alignment=Alignment(horizontal="center", vertical="center", wrap_text=True))
+    ws_calc.row_dimensions[22].height = 24
 
-    ws_calc.merge_cells("A23:F23")
-    ws_calc["A23"] = "👉 Отправьте 3 аудиозаписи любых вчерашних звонков ваших менеджеров в Telegram бот."
-    ws_calc["A23"].font = font_reg
-    ws_calc["A23"].alignment = Alignment(horizontal="center")
+    merge_and_format(ws_calc, "A23:I23", "👉 Отправьте 3 аудиозаписи любых вчерашних звонков ваших менеджеров в Telegram бот.", font=font_reg, alignment=Alignment(horizontal="center", vertical="center", wrap_text=True))
+    ws_calc.row_dimensions[23].height = 24
 
-    ws_calc.merge_cells("A24:F24")
-    ws_calc["A24"] = "ИИ бесплатно разберет их по 13 критериям, покажет ошибки речи и рассчитает точную сумму под угрозой слива."
-    ws_calc["A24"].font = font_reg
-    ws_calc["A24"].alignment = Alignment(horizontal="center")
+    merge_and_format(ws_calc, "A24:I24", "ИИ бесплатно разберет их по 13 критериям, покажет ошибки речи и рассчитает точную сумму под угрозой слива.", font=font_reg, alignment=Alignment(horizontal="center", vertical="center", wrap_text=True))
+    ws_calc.row_dimensions[24].height = 24
 
-    ws_calc.merge_cells("A25:F25")
-    ws_calc["A25"] = "🚀 ЗАПУСТИТЬ БЕСПЛАТНЫЙ ТЕСТ-ДРАЙВ: @RevOps_Super_Audit_Bot (https://t.me/RevOps_Super_Audit_Bot)"
-    ws_calc["A25"].font = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF")
-    ws_calc["A25"].fill = PatternFill(start_color="2563EB", end_color="2563EB", fill_type="solid")
-    ws_calc["A25"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_calc.row_dimensions[25].height = 28
+    merge_and_format(ws_calc, "A25:I25", "🚀 ЗАПУСТИТЬ БЕСПЛАТНЫЙ ТЕСТ-ДРАЙВ: @RevOps_Super_Audit_Bot (https://t.me/RevOps_Super_Audit_Bot)", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=PatternFill(start_color="2563EB", end_color="2563EB", fill_type="solid"), alignment=Alignment(horizontal="center", vertical="center"))
+    ws_calc.row_dimensions[25].height = 32
 
-    ws_calc.merge_cells("A26:F26")
-    ws_calc["A26"] = "Нужен комплексный аудит отдела продаж? 👉 Экономика спринта оптимизации (450 000 ₽) на вкладке «4. 7 Грехов ОП»"
-    ws_calc["A26"].font = font_link
-    ws_calc["A26"].alignment = Alignment(horizontal="center")
+    merge_and_format(ws_calc, "A26:I26", "Нужен комплексный аудит отдела продаж? 👉 Экономика спринта оптимизации (450 000 ₽) на вкладке «4. 7 Грехов ОП»", font=font_link, alignment=Alignment(horizontal="center", vertical="center", wrap_text=True))
+    ws_calc.row_dimensions[26].height = 24
 
-    ws_calc.merge_cells("A27:F27")
-    ws_calc["A27"] = "🔒 Конфиденциально • Без передачи персональных данных • Экспресс-разбор за 15 минут (152-ФЗ РФ)"
-    ws_calc["A27"].font = font_muted
-    ws_calc["A27"].alignment = Alignment(horizontal="center")
+    merge_and_format(ws_calc, "A27:I27", "🔒 Конфиденциально • Без передачи персональных данных • Экспресс-разбор за 15 минут (152-ФЗ РФ)", font=font_muted, alignment=Alignment(horizontal="center", vertical="center", wrap_text=True))
+    ws_calc.row_dimensions[27].height = 24
 
     # Column widths
     ws_calc.column_dimensions["A"].width = 38
-    ws_calc.column_dimensions["B"].width = 24
-    ws_calc.column_dimensions["C"].width = 38
+    ws_calc.column_dimensions["B"].width = 30
+    ws_calc.column_dimensions["C"].width = 40
     ws_calc.column_dimensions["D"].width = 26
-    ws_calc.column_dimensions["E"].width = 44
-    ws_calc.column_dimensions["F"].width = 46
+    ws_calc.column_dimensions["E"].width = 48
+    ws_calc.column_dimensions["F"].width = 50
     ws_calc.column_dimensions["G"].width = 28
     ws_calc.column_dimensions["H"].width = 24
     ws_calc.column_dimensions["I"].width = 20
@@ -409,47 +422,48 @@ def build_presentation_workbook(target_path: Path):
     # SHEET 2: 📋 Пульт_РОПа_15_Минут (gid 777000301 replica)
     # =========================================================================
     ws_rop = wb.create_sheet("📋 Пульт_РОПа_15_Минут")
-    setup_header_and_nav(ws_rop, "📋 СТРАТЕГИЧЕСКИЙ ПУЛЬТ СОБСТВЕННИКА: «5 РЕШЕНИЙ МЕСЯЦА»", active_idx=2, max_col="H")
+    setup_header_and_nav(ws_rop, "📋 СТРАТЕГИЧЕСКИЙ ПУЛЬТ СОБСТВЕННИКА: «5 РЕШЕНИЙ МЕСЯЦА»", active_idx=1, max_col="H")
 
     # Row 4 & 5: Top KPI cards
-    rop_kpis = [
-        ("A", "Звонков за вчера", "6", fill_card, font_card_val),
-        ("B", "Диалогов с браком (<9)", "2", fill_alert, font_card_red),
-        ("C", "Сделок с угрозой срыва", "2", fill_alert, font_card_red),
-        ("D", "Сумма в зоне риска прямо сейчас", 2730000, fill_alert, font_card_red),
-        ("E", "H", "Статус дня для РОПа", "🚨 ТРЕБУЕТСЯ 15 МИНУТ КОНТРОЛЯ РОПа", fill_alert, font_card_red),
-    ]
+    merge_and_format(ws_rop, "A4:B4", "Звонков за вчера", font=font_card_lbl, fill=fill_card, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_rop, "A5:B5", 6, font=font_card_val, fill=fill_card, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    for item in rop_kpis[:4]:
-        col_l, label, val, fill_c, font_v = item
-        ws_rop[f"{col_l}4"] = label
-        ws_rop[f"{col_l}4"].font = font_card_lbl
-        ws_rop[f"{col_l}4"].fill = fill_c
-        ws_rop[f"{col_l}4"].alignment = Alignment(horizontal="center", vertical="center")
-        ws_rop[f"{col_l}4"].border = card_border
+    ws_rop["C4"] = "Диалогов с браком (<9)"
+    ws_rop["C4"].font = font_card_lbl
+    ws_rop["C4"].fill = fill_alert
+    ws_rop["C4"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_rop["C4"].border = card_border
+    ws_rop["C5"] = 2
+    ws_rop["C5"].font = font_card_red
+    ws_rop["C5"].fill = fill_alert
+    ws_rop["C5"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_rop["C5"].border = card_border
 
-        ws_rop[f"{col_l}5"] = val
-        ws_rop[f"{col_l}5"].font = font_v
-        ws_rop[f"{col_l}5"].fill = fill_c
-        ws_rop[f"{col_l}5"].alignment = Alignment(horizontal="center", vertical="center")
-        ws_rop[f"{col_l}5"].border = card_border
-        if isinstance(val, int):
-            ws_rop[f"{col_l}5"].number_format = "#,##0 \"₽\""
+    ws_rop["D4"] = "Сделок с угрозой срыва"
+    ws_rop["D4"].font = font_card_lbl
+    ws_rop["D4"].fill = fill_alert
+    ws_rop["D4"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_rop["D4"].border = card_border
+    ws_rop["D5"] = 2
+    ws_rop["D5"].font = font_card_red
+    ws_rop["D5"].fill = fill_alert
+    ws_rop["D5"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_rop["D5"].border = card_border
 
-    # Merge status E4:H4 and E5:H5
-    ws_rop.merge_cells("E4:H4")
-    ws_rop["E4"] = "Статус дня для РОПа"
+    ws_rop["E4"] = "Сумма в зоне риска"
     ws_rop["E4"].font = font_card_lbl
     ws_rop["E4"].fill = fill_alert
     ws_rop["E4"].alignment = Alignment(horizontal="center", vertical="center")
     ws_rop["E4"].border = card_border
-
-    ws_rop.merge_cells("E5:H5")
-    ws_rop["E5"] = "🚨 ТРЕБУЕТСЯ 15 МИНУТ КОНТРОЛЯ РОПа"
-    ws_rop["E5"].font = Font(name="Segoe UI", size=13, bold=True, color="DC2626")
+    ws_rop["E5"] = 2730000
+    ws_rop["E5"].font = font_card_red
     ws_rop["E5"].fill = fill_alert
     ws_rop["E5"].alignment = Alignment(horizontal="center", vertical="center")
     ws_rop["E5"].border = card_border
+    ws_rop["E5"].number_format = "#,##0 \"₽\""
+
+    merge_and_format(ws_rop, "F4:H4", "Статус дня для РОПа", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_rop, "F5:H5", "🚨 ТРЕБУЕТСЯ 15 МИНУТ КОНТРОЛЯ РОПа", font=Font(name="Segoe UI", size=12, bold=True, color="DC2626"), fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
     ws_rop.row_dimensions[4].height = 20
     ws_rop.row_dimensions[5].height = 32
@@ -492,24 +506,29 @@ def build_presentation_workbook(target_path: Path):
         ws_rop[f"A{idx}"] = row_data[0]
         ws_rop[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_rop[f"B{idx}"] = row_data[1]
+        ws_rop[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_rop[f"C{idx}"] = row_data[2]
+        ws_rop[f"C{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_rop[f"D{idx}"] = row_data[3]
         ws_rop[f"D{idx}"].number_format = "#,##0 \"₽\""
         ws_rop[f"D{idx}"].font = font_bold
+        ws_rop[f"D{idx}"].alignment = Alignment(horizontal="right", vertical="center")
         ws_rop[f"E{idx}"] = row_data[4]
         ws_rop[f"E{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_rop[f"F{idx}"] = row_data[5]
+        ws_rop[f"F{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_rop[f"G{idx}"] = row_data[6]
         ws_rop[f"G{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_rop[f"G{idx}"].font = font_bold
         ws_rop[f"H{idx}"] = row_data[7]
         ws_rop[f"H{idx}"].font = Font(name="Segoe UI", size=8, italic=True, color="334155")
+        ws_rop[f"H{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
 
         for col_l in ["A", "B", "C", "D", "E", "F", "G", "H"]:
             ws_rop[f"{col_l}{idx}"].border = thin_border
             if col_l not in ["D", "G", "H"]:
                 ws_rop[f"{col_l}{idx}"].font = font_reg
-        ws_rop.row_dimensions[idx].height = 42
+        ws_rop.row_dimensions[idx].height = 48
 
     # R14: Total Row
     ws_rop["B14"] = "ИТОГО ДЕНЕГ В ЗОНЕ РИСКА СЕГОДНЯ:"
@@ -560,12 +579,12 @@ def build_presentation_workbook(target_path: Path):
         ws_rop[f"F{idx}"].border = thin_border
         ws_rop[f"G{idx}"].border = thin_border
         ws_rop[f"H{idx}"].border = thin_border
-        ws_rop.row_dimensions[idx].height = 20
+        ws_rop.row_dimensions[idx].height = 22
 
-    ws_rop.column_dimensions["A"].width = 6
+    ws_rop.column_dimensions["A"].width = 14
     ws_rop.column_dimensions["B"].width = 36
     ws_rop.column_dimensions["C"].width = 46
-    ws_rop.column_dimensions["D"].width = 20
+    ws_rop.column_dimensions["D"].width = 22
     ws_rop.column_dimensions["E"].width = 22
     ws_rop.column_dimensions["F"].width = 42
     ws_rop.column_dimensions["G"].width = 16
@@ -575,62 +594,35 @@ def build_presentation_workbook(target_path: Path):
     # SHEET 3: 🎙️ ИИ_Аудит (Golden Master gid 852624872 exact 60-row replica)
     # =========================================================================
     ws_audit = wb.create_sheet("🎙️ ИИ_Аудит")
-    setup_header_and_nav(ws_audit, "🎙️ ИИ-СУПЕРВАЙЗЕР ЗВОНКОВ: РЕЧЕВАЯ АНАЛИТИКА 100% ДИАЛОГОВ (WHISPER LARGE V3 + LLM)", active_idx=5, max_col="V")
+    setup_header_and_nav(ws_audit, "🎙️ ИИ-СУПЕРВАЙЗЕР ЗВОНКОВ: РЕЧЕВАЯ АНАЛИТИКА 100% ДИАЛОГОВ (WHISPER LARGE V3 + LLM)", active_idx=2, max_col="V")
 
-    # Row 3 & 4: Top KPI Cards (spanning A to V)
-    # Card 1: A3:A4
-    ws_audit["A3"] = "Проанализировано звонков"
-    ws_audit["A3"].font = font_card_lbl
-    ws_audit["A3"].fill = fill_card
-    ws_audit["A3"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["A3"].border = card_border
+    # Row 3 & 4: Top KPI Cards (symmetric 6-card grid spanning A to V)
+    # Card 1: A3:B4 (Проанализировано звонков)
+    merge_and_format(ws_audit, "A3:B3", "Проанализировано звонков", font=font_card_lbl, fill=fill_card, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "A4:B4", "25 звонков / сут", font=font_card_val, fill=fill_card, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    ws_audit["A4"] = "25 звонков / сут"
-    ws_audit["A4"].font = font_card_val
-    ws_audit["A4"].fill = fill_card
-    ws_audit["A4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["A4"].border = card_border
+    # Card 2: C3:D4 (Средний балл качества)
+    merge_and_format(ws_audit, "C3:D3", "Средний балл качества", font=font_card_lbl, fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "C4:D4", "8.9 из 13", font=font_card_blue, fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    # Card 2: B3:C4
-    merge_and_format(ws_audit, "B3:C3", "Средний балл качества", font=font_card_lbl, fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
-    merge_and_format(ws_audit, "B4:C4", "8.9 из 13", font=font_card_blue, fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    # Card 3: E3:F4 (Next Step)
+    merge_and_format(ws_audit, "E3:F3", "Фиксация жесткого Next Step", font=font_card_lbl, fill=fill_warn, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "E4:F4", "60.0% (норма ≥85%)", font=Font(name="Segoe UI", size=13, bold=True, color="B45309"), fill=fill_warn, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    # Card 3: D3:D4
-    ws_audit["D3"] = "Фиксация жесткого Next Step"
-    ws_audit["D3"].font = font_card_lbl
-    ws_audit["D3"].fill = fill_card
-    ws_audit["D3"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["D3"].border = card_border
+    # Card 4: G3:I4 (Критический брак речи)
+    merge_and_format(ws_audit, "G3:I3", "Критический брак речи (<9)", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "G4:I4", "6 диалогов", font=font_card_red, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    ws_audit["D4"] = "60.0% (норма ≥85%)"
-    ws_audit["D4"].font = Font(name="Segoe UI", size=13, bold=True, color="B45309")
-    ws_audit["D4"].fill = fill_warn
-    ws_audit["D4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["D4"].border = card_border
+    # Card 5: J3:L4 (Сумма в зоне риска)
+    merge_and_format(ws_audit, "J3:L3", "Выручка под угрозой слива", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "J4:L4", 2840000, font=font_card_red, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"), number_format='#,##0 "₽"')
 
-    # Card 4: E3:E4
-    ws_audit["E3"] = "Критический брак речи (<9)"
-    ws_audit["E3"].font = font_card_lbl
-    ws_audit["E3"].fill = fill_alert
-    ws_audit["E3"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["E3"].border = card_border
+    # Card 6: M3:V4 (Вердикт ИИ)
+    merge_and_format(ws_audit, "M3:V3", "Вердикт ИИ-супервайзера", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "M4:V4", "🚨 ВЫСОКИЙ РИСК СЛИВА VIP-КЛИЕНТОВ (ТРЕБУЕТСЯ ВМЕШАТЕЛЬСТВО РОПа)", font=Font(name="Segoe UI", size=11, bold=True, color="DC2626"), fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    ws_audit["E4"] = "6 диалогов"
-    ws_audit["E4"].font = font_card_red
-    ws_audit["E4"].fill = fill_alert
-    ws_audit["E4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["E4"].border = card_border
-
-    # Card 5: F3:G4
-    merge_and_format(ws_audit, "F3:G3", "Выручка под угрозой слива", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
-    merge_and_format(ws_audit, "F4:G4", 2840000, font=font_card_red, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"), number_format='#,##0 "₽"')
-
-    # Card 6: H3:V4
-    merge_and_format(ws_audit, "H3:V3", "Вердикт ИИ-супервайзера", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
-    merge_and_format(ws_audit, "H4:V4", "🚨 ВЫСОКИЙ РИСК СЛИВА VIP-КЛИЕНТОВ (ТРЕБУЕТСЯ ВМЕШАТЕЛЬСТВО РОПа)", font=Font(name="Segoe UI", size=11, bold=True, color="DC2626"), fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
-
-    ws_audit.row_dimensions[3].height = 20
-    ws_audit.row_dimensions[4].height = 30
+    ws_audit.row_dimensions[3].height = 22
+    ws_audit.row_dimensions[4].height = 32
     ws_audit.row_dimensions[5].height = 12
 
     # -------------------------------------------------------------------------
@@ -897,8 +889,7 @@ def build_presentation_workbook(target_path: Path):
         ("A30", "Call ID"),
         ("B30", "Сделка / Контрагент"),
         ("C30", "Менеджер"),
-        ("D30", "Сумма в риске"),
-        ("E30", "Критический дефект речи")
+        ("D30", "Сумма в риске")
     ]
     for cell_id, text in quotes_hdrs:
         ws_audit[cell_id] = text
@@ -907,8 +898,9 @@ def build_presentation_workbook(target_path: Path):
         ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
         ws_audit[cell_id].border = thin_border
 
-    merge_and_format(ws_audit, "F30:L30", "💬 Цитата из диалога (Расшифровка Whisper Large V3)", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
-    merge_and_format(ws_audit, "M30:V30", "🤖 Решение ИИ и Срочное действие РОПа", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "E30:F30", "Критический дефект речи", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "G30:M30", "💬 Цитата из диалога (Расшифровка Whisper Large V3)", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "N30:V30", "🤖 Решение ИИ и Срочное действие РОПа", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
     ws_audit.row_dimensions[30].height = 26
 
     quotes_data = [
@@ -946,25 +938,23 @@ def build_presentation_workbook(target_path: Path):
         ws_audit[f"A{idx}"].font = font_bold
         ws_audit[f"B{idx}"] = deal
         ws_audit[f"B{idx}"].font = font_bold
-        ws_audit[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center")
+        ws_audit[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_audit[f"C{idx}"] = mgr
         ws_audit[f"C{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_audit[f"D{idx}"] = risk_amt
         ws_audit[f"D{idx}"].number_format = '#,##0 "₽"'
         ws_audit[f"D{idx}"].font = font_card_red
         ws_audit[f"D{idx}"].alignment = Alignment(horizontal="right", vertical="center")
-        ws_audit[f"E{idx}"] = defect
-        ws_audit[f"E{idx}"].font = Font(name="Segoe UI", size=9, bold=True, color="DC2626")
-        ws_audit[f"E{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
 
-        for col_l in ["A", "B", "C", "D", "E"]:
+        for col_l in ["A", "B", "C", "D"]:
             ws_audit[f"{col_l}{idx}"].border = thin_border
-            if col_l not in ["A", "B", "D", "E"]:
+            if col_l not in ["A", "B", "D"]:
                 ws_audit[f"{col_l}{idx}"].font = font_reg
 
-        merge_and_format(ws_audit, f"F{idx}:L{idx}", quote, font=Font(name="Segoe UI", size=9, italic=True, color="334155"), fill=fill_card, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
-        merge_and_format(ws_audit, f"M{idx}:V{idx}", action, font=Font(name="Segoe UI", size=9, bold=True, color="0F172A"), fill=fill_warn, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
-        ws_audit.row_dimensions[idx].height = 48
+        merge_and_format(ws_audit, f"E{idx}:F{idx}", defect, font=Font(name="Segoe UI", size=9, bold=True, color="DC2626"), fill=fill_card, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        merge_and_format(ws_audit, f"G{idx}:M{idx}", quote, font=Font(name="Segoe UI", size=9, italic=True, color="334155"), fill=fill_card, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        merge_and_format(ws_audit, f"N{idx}:V{idx}", action, font=Font(name="Segoe UI", size=9, bold=True, color="0F172A"), fill=fill_warn, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        ws_audit.row_dimensions[idx].height = 54
 
     ws_audit.row_dimensions[36].height = 12
 
@@ -1070,10 +1060,10 @@ def build_presentation_workbook(target_path: Path):
 
     # Column widths for audit sheet (A to V)
     audit_col_widths = {
-        "A": 10, "B": 28, "C": 15, "D": 16, "E": 12, "F": 18,
+        "A": 14, "B": 28, "C": 16, "D": 16, "E": 14, "F": 18,
         "G": 11, "H": 11, "I": 11, "J": 11, "K": 11, "L": 11,
         "M": 11, "N": 11, "O": 11, "P": 11, "Q": 11, "R": 11, "S": 11,
-        "T": 12, "U": 16, "V": 20
+        "T": 13, "U": 16, "V": 22
     }
     for col_l, width in audit_col_widths.items():
         ws_audit.column_dimensions[col_l].width = width
@@ -1084,59 +1074,67 @@ def build_presentation_workbook(target_path: Path):
     ws_sins = wb.create_sheet("💸 Диагностика_Утечек_ОП")
     setup_header_and_nav(ws_sins, "💸 ДИАГНОСТИЧЕСКИЙ АУДИТ УПУЩЕННОЙ ПРИБЫЛИ И УЗКИХ МЕСТ ОТДЕЛА ПРОДАЖ", active_idx=3, max_col="H")
 
-    # Row 4 & 5: Top KPI cards
-    sins_kpis = [
-        ("A", "Фактическая выручка месяца", 1650000, fill_card, font_card_val, "#,##0 \"₽\""),
-        ("B", "Взвешенный пайплайн в работе", 2754000, fill_indigo_light, font_card_blue, "#,##0 \"₽\""),
-        ("C", "Выявленная упущенная прибыль", 7001000, fill_alert, font_card_red, "#,##0 \"₽\""),
-        ("D", "Потенциал выручки (To-Be)", 8651000, fill_success, font_card_green, "#,##0 \"₽\""),
-        ("E", "F", "Ожидаемый чистый ROI", "367%", fill_success, font_card_green, None),
-        ("G", "H", "Срок окупаемости проекта", "6 дн.", fill_success, font_card_green, None),
-    ]
+    # Row 4 & 5: Top KPI cards (6 cards across 8 cols: A:B, C, D, E, F, G:H)
+    # Card 1: A4:B5
+    merge_and_format(ws_sins, "A4:B4", "Фактическая выручка месяца", font=font_card_lbl, fill=fill_card, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_sins, "A5:B5", 1650000, font=font_card_val, fill=fill_card, border=card_border, alignment=Alignment(horizontal="center", vertical="center"), number_format='#,##0 "₽"')
 
-    for col_l, label, val, fill_c, font_v, num_fmt in sins_kpis[:4]:
-        ws_sins[f"{col_l}4"] = label
-        ws_sins[f"{col_l}4"].font = font_card_lbl
-        ws_sins[f"{col_l}4"].fill = fill_c
-        ws_sins[f"{col_l}4"].alignment = Alignment(horizontal="center", vertical="center")
-        ws_sins[f"{col_l}4"].border = card_border
+    # Card 2: C4:C5
+    ws_sins["C4"] = "Взвешенный пайплайн в работе"
+    ws_sins["C4"].font = font_card_lbl
+    ws_sins["C4"].fill = fill_indigo_light
+    ws_sins["C4"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["C4"].border = card_border
+    ws_sins["C5"] = 2754000
+    ws_sins["C5"].font = font_card_blue
+    ws_sins["C5"].fill = fill_indigo_light
+    ws_sins["C5"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["C5"].border = card_border
+    ws_sins["C5"].number_format = '#,##0 "₽"'
 
-        ws_sins[f"{col_l}5"] = val
-        ws_sins[f"{col_l}5"].font = font_v
-        ws_sins[f"{col_l}5"].fill = fill_c
-        ws_sins[f"{col_l}5"].alignment = Alignment(horizontal="center", vertical="center")
-        ws_sins[f"{col_l}5"].border = card_border
-        if num_fmt:
-            ws_sins[f"{col_l}5"].number_format = num_fmt
+    # Card 3: D4:D5
+    ws_sins["D4"] = "Выявленная упущенная прибыль"
+    ws_sins["D4"].font = font_card_lbl
+    ws_sins["D4"].fill = fill_alert
+    ws_sins["D4"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["D4"].border = card_border
+    ws_sins["D5"] = 7001000
+    ws_sins["D5"].font = font_card_red
+    ws_sins["D5"].fill = fill_alert
+    ws_sins["D5"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["D5"].border = card_border
+    ws_sins["D5"].number_format = '#,##0 "₽"'
 
-    # Merge ROI & Payback
-    ws_sins.merge_cells("E4:F4")
-    ws_sins["E4"] = "Ожидаемый чистый ROI"
+    # Card 4: E4:E5
+    ws_sins["E4"] = "Потенциал выручки (To-Be)"
     ws_sins["E4"].font = font_card_lbl
     ws_sins["E4"].fill = fill_success
     ws_sins["E4"].alignment = Alignment(horizontal="center", vertical="center")
     ws_sins["E4"].border = card_border
-    ws_sins.merge_cells("E5:F5")
-    ws_sins["E5"] = "367%"
+    ws_sins["E5"] = 8651000
     ws_sins["E5"].font = font_card_green
     ws_sins["E5"].fill = fill_success
     ws_sins["E5"].alignment = Alignment(horizontal="center", vertical="center")
     ws_sins["E5"].border = card_border
+    ws_sins["E5"].number_format = '#,##0 "₽"'
 
-    ws_sins.merge_cells("G4:H4")
-    ws_sins["G4"] = "Срок окупаемости проекта"
-    ws_sins["G4"].font = font_card_lbl
-    ws_sins["G4"].fill = fill_success
-    ws_sins["G4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_sins["G4"].border = card_border
-    ws_sins.merge_cells("G5:H5")
-    ws_sins["G5"] = "6 дн."
-    ws_sins["G5"].font = font_card_green
-    ws_sins["G5"].fill = fill_success
-    ws_sins["G5"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_sins["G5"].border = card_border
+    # Card 5: F4:F5
+    ws_sins["F4"] = "Ожидаемый чистый ROI"
+    ws_sins["F4"].font = font_card_lbl
+    ws_sins["F4"].fill = fill_success
+    ws_sins["F4"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["F4"].border = card_border
+    ws_sins["F5"] = "367%"
+    ws_sins["F5"].font = font_card_green
+    ws_sins["F5"].fill = fill_success
+    ws_sins["F5"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["F5"].border = card_border
 
-    ws_sins.row_dimensions[4].height = 20
+    # Card 6: G4:H5
+    merge_and_format(ws_sins, "G4:H4", "Срок окупаемости проекта", font=font_card_lbl, fill=fill_success, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_sins, "G5:H5", "6 дн.", font=font_card_green, fill=fill_success, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+
+    ws_sins.row_dimensions[4].height = 22
     ws_sins.row_dimensions[5].height = 32
 
     # Row 7: Section Header 7 Sins
@@ -1178,13 +1176,17 @@ def build_presentation_workbook(target_path: Path):
         ws_sins[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_sins[f"B{idx}"] = s[1]
         ws_sins[f"B{idx}"].font = font_bold
+        ws_sins[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_sins[f"C{idx}"] = s[2]
+        ws_sins[f"C{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_sins[f"D{idx}"] = s[3]
         ws_sins[f"D{idx}"].number_format = "#,##0 \"₽\""
         ws_sins[f"D{idx}"].font = font_reg
+        ws_sins[f"D{idx}"].alignment = Alignment(horizontal="right", vertical="center")
         ws_sins[f"E{idx}"] = s[4]
         ws_sins[f"E{idx}"].number_format = "#,##0 \"₽\""
         ws_sins[f"E{idx}"].font = font_bold
+        ws_sins[f"E{idx}"].alignment = Alignment(horizontal="right", vertical="center")
         ws_sins[f"F{idx}"] = s[5]
         ws_sins[f"F{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         if "🔴" in s[5]:
@@ -1192,13 +1194,15 @@ def build_presentation_workbook(target_path: Path):
         else:
             ws_sins[f"F{idx}"].fill = fill_warn
         ws_sins[f"G{idx}"] = s[6]
+        ws_sins[f"G{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         ws_sins[f"H{idx}"] = s[7]
+        ws_sins[f"H{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
 
         for col_l in ["A", "B", "C", "D", "E", "F", "G", "H"]:
             ws_sins[f"{col_l}{idx}"].border = thin_border
             if col_l not in ["B", "E", "F"]:
                 ws_sins[f"{col_l}{idx}"].font = font_reg
-        ws_sins.row_dimensions[idx].height = 36
+        ws_sins.row_dimensions[idx].height = 48
 
     # Total Row
     ws_sins["B16"] = "ИТОГО ВЫЯВЛЕННЫХ ПОТЕРЬ И РИСКОВ В МЕСЯЦ:"
