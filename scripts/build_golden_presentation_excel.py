@@ -102,6 +102,9 @@ def build_presentation_workbook(target_path: Path):
     def setup_header_and_nav(ws, title_text, active_idx=6, max_col="I"):
         ws.views.sheetView[0].showGridLines = True
         ws.merge_cells(f"A1:{max_col}1")
+        max_c = openpyxl.utils.column_index_from_string(max_col)
+        for col_idx in range(1, max_c + 1):
+            ws.cell(row=1, column=col_idx).fill = fill_navy
         c1 = ws["A1"]
         c1.value = title_text
         c1.font = font_main_title
@@ -111,7 +114,7 @@ def build_presentation_workbook(target_path: Path):
 
         # Nav bar on Row 2
         for col_idx, item in enumerate(nav_items, start=1):
-            if col_idx > openpyxl.utils.column_index_from_string(max_col):
+            if col_idx > max_c:
                 break
             cell = ws.cell(row=2, column=col_idx)
             cell.value = item
@@ -121,7 +124,23 @@ def build_presentation_workbook(target_path: Path):
                 cell.font = font_nav_active
             else:
                 cell.font = font_nav
+        for col_idx in range(len(nav_items) + 1, max_c + 1):
+            cell = ws.cell(row=2, column=col_idx)
+            cell.fill = fill_nav_bar
         ws.row_dimensions[2].height = 22
+
+    def merge_and_format(ws, cell_range, value=None, font=None, fill=None, border=None, alignment=None, number_format=None):
+        ws.merge_cells(cell_range)
+        first_cell = ws[cell_range.split(":")[0]]
+        if value is not None:
+            first_cell.value = value
+        for row in ws[cell_range]:
+            for cell in row:
+                if font: cell.font = font
+                if fill: cell.fill = fill
+                if border: cell.border = border
+                if alignment: cell.alignment = alignment
+                if number_format: cell.number_format = number_format
 
     # =========================================================================
     # SHEET 1: ⚡ Экспресс_Калькулятор_3_Цифры (gid 777000201 replica)
@@ -553,224 +572,425 @@ def build_presentation_workbook(target_path: Path):
     ws_rop.column_dimensions["H"].width = 65
 
     # =========================================================================
-    # SHEET 3: 🎙️ ИИ_Аудит (gid 852624872 replica + 13 EVALUATION PARAMETERS!)
+    # SHEET 3: 🎙️ ИИ_Аудит (Golden Master gid 852624872 exact 60-row replica)
     # =========================================================================
     ws_audit = wb.create_sheet("🎙️ ИИ_Аудит")
-    setup_header_and_nav(ws_audit, "🎙️ РЕЧЕВАЯ ИИ-АНАЛИТИКА: 13 ПАРАМЕТРОВ WHISPER + LLM", active_idx=5, max_col="J")
+    setup_header_and_nav(ws_audit, "🎙️ ИИ-СУПЕРВАЙЗЕР ЗВОНКОВ: РЕЧЕВАЯ АНАЛИТИКА 100% ДИАЛОГОВ (WHISPER LARGE V3 + LLM)", active_idx=5, max_col="V")
 
-    # Row 3 & 4: Top KPI Cards
-    audit_kpis = [
-        ("A", "Звонков проанализировано", "6", fill_card, font_card_val),
-        ("B", "C", "Средний балл качества", "9.5 из 13", fill_indigo_light, font_card_blue),
-        ("D", "Доля фиксации Next Step", "66.7%", fill_card, font_card_val),
-        ("E", "Диалогов с браком (<9)", "2", fill_alert, font_card_red),
-        ("F", "G", "Сумма пайплайна под угрозой", 880000, fill_alert, font_card_red),
-        ("H", "J", "Финансовый вердикт ИИ", "🚨 ВЫСОКИЙ РИСК СЛИВА VIP-КЛИЕНТА", fill_alert, font_card_red),
-    ]
-
-    # Render audit KPIs
-    ws_audit["A3"] = "Звонков проанализировано"
+    # Row 3 & 4: Top KPI Cards (spanning A to V)
+    # Card 1: A3:A4
+    ws_audit["A3"] = "Проанализировано звонков"
     ws_audit["A3"].font = font_card_lbl
     ws_audit["A3"].fill = fill_card
     ws_audit["A3"].alignment = Alignment(horizontal="center", vertical="center")
     ws_audit["A3"].border = card_border
-    ws_audit["A4"] = 6
+
+    ws_audit["A4"] = "25 звонков / сут"
     ws_audit["A4"].font = font_card_val
     ws_audit["A4"].fill = fill_card
     ws_audit["A4"].alignment = Alignment(horizontal="center", vertical="center")
     ws_audit["A4"].border = card_border
 
-    ws_audit.merge_cells("B3:C3")
-    ws_audit["B3"] = "Средний балл качества"
-    ws_audit["B3"].font = font_card_lbl
-    ws_audit["B3"].fill = fill_indigo_light
-    ws_audit["B3"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["B3"].border = card_border
-    ws_audit.merge_cells("B4:C4")
-    ws_audit["B4"] = "9.5 из 13"
-    ws_audit["B4"].font = font_card_blue
-    ws_audit["B4"].fill = fill_indigo_light
-    ws_audit["B4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["B4"].border = card_border
+    # Card 2: B3:C4
+    merge_and_format(ws_audit, "B3:C3", "Средний балл качества", font=font_card_lbl, fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "B4:C4", "8.9 из 13", font=font_card_blue, fill=fill_indigo_light, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
-    ws_audit["D3"] = "Доля фиксации Next Step"
+    # Card 3: D3:D4
+    ws_audit["D3"] = "Фиксация жесткого Next Step"
     ws_audit["D3"].font = font_card_lbl
     ws_audit["D3"].fill = fill_card
     ws_audit["D3"].alignment = Alignment(horizontal="center", vertical="center")
     ws_audit["D3"].border = card_border
-    ws_audit["D4"] = "66.7%"
-    ws_audit["D4"].font = font_card_val
-    ws_audit["D4"].fill = fill_card
+
+    ws_audit["D4"] = "60.0% (норма ≥85%)"
+    ws_audit["D4"].font = Font(name="Segoe UI", size=13, bold=True, color="B45309")
+    ws_audit["D4"].fill = fill_warn
     ws_audit["D4"].alignment = Alignment(horizontal="center", vertical="center")
     ws_audit["D4"].border = card_border
 
-    ws_audit["E3"] = "Диалогов с браком (<9)"
+    # Card 4: E3:E4
+    ws_audit["E3"] = "Критический брак речи (<9)"
     ws_audit["E3"].font = font_card_lbl
     ws_audit["E3"].fill = fill_alert
     ws_audit["E3"].alignment = Alignment(horizontal="center", vertical="center")
     ws_audit["E3"].border = card_border
-    ws_audit["E4"] = 2
+
+    ws_audit["E4"] = "6 диалогов"
     ws_audit["E4"].font = font_card_red
     ws_audit["E4"].fill = fill_alert
     ws_audit["E4"].alignment = Alignment(horizontal="center", vertical="center")
     ws_audit["E4"].border = card_border
 
-    ws_audit.merge_cells("F3:G3")
-    ws_audit["F3"] = "Сумма пайплайна под угрозой"
-    ws_audit["F3"].font = font_card_lbl
-    ws_audit["F3"].fill = fill_alert
-    ws_audit["F3"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["F3"].border = card_border
-    ws_audit.merge_cells("F4:G4")
-    ws_audit["F4"] = 880000
-    ws_audit["F4"].font = font_card_red
-    ws_audit["F4"].fill = fill_alert
-    ws_audit["F4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["F4"].number_format = "#,##0 \"₽\""
-    ws_audit["F4"].border = card_border
+    # Card 5: F3:G4
+    merge_and_format(ws_audit, "F3:G3", "Выручка под угрозой слива", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "F4:G4", 2840000, font=font_card_red, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"), number_format='#,##0 "₽"')
 
-    ws_audit.merge_cells("H3:J3")
-    ws_audit["H3"] = "Финансовый вердикт ИИ"
-    ws_audit["H3"].font = font_card_lbl
-    ws_audit["H3"].fill = fill_alert
-    ws_audit["H3"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["H3"].border = card_border
-    ws_audit.merge_cells("H4:J4")
-    ws_audit["H4"] = "🚨 ВЫСОКИЙ РИСК СЛИВА VIP-КЛИЕНТА"
-    ws_audit["H4"].font = Font(name="Segoe UI", size=11, bold=True, color="DC2626")
-    ws_audit["H4"].fill = fill_alert
-    ws_audit["H4"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit["H4"].border = card_border
+    # Card 6: H3:V4
+    merge_and_format(ws_audit, "H3:V3", "Вердикт ИИ-супервайзера", font=font_card_lbl, fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "H4:V4", "🚨 ВЫСОКИЙ РИСК СЛИВА VIP-КЛИЕНТОВ (ТРЕБУЕТСЯ ВМЕШАТЕЛЬСТВО РОПа)", font=Font(name="Segoe UI", size=11, bold=True, color="DC2626"), fill=fill_alert, border=card_border, alignment=Alignment(horizontal="center", vertical="center"))
 
     ws_audit.row_dimensions[3].height = 20
     ws_audit.row_dimensions[4].height = 30
+    ws_audit.row_dimensions[5].height = 12
 
-    # Row 6: Section 1 Header (Call Registry)
-    ws_audit.merge_cells("A6:J6")
-    ws_audit["A6"] = "📋 РЕЕСТР ПРОБЛЕМНЫХ ЗВОНКОВ И РЕКОМЕНДАЦИИ ИИ (СИНХРОНИЗАЦИЯ С CRM)"
-    ws_audit["A6"].font = font_sec_hdr
+    # -------------------------------------------------------------------------
+    # SECTION 1: Manager Leaderboard (Rows 6-13)
+    # -------------------------------------------------------------------------
+    merge_and_format(ws_audit, "A6:V6", "👥 РЕЙТИНГ МЕНЕДЖЕРОВ ОП ПО КАЧЕСТВУ РЕЧИ (ЛИДЕРБОРД РОПа)", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=fill_navy_light, alignment=Alignment(horizontal="center", vertical="center"))
     ws_audit.row_dimensions[6].height = 24
 
-    audit_tbl_hdrs = [
-        ("A7", "ID звонка"),
-        ("B7", "ID сделки"),
-        ("C7", "Менеджер ID"),
-        ("D7", "Длительность"),
-        ("E7", "Балл /13"),
-        ("F7", "Ошибка диалога"),
-        ("G7", "ИИ-рекомендация"),
-        ("H7", "Сумма сделки под угрозой, ₽"),
-        ("I7", "Уровень фин. риска"),
-        ("J7", "Срочное действие РОПа")
+    lb_hdrs = [
+        ("A7", "№"),
+        ("B7", "Менеджер ОП"),
+        ("C7", "Звонков"),
+        ("D7", "Ср. балл /13"),
+        ("E7", "Next Step %"),
+        ("F7", "Talk/Listen (норма ≥45%)"),
+        ("G7", "Зависших сделок"),
+        ("H7", "Сумма риска (₽)"),
+        ("I7", "Грейд ИИ")
     ]
-    for cell_id, text in audit_tbl_hdrs:
+    for cell_id, text in lb_hdrs:
         ws_audit[cell_id] = text
         ws_audit[cell_id].font = font_tbl_hdr
         ws_audit[cell_id].fill = fill_table_header
         ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
         ws_audit[cell_id].border = thin_border
+    merge_and_format(ws_audit, "J7:V7", "Статус и рекомендация РОПу", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
     ws_audit.row_dimensions[7].height = 26
 
-    audit_calls_data = [
-        ("C-505", "D-109", "102 (Петров)", "210 сек", 2, "Срыв контакта / грубость", "Личный звонок РОПа с извинениями", 600000, "🔴 ВЫСОКИЙ (VIP-чек)", "🚨 Личный перезвон РОПа ЛПР"),
-        ("C-503", "D-106", "102 (Петров)", "180 сек", 6, "Нет фиксации даты встречи", "Направить 2 слота в мессенджер", 280000, "🟡 СРЕДНИЙ", "Тренинг менеджера по скрипту"),
-        ("C-502", "D-104", "101 (Сидоров)", "310 сек", 11, "Слабая отработка возражения цены", "Предложить расчет окупаемости и рассрочку", 850000, "🟢 КОНТРОЛЬ", "Перепроверить отправку КП"),
-        ("C-504", "D-107", "103 (Иванова)", "540 сек", 12, "Не выявлен дедлайн бюджета", "Задать прямой вопрос о сроках согласования", 150000, "🟢 КОНТРОЛЬ", "Контроль выставления счета"),
-        ("C-501", "D-101", "102 (Петров)", "420 сек", 13, "Без дефектов (Эталонный диалог)", "Использовать в базе знаний компании", 700000, "⭐ ЭТАЛОН", "Похвала сотрудника на летучке"),
-        ("C-506", "D-108", "103 (Иванова)", "290 сек", 13, "Без дефектов (Эталонный диалог)", "Быстрый квалификационный переход", 320000, "⭐ ЭТАЛОН", "Перевод сделки на этап демо")
+    leaderboard = [
+        (1, "Алексей Мельников", 6, 12.2, "100.0%", "48% / 52%", 0, 0, "⭐ А (Эталон)", "Эталонный скрипт, рекомендован в базу знаний компании"),
+        (2, "Елена Васильева", 5, 10.8, "80.0%", "51% / 49%", 1, 160000, "🟢 B (Норма)", "Высокая конверсия, мелкие замечания по регламенту встречи"),
+        (3, "Анна Соколова", 5, 8.4, "60.0%", "58% / 42%", 2, 480000, "🟡 C (Зона риска)", "Забывает фиксировать дату звонка, требуется тренинг"),
+        (4, "Дмитрий Ковалев", 5, 6.2, "40.0%", "72% / 28%", 3, 1100000, "🔴 D (Брак речи)", "Срыв контакта, перебивание клиента, демпинг скидок"),
+        (5, "Иван Попов", 4, 5.5, "25.0%", "79% / 21%", 3, 1100000, "🔴 D (Брак речи)", "Режим 'автоответчика', нет попыток закрытия на встречу")
     ]
 
-    for idx, cdata in enumerate(audit_calls_data, start=8):
-        ws_audit[f"A{idx}"] = cdata[0]
-        ws_audit[f"A{idx}"].alignment = Alignment(horizontal="center")
-        ws_audit[f"B{idx}"] = cdata[1]
-        ws_audit[f"B{idx}"].alignment = Alignment(horizontal="center")
-        ws_audit[f"C{idx}"] = cdata[2]
-        ws_audit[f"D{idx}"] = cdata[3]
-        ws_audit[f"D{idx}"].alignment = Alignment(horizontal="center")
+    for idx, row in enumerate(leaderboard, start=8):
+        ws_audit[f"A{idx}"] = row[0]
+        ws_audit[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"B{idx}"] = row[1]
+        ws_audit[f"B{idx}"].font = font_bold
+        ws_audit[f"C{idx}"] = row[2]
+        ws_audit[f"C{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"D{idx}"] = row[3]
+        ws_audit[f"D{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"D{idx}"].font = font_card_green if row[3] >= 10 else (Font(name="Segoe UI", size=9, bold=True, color="B45309") if row[3] >= 8 else font_card_red)
+        ws_audit[f"E{idx}"] = row[4]
+        ws_audit[f"E{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"F{idx}"] = row[5]
+        ws_audit[f"F{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"G{idx}"] = row[6]
+        ws_audit[f"G{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"H{idx}"] = row[7]
+        ws_audit[f"H{idx}"].number_format = '#,##0 "₽"'
+        ws_audit[f"H{idx}"].font = font_card_red if row[7] > 0 else font_bold
+        ws_audit[f"H{idx}"].alignment = Alignment(horizontal="right", vertical="center")
+        ws_audit[f"I{idx}"] = row[8]
+        ws_audit[f"I{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"I{idx}"].font = font_bold
+        if "⭐" in row[8] or "🟢" in row[8]:
+            ws_audit[f"I{idx}"].fill = fill_success
+        elif "🟡" in row[8]:
+            ws_audit[f"I{idx}"].fill = fill_warn
+        else:
+            ws_audit[f"I{idx}"].fill = fill_alert
 
-        ws_audit[f"E{idx}"] = cdata[4]
-        ws_audit[f"E{idx}"].alignment = Alignment(horizontal="center")
-        ws_audit[f"E{idx}"].font = font_card_red if cdata[4] < 9 else font_bold
-
-        ws_audit[f"F{idx}"] = cdata[5]
-        ws_audit[f"G{idx}"] = cdata[6]
-
-        ws_audit[f"H{idx}"] = cdata[7]
-        ws_audit[f"H{idx}"].number_format = "#,##0 \"₽\""
-        ws_audit[f"H{idx}"].font = font_bold
-
-        ws_audit[f"I{idx}"] = cdata[8]
-        ws_audit[f"I{idx}"].alignment = Alignment(horizontal="center")
-        ws_audit[f"J{idx}"] = cdata[9]
-
-        for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]:
+        for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I"]:
             ws_audit[f"{col_l}{idx}"].border = thin_border
-            if col_l not in ["E", "H"]:
+            if col_l not in ["B", "D", "H", "I"]:
                 ws_audit[f"{col_l}{idx}"].font = font_reg
+
+        merge_and_format(ws_audit, f"J{idx}:V{idx}", row[9], font=font_reg, border=thin_border, alignment=Alignment(horizontal="left", vertical="center"))
         ws_audit.row_dimensions[idx].height = 22
 
-    # Total Row for Calls
-    ws_audit["B14"] = "ИТОГО ПОТЕРЬ ИЗ-ЗА БРАКА ЗВОНКОВ:"
-    ws_audit["B14"].font = font_bold
-    ws_audit["H14"] = "=SUM(H8:H9)"
-    ws_audit["H14"].font = font_card_red
-    ws_audit["H14"].number_format = "#,##0 \"₽\""
-    ws_audit["I14"] = "ИТОГО В РИСКЕ"
-    ws_audit["I14"].font = font_bold
-    ws_audit["I14"].alignment = Alignment(horizontal="center")
-    ws_audit["J14"] = "Срочный разбор с менеджерами"
-    ws_audit["J14"].font = font_reg
+    # Row 13: Summary row
+    ws_audit["A13"] = ""
+    ws_audit["B13"] = "ИТОГО ПО ОТДЕЛУ ПРОДАЖ:"
+    ws_audit["B13"].font = font_bold
+    ws_audit["B13"].alignment = Alignment(horizontal="right", vertical="center")
+    ws_audit["C13"] = "=SUM(C8:C12)"
+    ws_audit["C13"].font = font_bold
+    ws_audit["C13"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_audit["D13"] = "8.9 / 13"
+    ws_audit["D13"].font = font_bold
+    ws_audit["D13"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_audit["E13"] = "60.0%"
+    ws_audit["E13"].font = font_bold
+    ws_audit["E13"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_audit["F13"] = "61% / 39%"
+    ws_audit["F13"].font = font_bold
+    ws_audit["F13"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_audit["G13"] = "=SUM(G8:G12)"
+    ws_audit["G13"].font = font_bold
+    ws_audit["G13"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_audit["H13"] = "=SUM(H8:H12)"
+    ws_audit["H13"].font = font_card_red
+    ws_audit["H13"].number_format = '#,##0 "₽"'
+    ws_audit["H13"].alignment = Alignment(horizontal="right", vertical="center")
+    ws_audit["I13"] = "⚠️ РИСК"
+    ws_audit["I13"].font = Font(name="Segoe UI", size=9, bold=True, color="B45309")
+    ws_audit["I13"].fill = fill_warn
+    ws_audit["I13"].alignment = Alignment(horizontal="center", vertical="center")
 
-    for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]:
-        ws_audit[f"{col_l}14"].border = total_top_border
-    ws_audit.row_dimensions[14].height = 24
+    for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I"]:
+        ws_audit[f"{col_l}13"].border = total_top_border
+
+    merge_and_format(ws_audit, "J13:V13", "Требуется экспресс-коучинг по отработке возражений", font=font_bold, border=total_top_border, alignment=Alignment(horizontal="left", vertical="center"))
+    ws_audit.row_dimensions[13].height = 24
+    ws_audit.row_dimensions[14].height = 12
 
     # -------------------------------------------------------------------------
-    # TABLE 2: EXACT 13 SPEECH EVALUATION PARAMETERS (Requested by User!)
+    # SECTION 2: 13-Criteria Call Matrix (Rows 15-27)
     # -------------------------------------------------------------------------
-    ws_audit.merge_cells("A16:J16")
-    ws_audit["A16"] = "🎙️ ЭТАЛОННАЯ СИСТЕМА 13 КРИТЕРИЕВ ОЦЕНКИ ЗВОНКОВ (WHISPER LARGE V3 + LLM SUPERVISOR)"
-    ws_audit["A16"].font = font_sec_hdr
-    ws_audit["A16"].fill = fill_indigo_light
-    ws_audit["A16"].alignment = Alignment(horizontal="center", vertical="center")
-    ws_audit.row_dimensions[16].height = 26
+    merge_and_format(ws_audit, "A15:V15", "🔍 ДЕТАЛИЗИРОВАННАЯ МАТРИЦА ОЦЕНКИ ЗВОНКОВ ПО ВСЕМ 13 КРИТЕРИЯМ (0 / 1)", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=fill_navy_light, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[15].height = 24
 
-    crit_headers = [
-        ("A17", "№"),
-        ("B17", "Параметр оценки диалога"),
-        ("C17", "Вес"),
-        ("D17", "Приоритет"),
-        ("E17", "Что проверяет алгоритм ИИ (Суть критерия)"),
-        ("F17", "G17", "Маркеры брака и речевые дефекты"),
-        ("H17", "J17", "Coaching Tip: как обучить менеджера и предотвратить слив")
+    matrix_hdrs = [
+        ("A16", "Call ID"),
+        ("B16", "Сделка / Клиент"),
+        ("C16", "Менеджер"),
+        ("D16", "Сумма (₽)"),
+        ("E16", "Длит."),
+        ("F16", "Этап CRM"),
+        ("G16", "К1 NextStep"),
+        ("H16", "К2 Иниц."),
+        ("I16", "К3 ЛПР"),
+        ("J16", "К4 Боли"),
+        ("K16", "К5 Дорого"),
+        ("L16", "К6 Подумаю"),
+        ("M16", "К7 Кейсы"),
+        ("N16", "К8 Закрытие"),
+        ("O16", "К9 Привет."),
+        ("P16", "К10 Речь"),
+        ("Q16", "К11 Слушан."),
+        ("R16", "К12 Итог"),
+        ("S16", "К13 Маржа"),
+        ("T16", "Балл /13"),
+        ("U16", "Статус ИИ"),
+        ("V16", "Сумма в риске, ₽")
+    ]
+    for cell_id, text in matrix_hdrs:
+        ws_audit[cell_id] = text
+        ws_audit[cell_id].font = font_tbl_hdr
+        ws_audit[cell_id].fill = fill_table_header
+        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[cell_id].border = thin_border
+    ws_audit.row_dimensions[16].height = 28
+
+    calls_matrix_data = [
+        ("C-501", "D-101 (ООО Вектор Плюс)", "Мельников", 850000, "05:40", "КП отправлено", [1,1,1,1,1,1,1,1,1,1,1,1,1], 13, "⭐ ЭТАЛОН", 0),
+        ("C-502", "D-104 (ООО Вектор Плюс)", "Васильева", 850000, "04:20", "Переговоры", [1,1,1,1,1,0,1,1,1,1,1,1,1], 12, "🟢 В НОРМЕ", 0),
+        ("C-503", "D-106 (ООО СнабСервис)", "Соколова", 280000, "03:10", "Встреча/Демо", [0,1,1,0,1,0,1,0,1,0,1,0,1], 7, "⚠️ РИСК", 280000),
+        ("C-504", "D-107 (ООО ТехноПром)", "Соколова", 150000, "06:15", "Квалификация", [1,1,1,0,1,1,0,0,1,1,0,1,1], 9, "⚠️ РИСК", 150000),
+        ("C-505", "D-109 (ООО ПромКомплект)", "Ковалев", 600000, "03:30", "КП отправлено", [0,0,0,0,0,0,0,0,1,0,0,0,1], 2, "❌ СЛИВ", 600000),
+        ("C-506", "D-111 (ООО Глобал Инвест)", "Мельников", 3000000, "07:15", "Финальные условия", [1,1,1,1,1,1,1,1,1,1,1,1,1], 13, "⭐ ЭТАЛОН", 0),
+        ("C-507", "D-114 (ООО АльфаТрейд)", "Ковалев", 500000, "04:45", "Дожим договора", [0,1,1,0,0,0,1,0,1,0,0,1,0], 5, "❌ СЛИВ", 500000),
+        ("C-508", "D-118 (ООО СтройХолдинг)", "Попов", 650000, "02:50", "Входящий лид", [0,0,1,0,0,0,0,0,1,1,0,1,0], 4, "❌ СЛИВ", 650000),
+        ("C-509", "D-121 (ООО СпецМаш)", "Васильева", 420000, "05:10", "Презентация КП", [1,1,1,1,1,1,1,0,1,1,1,1,1], 12, "🟢 В НОРМЕ", 0),
+        ("C-510", "D-125 (ООО МегаТранс)", "Попов", 450000, "03:40", "Квалификация", [0,0,0,1,1,0,1,0,1,1,0,1,0], 6, "⚠️ РИСК", 450000),
     ]
 
-    for item in crit_headers:
-        if len(item) == 2:
-            cell_id, text = item
-            ws_audit[cell_id] = text
-            ws_audit[cell_id].fill = fill_table_header
-            ws_audit[cell_id].font = font_tbl_hdr
-            ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
-            ws_audit[cell_id].border = thin_border
-        else:
-            s_cell, e_cell, text = item
-            ws_audit.merge_cells(f"{s_cell}:{e_cell}")
-            ws_audit[s_cell] = text
-            ws_audit[s_cell].fill = fill_table_header
-            ws_audit[s_cell].font = font_tbl_hdr
-            ws_audit[s_cell].alignment = Alignment(horizontal="center", vertical="center")
-            ws_audit[s_cell].border = thin_border
-            # border on covered cells
-            start_col = s_cell[0]
-            end_col = e_cell[0]
-            r_num = s_cell[1:]
-            for c_code in range(ord(start_col), ord(end_col) + 1):
-                ws_audit[f"{chr(c_code)}{r_num}"].border = thin_border
-                ws_audit[f"{chr(c_code)}{r_num}"].fill = fill_table_header
+    criteria_cols = ["G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
+    font_crit_pass = Font(name="Segoe UI", size=9, bold=True, color="16A34A")
+    font_crit_fail = Font(name="Segoe UI", size=9, bold=True, color="DC2626")
 
-    ws_audit.row_dimensions[17].height = 26
+    for idx, cdata in enumerate(calls_matrix_data, start=17):
+        cid, deal, mgr, amt, dur, stage, crits, score, status, risk = cdata
+        ws_audit[f"A{idx}"] = cid
+        ws_audit[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"A{idx}"].font = font_bold
+        ws_audit[f"B{idx}"] = deal
+        ws_audit[f"B{idx}"].font = font_reg
+        ws_audit[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center")
+        ws_audit[f"C{idx}"] = mgr
+        ws_audit[f"C{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"D{idx}"] = amt
+        ws_audit[f"D{idx}"].number_format = '#,##0 "₽"'
+        ws_audit[f"D{idx}"].alignment = Alignment(horizontal="right", vertical="center")
+        ws_audit[f"E{idx}"] = dur
+        ws_audit[f"E{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"F{idx}"] = stage
+        ws_audit[f"F{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+
+        # 13 criteria (0/1)
+        for c_col, val in zip(criteria_cols, crits):
+            c_cell = ws_audit[f"{c_col}{idx}"]
+            c_cell.value = val
+            c_cell.alignment = Alignment(horizontal="center", vertical="center")
+            if val == 1:
+                c_cell.fill = fill_success
+                c_cell.font = font_crit_pass
+            else:
+                c_cell.fill = fill_alert
+                c_cell.font = font_crit_fail
+
+        ws_audit[f"T{idx}"] = f"=SUM(G{idx}:S{idx})"
+        ws_audit[f"T{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"T{idx}"].font = font_card_green if score >= 12 else (font_card_red if score < 9 else Font(name="Segoe UI", size=9, bold=True, color="B45309"))
+
+        ws_audit[f"U{idx}"] = status
+        ws_audit[f"U{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"U{idx}"].font = font_bold
+        if "⭐" in status or "🟢" in status:
+            ws_audit[f"U{idx}"].fill = fill_success
+        elif "⚠️" in status:
+            ws_audit[f"U{idx}"].fill = fill_warn
+        else:
+            ws_audit[f"U{idx}"].fill = fill_alert
+
+        ws_audit[f"V{idx}"] = risk
+        ws_audit[f"V{idx}"].number_format = '#,##0 "₽"'
+        ws_audit[f"V{idx}"].alignment = Alignment(horizontal="right", vertical="center")
+        ws_audit[f"V{idx}"].font = font_card_red if risk > 0 else font_bold
+
+        for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V"]:
+            ws_audit[f"{col_l}{idx}"].border = thin_border
+            if col_l not in ["A", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V"]:
+                ws_audit[f"{col_l}{idx}"].font = font_reg
+
+        ws_audit.row_dimensions[idx].height = 22
+
+    # Row 27: Matrix Total
+    ws_audit["A27"] = ""
+    ws_audit["B27"] = "ИТОГО ПОТЕРЬ И РИСКОВ ПО ЗВОНКАМ:"
+    ws_audit["B27"].font = font_bold
+    ws_audit["B27"].alignment = Alignment(horizontal="right", vertical="center")
+    ws_audit["C27"] = ""
+    ws_audit["D27"] = "=SUM(D17:D26)"
+    ws_audit["D27"].font = font_bold
+    ws_audit["D27"].number_format = '#,##0 "₽"'
+    ws_audit["D27"].alignment = Alignment(horizontal="right", vertical="center")
+
+    for col_l in ["E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]:
+        ws_audit[f"{col_l}27"] = ""
+
+    ws_audit["T27"] = "=AVERAGE(T17:T26)"
+    ws_audit["T27"].font = font_bold
+    ws_audit["T27"].number_format = '0.0 "ср."'
+    ws_audit["T27"].alignment = Alignment(horizontal="center", vertical="center")
+
+    ws_audit["U27"] = "6 сливов"
+    ws_audit["U27"].font = font_card_red
+    ws_audit["U27"].fill = fill_alert
+    ws_audit["U27"].alignment = Alignment(horizontal="center", vertical="center")
+
+    ws_audit["V27"] = "=SUM(V17:V26)"
+    ws_audit["V27"].font = font_card_red
+    ws_audit["V27"].number_format = '#,##0 "₽"'
+    ws_audit["V27"].alignment = Alignment(horizontal="right", vertical="center")
+
+    for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V"]:
+        ws_audit[f"{col_l}27"].border = total_top_border
+
+    ws_audit.row_dimensions[27].height = 24
+    ws_audit.row_dimensions[28].height = 12
+
+    # -------------------------------------------------------------------------
+    # SECTION 3: Verbatim Quotes & Tactical Actions (Rows 29-35)
+    # -------------------------------------------------------------------------
+    merge_and_format(ws_audit, "A29:V29", "🚨 РЕЕСТР ДЕФЕКТОВ РЕЧИ: РАСШИФРОВАННЫЕ ЦИТАТЫ ИЗ РАЗГОВОРОВ И РЕШЕНИЯ РОПа", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=fill_navy_light, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[29].height = 24
+
+    quotes_hdrs = [
+        ("A30", "Call ID"),
+        ("B30", "Сделка / Контрагент"),
+        ("C30", "Менеджер"),
+        ("D30", "Сумма в риске"),
+        ("E30", "Критический дефект речи")
+    ]
+    for cell_id, text in quotes_hdrs:
+        ws_audit[cell_id] = text
+        ws_audit[cell_id].font = font_tbl_hdr
+        ws_audit[cell_id].fill = fill_table_header
+        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[cell_id].border = thin_border
+
+    merge_and_format(ws_audit, "F30:L30", "💬 Цитата из диалога (Расшифровка Whisper Large V3)", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "M30:V30", "🤖 Решение ИИ и Срочное действие РОПа", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[30].height = 26
+
+    quotes_data = [
+        (
+            "C-505", "D-109 (ООО «ПромКомплект»)", "Дмитрий Ковалев", 600000, "Срыв контакта / грубость при цене",
+            "Клиент: «Почему у вас смета на 15% выше рынка?» → Менеджер: «Не знаю, везде всё дорожает. Не устраивает — берите у конкурентов без гарантии»",
+            "🚨 Экстренный звонок РОПа ЛПР до 12:00: принести извинения за консультацию, перехватить сделку, дать проект со спец-гарантией 24 мес."
+        ),
+        (
+            "C-503", "D-106 (ООО «СнабСервис»)", "Анна Соколова", 280000, "Слив жесткого Next Step (в никуда)",
+            "Менеджер: «Я вам КП на почту сбросила, посмотрите когда время будет». Клиент: «Хорошо, если что наберу»",
+            "Направить клиенту в WhatsApp 2 конкретных слота встречи (сегодня 16:00 / завтра 11:30) с демонстрацией интеграции с CRM."
+        ),
+        (
+            "C-507", "D-114 (ООО «АльфаТрейд»)", "Дмитрий Ковалев", 500000, "Необоснованная скидка вместо ценности",
+            "Клиент: «У нас бюджет строго ограничен». Менеджер: «Ну ладно, согласую вам скидку 10% прямо сейчас»",
+            "Заблокировать выставление счета со скидкой в CRM. РОПу пересогласовать условия: скидка 5% только в обмен на 100% предоплату за 24ч."
+        ),
+        (
+            "C-508", "D-118 (ООО «СтройХолдинг»)", "Иван Попов", 650000, "Слив возражения «Я подумаю»",
+            "Клиент: «Нам нужно всё обдумать и посоветоваться с руководством». Менеджер: «Да, конечно, думайте» (повесил трубку)",
+            "Передать лида старшему КАМу. Отправить в WhatsApp отраслевой кейс с аналогичным объектом и окупаемостью за 21 день."
+        ),
+        (
+            "C-510", "D-125 (ООО «МегаТранс»)", "Иван Попов", 450000, "Режим автоответчика, не выявлен ЛПР",
+            "Менеджер 5 минут зачитывал прайс-лист секретарю, не спросив, кто принимает решение по закупкам",
+            "Разбор на летучке: регламент квалификации BANT. Назначить повторный звонок с прямым выходом на генерального директора."
+        ),
+    ]
+
+    for idx, qitem in enumerate(quotes_data, start=31):
+        cid, deal, mgr, risk_amt, defect, quote, action = qitem
+        ws_audit[f"A{idx}"] = cid
+        ws_audit[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"A{idx}"].font = font_bold
+        ws_audit[f"B{idx}"] = deal
+        ws_audit[f"B{idx}"].font = font_bold
+        ws_audit[f"B{idx}"].alignment = Alignment(horizontal="left", vertical="center")
+        ws_audit[f"C{idx}"] = mgr
+        ws_audit[f"C{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[f"D{idx}"] = risk_amt
+        ws_audit[f"D{idx}"].number_format = '#,##0 "₽"'
+        ws_audit[f"D{idx}"].font = font_card_red
+        ws_audit[f"D{idx}"].alignment = Alignment(horizontal="right", vertical="center")
+        ws_audit[f"E{idx}"] = defect
+        ws_audit[f"E{idx}"].font = Font(name="Segoe UI", size=9, bold=True, color="DC2626")
+        ws_audit[f"E{idx}"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
+
+        for col_l in ["A", "B", "C", "D", "E"]:
+            ws_audit[f"{col_l}{idx}"].border = thin_border
+            if col_l not in ["A", "B", "D", "E"]:
+                ws_audit[f"{col_l}{idx}"].font = font_reg
+
+        merge_and_format(ws_audit, f"F{idx}:L{idx}", quote, font=Font(name="Segoe UI", size=9, italic=True, color="334155"), fill=fill_card, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        merge_and_format(ws_audit, f"M{idx}:V{idx}", action, font=Font(name="Segoe UI", size=9, bold=True, color="0F172A"), fill=fill_warn, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        ws_audit.row_dimensions[idx].height = 48
+
+    ws_audit.row_dimensions[36].height = 12
+
+    # -------------------------------------------------------------------------
+    # SECTION 4: 13-Criteria Reference Directory (Rows 37-51)
+    # -------------------------------------------------------------------------
+    merge_and_format(ws_audit, "A37:V37", "📋 ЭТАЛОННЫЙ СТАНДАРТ 13 КРИТЕРИЕВ ОЦЕНКИ B2B-ДИАЛОГОВ (WHISPER LARGE V3 + LLM SUPERVISOR)", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=fill_navy_light, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[37].height = 24
+
+    ref_hdrs = [
+        ("A38", "№"),
+        ("B38", "Параметр оценки диалога"),
+        ("C38", "Вес"),
+        ("D38", "Приоритет")
+    ]
+    for cell_id, text in ref_hdrs:
+        ws_audit[cell_id] = text
+        ws_audit[cell_id].font = font_tbl_hdr
+        ws_audit[cell_id].fill = fill_table_header
+        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[cell_id].border = thin_border
+
+    merge_and_format(ws_audit, "E38:G38", "Что проверяет алгоритм ИИ (Суть критерия)", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "H38:L38", "Маркеры дефекта в речи (Почему сделка срывается)", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "M38:V38", "Coaching Tip: как обучить менеджера и защитить выручку", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[38].height = 26
 
     criteria_13 = [
         (1, "Жёсткий Next Step", "2.0x", "🔴 P0 (Критический)", "Зафиксирована точная дата и время следующего контакта (календарный слот)", "«Я вам перезвоню на днях», «Подумайте, наберите», отпускание без времени", "Внедрить обязательный вопрос в конце диалога: «Во вторник в 14:30 или в среду в 11:00 удобно?»"),
@@ -788,7 +1008,7 @@ def build_presentation_workbook(target_path: Path):
         (13, "Защита маржинальности", "1.5x", "🔴 P0 (Критический)", "Отсутствие необоснованных скидок без встречных уступок по объему или предоплате", "Раздача скидок из маржи компании без требования 100% предоплаты или большего объема", "Скидка возможна только в обмен на ценность: «Готовы дать 5% при оплате счета в течение 24 часов».")
     ]
 
-    for idx, c in enumerate(criteria_13, start=18):
+    for idx, c in enumerate(criteria_13, start=39):
         c_num, c_name, c_weight, c_pri, c_desc, c_defect, c_tip = c
         ws_audit[f"A{idx}"] = c_num
         ws_audit[f"A{idx}"].alignment = Alignment(horizontal="center", vertical="center")
@@ -798,6 +1018,7 @@ def build_presentation_workbook(target_path: Path):
         ws_audit[f"C{idx}"].alignment = Alignment(horizontal="center", vertical="center")
         ws_audit[f"D{idx}"] = c_pri
         ws_audit[f"D{idx}"].alignment = Alignment(horizontal="center", vertical="center")
+
         if "🔴" in c_pri:
             ws_audit[f"D{idx}"].fill = fill_alert
             ws_audit[f"D{idx}"].font = font_bold
@@ -808,29 +1029,54 @@ def build_presentation_workbook(target_path: Path):
             ws_audit[f"D{idx}"].fill = fill_success
             ws_audit[f"D{idx}"].font = font_reg
 
-        ws_audit[f"E{idx}"] = c_desc
-        ws_audit.merge_cells(f"F{idx}:G{idx}")
-        ws_audit[f"F{idx}"] = c_defect
-        ws_audit.merge_cells(f"H{idx}:J{idx}")
-        ws_audit[f"H{idx}"] = c_tip
-
-        for col_l in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]:
+        for col_l in ["A", "B", "C", "D"]:
             ws_audit[f"{col_l}{idx}"].border = thin_border
             if col_l not in ["B", "D"]:
                 ws_audit[f"{col_l}{idx}"].font = font_reg
-        ws_audit.row_dimensions[idx].height = 32
 
-    # Column dimensions for audit sheet
-    ws_audit.column_dimensions["A"].width = 12
-    ws_audit.column_dimensions["B"].width = 28
-    ws_audit.column_dimensions["C"].width = 14
-    ws_audit.column_dimensions["D"].width = 16
-    ws_audit.column_dimensions["E"].width = 12
-    ws_audit.column_dimensions["F"].width = 32
-    ws_audit.column_dimensions["G"].width = 38
-    ws_audit.column_dimensions["H"].width = 26
-    ws_audit.column_dimensions["I"].width = 22
-    ws_audit.column_dimensions["J"].width = 34
+        merge_and_format(ws_audit, f"E{idx}:G{idx}", c_desc, font=font_reg, border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        merge_and_format(ws_audit, f"H{idx}:L{idx}", c_defect, font=Font(name="Segoe UI", size=9, color="DC2626"), border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        merge_and_format(ws_audit, f"M{idx}:V{idx}", c_tip, font=Font(name="Segoe UI", size=9, bold=True, color="0F172A"), border=thin_border, alignment=Alignment(horizontal="left", vertical="center", wrap_text=True))
+        ws_audit.row_dimensions[idx].height = 34
+
+    ws_audit.row_dimensions[52].height = 12
+
+    # -------------------------------------------------------------------------
+    # SECTION 5: ROI Economics Block (Rows 53-60)
+    # -------------------------------------------------------------------------
+    merge_and_format(ws_audit, "A53:V53", "💰 ЭКОНОМИЧЕСКИЙ ЭФФЕКТ РЕЧЕВОЙ АНАЛИТИКИ (ROI ВНЕДРЕНИЯ И ОКУПАЕМОСТЬ)", font=Font(name="Segoe UI", size=11, bold=True, color="FFFFFF"), fill=fill_navy_light, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[53].height = 24
+
+    merge_and_format(ws_audit, "A54:C54", "Параметр эффекта речевой аналитики", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "D54:E54", "Значение", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    merge_and_format(ws_audit, "F54:V54", "Комментарий и логика окупаемости", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
+    ws_audit.row_dimensions[54].height = 26
+
+    roi_data = [
+        ("Текущие потери от брака звонков в месяц (As-Is)", 1382500, '#,##0 "₽"', font_card_red, "Сливы на этапе первичного звонка из-за отсутствия Next Step и слабой отработки возражений"),
+        ("Ожидаемый возврат выручки в кассу (M1 To-Be)", 414750, '#,##0 "₽"', font_card_green, "Консервативный сценарий: устранение всего 30% выявленных дефектов речи"),
+        ("Стоимость модуля речевого ИИ-супервайзера", 150000, '#,##0 "₽"', font_bold, "В составе комплексного 4-недельного спринта оптимизации отдела продаж"),
+        ("Чистая прибыль компании от внедрения в первый месяц", 264750, '#,##0 "₽"', font_card_green, "Чистый денежный плюс в кассе компании уже в первый месяц работы"),
+        ("Чистый ROI речевой аналитики", "276%", None, font_card_green, "Отдача на каждый вложенный рубль в первый месяц"),
+        ("Срок полной окупаемости модуля", "11 дней", None, font_card_green, "Количество рабочих дней до полной окупаемости внедрения речевого ИИ")
+    ]
+
+    for idx, ritem in enumerate(roi_data, start=55):
+        r_param, r_val, r_fmt, r_font, r_comment = ritem
+        merge_and_format(ws_audit, f"A{idx}:C{idx}", r_param, font=font_bold, border=thin_border, alignment=Alignment(horizontal="left", vertical="center"))
+        merge_and_format(ws_audit, f"D{idx}:E{idx}", r_val, font=r_font, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"), number_format=r_fmt)
+        merge_and_format(ws_audit, f"F{idx}:V{idx}", r_comment, font=font_reg, border=thin_border, alignment=Alignment(horizontal="left", vertical="center"))
+        ws_audit.row_dimensions[idx].height = 24
+
+    # Column widths for audit sheet (A to V)
+    audit_col_widths = {
+        "A": 10, "B": 28, "C": 15, "D": 16, "E": 12, "F": 18,
+        "G": 11, "H": 11, "I": 11, "J": 11, "K": 11, "L": 11,
+        "M": 11, "N": 11, "O": 11, "P": 11, "Q": 11, "R": 11, "S": 11,
+        "T": 12, "U": 16, "V": 20
+    }
+    for col_l, width in audit_col_widths.items():
+        ws_audit.column_dimensions[col_l].width = width
 
     # =========================================================================
     # SHEET 4: 💸 Диагностика_Утечек_ОП (gid 777000101 replica)
@@ -1293,7 +1539,9 @@ if __name__ == "__main__":
     desktop_file = Path(r"C:\Users\strel\Desktop\RevOps Platform\Презентация\Презентационная_Таблица_RevOps.xlsx")
     repo_file1 = Path(r"presentation\RevOps_Platform_Demo_Sample.xlsx")
     repo_file2 = Path(r"docs\RevOps_Platform_Demo_Sample.xlsx")
+    web_file = Path(r"web\RevOps_Platform_Demo_Sample.xlsx")
 
     build_presentation_workbook(desktop_file)
     build_presentation_workbook(repo_file1)
     build_presentation_workbook(repo_file2)
+    build_presentation_workbook(web_file)
