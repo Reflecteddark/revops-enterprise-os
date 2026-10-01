@@ -88,7 +88,7 @@ def build_presentation_workbook(target_path: Path):
     )
 
     nav_tabs_def = [
-        ("⚡ Экспресс-Калькулятор", "⚡ Экспресс_Калькулятор_3_Цифры", "⚡ Калькулятор 3 цифры"),
+        ("⚡ Экспресс-Калькулятор", "⚡ Экспресс_Калькулятор_3_Цифры", "⚡ Калькулятор"),
         ("📋 Пульт РОПа (15 мин)", "📋 Пульт_РОПа_15_Минут", "📋 Пульт РОПа"),
         ("🎙️ ИИ-Аудит звонков", "🎙️ ИИ_Аудит", "🎙️ ИИ-Аудит"),
         ("💸 7 Грехов (Диагностика)", "💸 Диагностика_Утечек_ОП", "💸 7 Грехов ОП"),
@@ -131,7 +131,7 @@ def build_presentation_workbook(target_path: Path):
             bg_fill = PatternFill(start_color="2563EB", end_color="2563EB", fill_type="solid") if is_active else fill_nav_bar
             
             # Use full title if range is merged or wide, otherwise short title
-            title_to_use = full_title if (":" in cell_rng or max_col in ["V", "I", "F"]) else short_title
+            title_to_use = full_title if (":" in cell_rng or max_col in ["V", "I"]) else short_title
             
             if ":" in cell_rng:
                 merge_and_format(ws, cell_rng, title_to_use, font=f_style, fill=bg_fill, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
@@ -528,7 +528,7 @@ def build_presentation_workbook(target_path: Path):
             ws_rop[f"{col_l}{idx}"].border = thin_border
             if col_l not in ["D", "G", "H"]:
                 ws_rop[f"{col_l}{idx}"].font = font_reg
-        ws_rop.row_dimensions[idx].height = 48
+        ws_rop.row_dimensions[idx].height = 58
 
     # R14: Total Row
     ws_rop["B14"] = "ИТОГО ДЕНЕГ В ЗОНЕ РИСКА СЕГОДНЯ:"
@@ -646,10 +646,10 @@ def build_presentation_workbook(target_path: Path):
         ws_audit[cell_id] = text
         ws_audit[cell_id].font = font_tbl_hdr
         ws_audit[cell_id].fill = fill_table_header
-        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         ws_audit[cell_id].border = thin_border
     merge_and_format(ws_audit, "J7:V7", "Статус и рекомендация РОПу", font=font_tbl_hdr, fill=fill_table_header, border=thin_border, alignment=Alignment(horizontal="center", vertical="center"))
-    ws_audit.row_dimensions[7].height = 26
+    ws_audit.row_dimensions[7].height = 32
 
     leaderboard = [
         (1, "Алексей Мельников", 6, 12.2, "100.0%", "48% / 52%", 0, 0, "⭐ А (Эталон)", "Эталонный скрипт, рекомендован в базу знаний компании"),
@@ -767,9 +767,9 @@ def build_presentation_workbook(target_path: Path):
         ws_audit[cell_id] = text
         ws_audit[cell_id].font = font_tbl_hdr
         ws_audit[cell_id].fill = fill_table_header
-        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center")
+        ws_audit[cell_id].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         ws_audit[cell_id].border = thin_border
-    ws_audit.row_dimensions[16].height = 28
+    ws_audit.row_dimensions[16].height = 32
 
     calls_matrix_data = [
         ("C-501", "D-101 (ООО Вектор Плюс)", "Мельников", 850000, "05:40", "КП отправлено", [1,1,1,1,1,1,1,1,1,1,1,1,1], 13, "⭐ ЭТАЛОН", 0),
@@ -845,11 +845,7 @@ def build_presentation_workbook(target_path: Path):
         ws_audit.row_dimensions[idx].height = 22
 
     # Row 27: Matrix Total
-    ws_audit["A27"] = ""
-    ws_audit["B27"] = "ИТОГО ПОТЕРЬ И РИСКОВ ПО ЗВОНКАМ:"
-    ws_audit["B27"].font = font_bold
-    ws_audit["B27"].alignment = Alignment(horizontal="right", vertical="center")
-    ws_audit["C27"] = ""
+    merge_and_format(ws_audit, "A27:C27", "ИТОГО ПОТЕРЬ И РИСКОВ ПО ЗВОНКАМ:", font=font_bold, border=total_top_border, alignment=Alignment(horizontal="right", vertical="center"))
     ws_audit["D27"] = "=SUM(D17:D26)"
     ws_audit["D27"].font = font_bold
     ws_audit["D27"].number_format = '#,##0 "₽"'
@@ -1060,8 +1056,8 @@ def build_presentation_workbook(target_path: Path):
 
     # Column widths for audit sheet (A to V)
     audit_col_widths = {
-        "A": 14, "B": 28, "C": 16, "D": 16, "E": 14, "F": 18,
-        "G": 11, "H": 11, "I": 11, "J": 11, "K": 11, "L": 11,
+        "A": 14, "B": 34, "C": 16, "D": 16, "E": 14, "F": 20,
+        "G": 14, "H": 14, "I": 16, "J": 11, "K": 11, "L": 11,
         "M": 11, "N": 11, "O": 11, "P": 11, "Q": 11, "R": 11, "S": 11,
         "T": 13, "U": 16, "V": 22
     }
@@ -1096,7 +1092,7 @@ def build_presentation_workbook(target_path: Path):
     ws_sins["D4"] = "Выявленная упущенная прибыль"
     ws_sins["D4"].font = font_card_lbl
     ws_sins["D4"].fill = fill_alert
-    ws_sins["D4"].alignment = Alignment(horizontal="center", vertical="center")
+    ws_sins["D4"].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
     ws_sins["D4"].border = card_border
     ws_sins["D5"] = 7001000
     ws_sins["D5"].font = font_card_red
@@ -1304,7 +1300,7 @@ def build_presentation_workbook(target_path: Path):
     ws_sins.column_dimensions["A"].width = 14
     ws_sins.column_dimensions["B"].width = 38
     ws_sins.column_dimensions["C"].width = 44
-    ws_sins.column_dimensions["D"].width = 24
+    ws_sins.column_dimensions["D"].width = 28
     ws_sins.column_dimensions["E"].width = 26
     ws_sins.column_dimensions["F"].width = 22
     ws_sins.column_dimensions["G"].width = 44
@@ -1321,13 +1317,13 @@ def build_presentation_workbook(target_path: Path):
         ("A", "Выручка (Closed-Won)", 1650000, font_card_val, fill_card, "#,##0 \"₽\""),
         ("B", "% Выполнения плана", "33.0%", font_card_val, fill_card, None),
         ("C", "Взвешенный прогноз", 2754000, font_card_blue, fill_indigo_light, "#,##0 \"₽\""),
-        ("D", "Run-Rate касса (Прогноз)", 1706897, font_card_val, fill_card, "#,##0 \"₽\"")
+        ("D", "Run-Rate касса (мес)", 1706897, font_card_val, fill_card, "#,##0 \"₽\"")
     ]
     for col_l, label, val, font_v, fill_c, num_fmt in left_kpis:
         ws_one[f"{col_l}4"] = label
         ws_one[f"{col_l}4"].font = font_card_lbl
         ws_one[f"{col_l}4"].fill = fill_c
-        ws_one[f"{col_l}4"].alignment = Alignment(horizontal="center", vertical="center")
+        ws_one[f"{col_l}4"].alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         ws_one[f"{col_l}4"].border = card_border
 
         ws_one[f"{col_l}5"] = val
@@ -1461,7 +1457,7 @@ def build_presentation_workbook(target_path: Path):
     ws_one.column_dimensions["A"].width = 26
     ws_one.column_dimensions["B"].width = 16
     ws_one.column_dimensions["C"].width = 22
-    ws_one.column_dimensions["D"].width = 20
+    ws_one.column_dimensions["D"].width = 24
     ws_one.column_dimensions["E"].width = 6
     ws_one.column_dimensions["F"].width = 26
     ws_one.column_dimensions["G"].width = 28
