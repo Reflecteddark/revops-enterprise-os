@@ -372,9 +372,9 @@
                             ИНТЕРАКТИВНЫЙ ТЕСТ-ДРАЙВ
                         </span>
                         <h3 class="font-display text-xl sm:text-2xl font-bold text-white">
-                            Послушайте реальный слив сделки за 13 секунд
+                            Послушайте реальный разбор слива сделки за 26 секунд
                         </h3>
-                        <p class="text-xs text-slate-400 mt-1">Нажмите кнопку: включится реальная аудиозапись диалога клиента и менеджера</p>
+                        <p class="text-xs text-slate-400 mt-1">Нажмите кнопку: включится студийная аудиозапись диалога клиента и менеджера</p>
                     </div>
 
                     <!-- Audio Player Control Button with animated waveform -->
@@ -400,7 +400,7 @@
                     <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
                         <span id="demoCurrentTime" class="text-emerald-400 font-bold">0:00</span>
                         <span class="text-slate-500">Запись звонка #A-4892 (SaaS / Оптовая торговля)</span>
-                        <span id="demoDuration">0:13</span>
+                        <span id="demoDuration">0:26</span>
                     </div>
                     <div class="w-full bg-slate-800 rounded-full h-2 cursor-pointer overflow-hidden relative" id="demoTimeline" title="Нажмите для перемотки">
                         <div id="demoAudioProgress" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full w-0 transition-all duration-75"></div>
@@ -413,21 +413,21 @@
                         <div id="demoClientBubble" class="p-4 rounded-xl bg-slate-900 border border-slate-800 transition-all duration-300">
                             <div class="flex items-center justify-between mb-1.5">
                                 <span class="text-cyan-400 font-bold flex items-center gap-1.5">
-                                    <i class="fas fa-user text-[10px]"></i> Клиент (0:00 - 0:05):
+                                    <i class="fas fa-user text-[10px]"></i> Клиент (0:00 - 0:08):
                                 </span>
                                 <span id="clientStatusBadge" class="hidden text-[9px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-semibold animate-pulse">ГОВОРИТ КЛИЕНТ 🎙️</span>
                             </div>
-                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«340 000 рублей для нас сейчас дороговато. Мы, пожалуй, ещё посмотрим другие варианты...»</span>
+                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«У вас слишком дорого. В другой компании нам предложили ровно то же самое, но почти в два раза дешевле.»</span>
                         </div>
 
                         <div id="demoManagerBubble" class="p-4 rounded-xl bg-slate-900 border border-slate-800 relative transition-all duration-300">
                             <div class="flex items-center justify-between mb-1.5">
                                 <span class="text-slate-400 font-bold flex items-center gap-1.5">
-                                    <i class="fas fa-headset text-[10px]"></i> Менеджер (0:05 - 0:09):
+                                    <i class="fas fa-headset text-[10px]"></i> Менеджер (0:08 - 0:15):
                                 </span>
                                 <span id="managerStatusBadge" class="hidden text-[9px] px-2 py-0.5 rounded bg-rose-500 text-white font-bold tracking-wider animate-bounce">СЛИВ СДЕЛКИ ⚠️</span>
                             </div>
-                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«Ну ладно... Если решите, перезвоните нам тогда сами, номер сохранили?»</span>
+                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«Ну ладно... Тогда я просто скину вам коммерческое предложение на почту. Ознакомьтесь на досуге.»</span>
                         </div>
                     </div>
 
@@ -436,18 +436,24 @@
                         <div class="flex items-center justify-between mb-3">
                             <span class="flex items-center gap-1.5 text-xs font-bold text-amber-400 font-mono">
                                 <i class="fas fa-triangle-exclamation text-sm" id="demoAlertIcon"></i>
-                                АЛЕРТ СУПЕРВАЙЗЕРА #07
+                                АЛЕРТ СУПЕРВАЙЗЕРА (0:15 - 0:26)
                             </span>
                             <span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold">ОЦЕНКА: 2 / 10</span>
                         </div>
                         <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
-                            <p><strong>Ошибка:</strong> Менеджер капитулировал без отработки возражения («дорого») и отпустил клиента без даты/времени следующего шага.</p>
+                            <p><strong>Вердикт ИИ:</strong> Слив сделки зафиксирован: менеджер согласился с возражением и отправил КП на кладбище почты без договорённости о следующем шаге.</p>
                             <p class="text-rose-300 font-semibold font-mono text-[11px]">Угроза выручке: -340 000 ₽ уходит конкуренту.</p>
                             <p class="text-emerald-400 text-[11px] pt-1 border-t border-slate-800 font-mono">
                                 <strong>Рекомендация РОПу:</strong> Связаться через 2 часа со сценарием «Отработка через ROI».
                             </p>
                         </div>
                     </div>
+                </div>
+
+                <!-- Discreet AI simulation note requested by user -->
+                <div class="mt-4 pt-3 border-t border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[10px] font-mono text-slate-500">
+                    <span><i class="fas fa-robot text-slate-600 mr-1.5"></i>* Пример диалога смоделирован нейросетью для наглядной демонстрации детекции сбоя в отделе продаж.</span>
+                    <span class="text-slate-600">HD Neural Audio • 22.05 kHz</span>
                 </div>
 
                 <div class="mt-6 pt-5 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
@@ -1967,7 +1973,7 @@
             const demoWaveform = document.getElementById('demoWaveform');
 
             function formatAudioTime(sec) {
-                if (isNaN(sec)) return '0:13';
+                if (isNaN(sec)) return '0:26';
                 const m = Math.floor(sec / 60);
                 const s = Math.floor(sec % 60);
                 return `${m}:${s < 10 ? '0' : ''}${s}`;
@@ -1975,7 +1981,7 @@
 
             if (demoAudioPlayer && demoPlayBtn) {
                 demoAudioPlayer.addEventListener('loadedmetadata', () => {
-                    if (demoDuration) demoDuration.textContent = formatAudioTime(demoAudioPlayer.duration || 13);
+                    if (demoDuration) demoDuration.textContent = formatAudioTime(demoAudioPlayer.duration || 26.5);
                 });
 
                 demoPlayBtn.addEventListener('click', () => {
@@ -2006,7 +2012,7 @@
 
                 demoAudioPlayer.addEventListener('timeupdate', () => {
                     const cur = demoAudioPlayer.currentTime;
-                    const dur = demoAudioPlayer.duration || 13;
+                    const dur = demoAudioPlayer.duration || 26.5;
                     const pct = (cur / dur) * 100;
                     if (demoAudioProgress) demoAudioProgress.style.width = pct + '%';
                     if (demoCurrentTime) demoCurrentTime.textContent = formatAudioTime(cur);
@@ -2021,25 +2027,29 @@
                         });
                     }
 
-                    // Synchronous highlights:
-                    // 0s - 4.8s: Client
-                    if (cur >= 0 && cur < 4.8) {
+                    // Synchronous highlights based on precise audio timeline:
+                    // 0.00s - 8.10s: Client objection
+                    if (cur >= 0 && cur < 8.1) {
                         demoClientBubble?.classList.add('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.remove('hidden');
                         demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
                         managerStatusBadge?.classList.add('hidden');
                         demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
-                    // 4.8s - 8.8s: Manager (Leak point!)
-                    else if (cur >= 4.8 && cur < 8.8) {
+                    // 8.10s - 15.00s: Manager mistake (Giving up)
+                    else if (cur >= 8.1 && cur < 15.0) {
                         demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.add('hidden');
                         demoManagerBubble?.classList.add('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
                         managerStatusBadge?.classList.remove('hidden');
                         demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
-                    // 8.8s+: Supervisor Alert
-                    else if (cur >= 8.8) {
+                    // 15.00s+: AI Supervisor alert trigger & voice verdict
+                    else if (cur >= 15.0) {
+                        demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
+                        clientStatusBadge?.classList.add('hidden');
+                        demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
+                        managerStatusBadge?.classList.add('hidden');
                         demoAiVerdict?.classList.add('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
                 });
@@ -2059,7 +2069,7 @@
                         const rect = demoTimeline.getBoundingClientRect();
                         const clickX = e.clientX - rect.left;
                         const pct = Math.max(0, Math.min(1, clickX / rect.width));
-                        demoAudioPlayer.currentTime = pct * (demoAudioPlayer.duration || 13);
+                        demoAudioPlayer.currentTime = pct * (demoAudioPlayer.duration || 26.5);
                     });
                 }
             }
