@@ -91,6 +91,25 @@
             transform: rotate(180deg);
             color: #10b981;
         }
+
+        /* Custom dark scrollbar for chat widget */
+        #chatMessages::-webkit-scrollbar {
+            width: 6px;
+        }
+        #chatMessages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #chatMessages::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 999px;
+        }
+        #chatMessages::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        #chatMessages {
+            scrollbar-width: thin;
+            scrollbar-color: #334155 transparent;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0">
@@ -1245,9 +1264,9 @@
         </div>
 
         <!-- Chat Window / Dialog Box -->
-        <div id="chatWindow" class="fixed bottom-4 sm:bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[380px] max-h-[580px] h-[520px] rounded-3xl bg-slate-950/95 border border-slate-700/80 shadow-2xl flex flex-col overflow-hidden backdrop-blur-2xl transition-all duration-300 transform scale-95 opacity-0 pointer-events-none">
+        <div id="chatWindow" class="fixed bottom-4 sm:bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[410px] max-h-[600px] h-[540px] rounded-3xl bg-slate-950/95 border-2 border-slate-700/80 shadow-2xl flex flex-col overflow-hidden backdrop-blur-2xl transition-all duration-300 transform scale-95 opacity-0 pointer-events-none">
             <!-- Header -->
-            <div class="px-5 py-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+            <div class="px-5 py-3.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-950 font-bold text-lg shadow-md">
@@ -1275,7 +1294,7 @@
                 </div>
             </div>
 
-            <!-- Messages Stream Area -->
+            <!-- Messages Stream Area with clean dark scrollbar -->
             <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs sm:text-sm">
                 <!-- Messages injected dynamically -->
             </div>
@@ -1286,29 +1305,47 @@
                 <span>ИИ-супервайзер формулирует ответ...</span>
             </div>
 
-            <!-- Quick Action Chips -->
-            <div id="chatChips" class="px-3 py-2 border-t border-slate-800/80 bg-slate-900/60 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                <button type="button" data-prompt="Хочу бесплатный аудит 3 звонков" class="chat-chip shrink-0 px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] border border-slate-700 hover:border-emerald-500/50 transition">
-                    🎯 Аудит 3 звонков (0 ₽)
-                </button>
-                <button type="button" data-prompt="Сколько стоит пилот на 7 дней?" class="chat-chip shrink-0 px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] border border-slate-700 hover:border-cyan-500/50 transition">
-                    💰 Стоимость пилота
-                </button>
-                <button type="button" data-prompt="Как подключить к amoCRM или Битрикс24?" class="chat-chip shrink-0 px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] border border-slate-700 hover:border-purple-500/50 transition">
-                    ⚡ Интеграция с CRM
-                </button>
-                <button type="button" data-prompt="Как связаться с основателем?" class="chat-chip shrink-0 px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] border border-slate-700 hover:border-emerald-500/50 transition">
-                    👤 Связь с основателем
-                </button>
+            <!-- Quick Action Chips (Clean 2-row wrapped layout without any horizontal scrollbars) -->
+            <div id="chatChips" class="px-3.5 py-2.5 border-t border-slate-800/80 bg-slate-900/60">
+                <div class="text-[10px] text-slate-400 font-mono uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                    <i class="fas fa-bolt text-amber-400"></i>
+                    <span>Быстрый выбор в 1 клик:</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    <button type="button" data-prompt="Хочу бесплатный аудит 3 звонков" class="chat-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] border border-slate-700 hover:border-emerald-500/50 transition">
+                        🎯 Аудит 3 звонков (0 ₽)
+                    </button>
+                    <button type="button" data-prompt="Сколько стоит пилот на 7 дней?" class="chat-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] border border-slate-700 hover:border-cyan-500/50 transition">
+                        💰 Пилот 7 дней (14 900 ₽)
+                    </button>
+                    <button type="button" data-prompt="Как подключить к amoCRM или Битрикс24?" class="chat-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] border border-slate-700 hover:border-purple-500/50 transition">
+                        ⚡ CRM и АТС
+                    </button>
+                    <button type="button" data-prompt="Как связаться с основателем?" class="chat-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] border border-slate-700 hover:border-emerald-500/50 transition">
+                        👤 Связь с основателем
+                    </button>
+                </div>
             </div>
 
-            <!-- Input area -->
-            <form id="chatForm" class="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
-                <input type="text" id="chatInput" autocomplete="off" placeholder="Напишите вопрос или телефон/TG..." class="flex-1 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-emerald-500 text-white placeholder-slate-500 text-xs sm:text-sm outline-none transition">
-                <button type="submit" id="chatSendBtn" class="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold flex items-center justify-center hover:opacity-90 active:scale-95 transition shrink-0" title="Отправить">
-                    <i class="fas fa-paper-plane text-xs"></i>
-                </button>
-            </form>
+            <!-- Input area with clear visual prominence -->
+            <div class="p-3 bg-slate-900 border-t border-slate-800 shadow-2xl">
+                <div class="flex items-center justify-between text-[11px] mb-1.5 px-0.5">
+                    <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                        <i class="fas fa-keyboard text-xs"></i>
+                        <span>Напишите вопрос или контакт сюда:</span>
+                    </span>
+                    <span class="text-[10px] text-slate-500 font-mono hidden sm:inline">Enter ↵</span>
+                </div>
+                <form id="chatForm" class="flex items-center gap-2">
+                    <input type="text" id="chatInput" autocomplete="off" 
+                        placeholder="Ваш вопрос или телефон / Telegram..." 
+                        class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-950 border-2 border-emerald-500/60 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 text-white placeholder-slate-400 text-xs sm:text-sm outline-none transition shadow-inner">
+                    <button type="submit" id="chatSendBtn" class="h-10 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/25 active:scale-95 transition shrink-0" title="Отправить сообщение">
+                        <span class="text-xs font-bold hidden sm:inline">Отправить</span>
+                        <i class="fas fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -1470,7 +1507,7 @@
             const chatChips = document.querySelectorAll('.chat-chip');
 
             let chatHistory = [];
-            const STORAGE_KEY = 'ai_rop_chat_history_v1';
+            const STORAGE_KEY = 'ai_rop_chat_history_v2';
 
             function formatText(text) {
                 let html = text
@@ -1535,7 +1572,7 @@
                     chatHistory = [
                         {
                             sender: 'bot',
-                            text: 'Здравствуйте! Я ИИ-супервайзер платформы **AI-ROP**.\n\nПомогаю разобрать звонки отдела продаж, найти скрытые утечки выручки и рассчитать окупаемость пилота.\n\nЧем я могу вам помочь прямо сейчас?',
+                            text: 'Здравствуйте! Я ИИ-супервайзер **AI-ROP**.\n\nПомогу бесплатно разобрать 3 звонка (0 ₽), рассчитать потери выручки или запустить пилот.\n\n👇 **Выберите готовый вопрос выше или напишите свой вопрос в поле ввода внизу:**',
                             time: getTimeString()
                         }
                     ];
