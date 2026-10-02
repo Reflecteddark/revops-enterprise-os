@@ -19,7 +19,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 7mm 8mm;
+                margin: 0;
             }
             *, *:before, *:after {
                 box-sizing: border-box !important;
@@ -31,29 +31,34 @@
                 color: #F1F5F9 !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                min-height: auto !important;
-                height: 100% !important;
-                max-height: 100% !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
                 display: block !important;
                 overflow: hidden !important;
             }
             .no-print { display: none !important; }
             .print-card {
-                border: 1px solid #1e293b !important;
-                background-color: #0f172a !important;
+                border: none !important;
+                background-color: #0B0F19 !important;
                 box-shadow: none !important;
-                padding: 18px 22px !important;
-                border-radius: 16px !important;
-                margin: 0 auto !important;
-                width: 100% !important;
-                max-width: 100% !important;
+                padding: 10mm 12mm !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
                 page-break-inside: avoid !important;
                 page-break-after: avoid !important;
+                overflow: hidden !important;
             }
             /* Header */
             .print-card > div:nth-of-type(2) {
-                padding-bottom: 10px !important;
-                margin-bottom: 6px !important;
+                padding-bottom: 8px !important;
+                margin-bottom: 4px !important;
                 border-bottom: 1px solid rgba(51, 65, 85, 0.6) !important;
                 display: flex !important;
                 flex-direction: row !important;
@@ -296,18 +301,21 @@
 
         <!-- Footer Contacts -->
         <div class="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            <div class="flex items-center gap-5">
+            <div class="flex flex-wrap items-center gap-4 sm:gap-5">
                 <a href="https://ai-rop.ru" class="flex items-center hover:text-indigo-300 transition-colors">
                     <i class="fas fa-globe text-indigo-400 mr-1.5"></i> ai-rop.ru
                 </a>
-                <a href="https://t.me/dm1918" class="flex items-center hover:text-indigo-300 transition-colors" title="Личный Telegram">
+                <a href="https://t.me/dm1918" target="_blank" class="flex items-center hover:text-indigo-300 transition-colors" title="Личный Telegram">
                     <i class="fab fa-telegram text-indigo-400 mr-1.5"></i> @dm1918
                 </a>
-                <a href="https://t.me/RevOps_Super_Audit_Bot" class="flex items-center hover:text-indigo-300 transition-colors" title="Telegram-бот">
+                <a href="https://max.ru/se14526668_bot" target="_blank" class="flex items-center hover:text-purple-400 transition-colors" title="Мессенджер MAX">
+                    <i class="fas fa-comment-dots text-purple-400 mr-1.5"></i> MAX (@se14526668_bot)
+                </a>
+                <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="flex items-center hover:text-indigo-300 transition-colors" title="Telegram-бот">
                     <i class="fas fa-robot text-indigo-400 mr-1.5"></i> @RevOps_Super_Audit_Bot
                 </a>
-                <a href="mailto:strelok15@bk.ru" class="flex items-center hover:text-indigo-300 transition-colors">
-                    <i class="fas fa-envelope text-indigo-400 mr-1.5"></i> strelok15@bk.ru
+                <a href="mailto:info@ai-rop.ru" class="flex items-center hover:text-indigo-300 transition-colors">
+                    <i class="fas fa-envelope text-indigo-400 mr-1.5"></i> info@ai-rop.ru
                 </a>
             </div>
             <div class="no-print flex items-center gap-2">
