@@ -395,12 +395,62 @@
                     </div>
                 </div>
 
+                <!-- Interactive Variant Selector (4 варианта озвучки на согласование) -->
+                <div class="mb-5 p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+                    <div class="text-[11px] font-mono text-slate-400 mb-2 px-1 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <span class="flex items-center gap-1.5 text-emerald-400 font-bold">
+                            <i class="fas fa-headphones-simple text-xs"></i> Выберите вариант озвучки для сравнения:
+                        </span>
+                        <a href="audio-review.html" target="_blank" class="text-cyan-400 hover:text-cyan-300 underline font-semibold flex items-center gap-1 text-[11px]">
+                            Открыть витрину всех 4 вариантов <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="variantButtonsContainer">
+                        <button type="button" data-variant="variant_1" class="variant-tab-btn active p-2.5 rounded-xl text-left transition border border-emerald-500/60 bg-emerald-500/10 text-emerald-300">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">Вариант 1</span>
+                                <span class="text-[10px] font-mono text-slate-400">30 с</span>
+                            </div>
+                            <div class="text-white text-xs font-bold mt-1 truncate">Дуэт (Павел + Ирина)</div>
+                            <div class="text-[10px] text-slate-400 truncate">Мужской + женский</div>
+                        </button>
+                        <button type="button" data-variant="variant_2" class="variant-tab-btn p-2.5 rounded-xl text-left transition border border-slate-800 bg-slate-950/70 text-slate-400 hover:text-white hover:border-slate-700">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">Вариант 2</span>
+                                <span class="text-[10px] font-mono text-slate-400">30 с</span>
+                            </div>
+                            <div class="text-white text-xs font-bold mt-1 truncate">Телефония amoCRM</div>
+                            <div class="text-[10px] text-slate-400 truncate">Линия звонка + HD HUD</div>
+                        </button>
+                        <button type="button" data-variant="variant_3" class="variant-tab-btn p-2.5 rounded-xl text-left transition border border-slate-800 bg-slate-950/70 text-slate-400 hover:text-white hover:border-slate-700">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">Вариант 3</span>
+                                <span class="text-[10px] font-mono text-slate-400">24 с</span>
+                            </div>
+                            <div class="text-white text-xs font-bold mt-1 truncate">Студийный Neural HD</div>
+                            <div class="text-[10px] text-slate-400 truncate">Чистый VITS диктор</div>
+                        </button>
+                        <button type="button" data-variant="variant_4" class="variant-tab-btn p-2.5 rounded-xl text-left transition border border-slate-800 bg-slate-950/70 text-slate-400 hover:text-white hover:border-slate-700">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Вариант 4</span>
+                                <span class="text-[10px] font-mono text-slate-400">17 с</span>
+                            </div>
+                            <div class="text-white text-xs font-bold mt-1 truncate">Экспресс-Блиц</div>
+                            <div class="text-[10px] text-slate-400 truncate">Быстрый ударный разбор</div>
+                        </button>
+                    </div>
+                    <div class="mt-2.5 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono flex items-center justify-between">
+                        <span id="variantDescText"><i class="fas fa-circle-info text-emerald-400 mr-1.5"></i>Клиент говорит естественным мужским голосом (Павел), менеджер отвечает женским голосом (Ирина). Без цифровых искажений.</span>
+                        <span class="text-emerald-400 shrink-0 ml-2 font-bold text-[10px] uppercase tracking-wider" id="variantActiveBadge">АКТИВЕН</span>
+                    </div>
+                </div>
+
                 <!-- Audio timeline / scrubber -->
                 <div class="mb-6 px-1">
                     <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
                         <span id="demoCurrentTime" class="text-emerald-400 font-bold">0:00</span>
-                        <span class="text-slate-500">Запись звонка #A-4892 (SaaS / Оптовая торговля)</span>
-                        <span id="demoDuration">0:26</span>
+                        <span class="text-slate-500" id="demoCallLabel">Запись звонка #A-4892 (SaaS / Оптовая торговля)</span>
+                        <span id="demoDuration">0:30</span>
                     </div>
                     <div class="w-full bg-slate-800 rounded-full h-2 cursor-pointer overflow-hidden relative" id="demoTimeline" title="Нажмите для перемотки">
                         <div id="demoAudioProgress" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full w-0 transition-all duration-75"></div>
@@ -1972,16 +2022,122 @@
             const managerStatusBadge = document.getElementById('managerStatusBadge');
             const demoWaveform = document.getElementById('demoWaveform');
 
+            // 4 Audio Variants configuration
+            const audioVariants = {
+                variant_1: {
+                    src: 'audio/demo-variant-1.mp3',
+                    duration: 29.88,
+                    client_end: 9.91,
+                    manager_start: 10.31,
+                    manager_end: 17.76,
+                    supervisor_start: 18.16,
+                    desc: '<i class="fas fa-circle-info text-emerald-400 mr-1.5"></i>Клиент говорит естественным мужским голосом (Павел), менеджер отвечает женским голосом (Ирина). Без цифровых искажений.',
+                    clientText: '«340 000 рублей для нас сейчас дороговато. Мы, пожалуй, ещё посмотрим другие варианты...»',
+                    managerText: '«Ну ладно... Если решите, перезвоните нам тогда сами, номер сохранили?»',
+                    supervisorText: 'Внимание! Менеджер слил сделку на 340 000 рублей: капитулировал без отработки возражения и отпустил клиента без следующего шага.'
+                },
+                variant_2: {
+                    src: 'audio/demo-variant-2.mp3',
+                    duration: 29.88,
+                    client_end: 9.91,
+                    manager_start: 10.31,
+                    manager_end: 17.76,
+                    supervisor_start: 18.16,
+                    desc: '<i class="fas fa-phone-volume text-cyan-400 mr-1.5"></i>Диалог звонка звучит как реальная перехваченная запись из телефонии через трубку (фильтр 300-3400 Гц), а вердикт супервайзера звучит четко в HD.',
+                    clientText: '«340 000 рублей для нас сейчас дороговато. Мы, пожалуй, ещё посмотрим другие варианты...»',
+                    managerText: '«Ну ладно... Если решите, перезвоните нам тогда сами, номер сохранили?»',
+                    supervisorText: 'Внимание! Менеджер слил сделку на 340 000 рублей: капитулировал без отработки возражения и отпустил клиента без следующего шага.'
+                },
+                variant_3: {
+                    src: 'audio/demo-variant-3.mp3',
+                    duration: 23.94,
+                    client_end: 7.16,
+                    manager_start: 7.56,
+                    manager_end: 13.09,
+                    supervisor_start: 13.49,
+                    desc: '<i class="fas fa-microphone-lines text-purple-400 mr-1.5"></i>Чистый женский нейросетевой голос VITS с естественным дыханием и мягкой дикцией в оригинальной студийной тональности.',
+                    clientText: '«У вас слишком дорого. В другой компании нам предложили ровно то же самое, но в два раза дешевле.»',
+                    managerText: '«Ну ладно... Тогда я просто скину вам коммерческое предложение на почту, ознакомьтесь.»',
+                    supervisorText: 'Внимание! Менеджер слил сделку: согласился с возражением и отправил КП на кладбище почты без договорённости о следующем шаге.'
+                },
+                variant_4: {
+                    src: 'audio/demo-variant-4.mp3',
+                    duration: 17.45,
+                    client_end: 5.14,
+                    manager_start: 5.39,
+                    manager_end: 9.19,
+                    supervisor_start: 9.44,
+                    desc: '<i class="fas fa-bolt text-amber-400 mr-1.5"></i>Короткий, концентрированный разбор: клиент сразу возражает, менеджер мгновенно капитулирует, супервайзер дает резкий алерт с суммой риска.',
+                    clientText: '«340 000 — это дорого. Мы уходим к конкурентам.»',
+                    managerText: '«Понятно, скину тогда вам КП на почту.»',
+                    supervisorText: 'Слив зафиксирован! Менеджер сдался без боя. Угроза выручке: 340 000 рублей.'
+                }
+            };
+
+            let currentVariantKey = 'variant_1';
+
             function formatAudioTime(sec) {
-                if (isNaN(sec)) return '0:26';
+                if (isNaN(sec)) return '0:30';
                 const m = Math.floor(sec / 60);
                 const s = Math.floor(sec % 60);
                 return `${m}:${s < 10 ? '0' : ''}${s}`;
             }
 
+            // Variant tab buttons click handler
+            const variantBtns = document.querySelectorAll('.variant-tab-btn');
+            const variantDescText = document.getElementById('variantDescText');
+            const demoClientTextSpan = demoClientBubble?.querySelector('span.block');
+            const demoManagerTextSpan = demoManagerBubble?.querySelector('span.block');
+            const demoSupervisorTextP = demoAiVerdict?.querySelector('p strong')?.parentElement;
+
+            function applyVariant(vKey, autoPlay = false) {
+                if (!audioVariants[vKey]) return;
+                currentVariantKey = vKey;
+                const v = audioVariants[vKey];
+
+                // Update active tab styles
+                variantBtns.forEach(btn => {
+                    const isTarget = btn.getAttribute('data-variant') === vKey;
+                    if (isTarget) {
+                        btn.className = 'variant-tab-btn active p-2.5 rounded-xl text-left transition border border-emerald-500/60 bg-emerald-500/10 text-emerald-300';
+                    } else {
+                        btn.className = 'variant-tab-btn p-2.5 rounded-xl text-left transition border border-slate-800 bg-slate-950/70 text-slate-400 hover:text-white hover:border-slate-700';
+                    }
+                });
+
+                if (variantDescText) variantDescText.innerHTML = v.desc;
+                if (demoDuration) demoDuration.textContent = formatAudioTime(v.duration);
+                if (demoCurrentTime) demoCurrentTime.textContent = '0:00';
+                if (demoAudioProgress) demoAudioProgress.style.width = '0%';
+
+                // Update transcript bubbles text
+                if (demoClientTextSpan) demoClientTextSpan.textContent = v.clientText;
+                if (demoManagerTextSpan) demoManagerTextSpan.textContent = v.managerText;
+                if (demoSupervisorTextP) demoSupervisorTextP.innerHTML = `<strong>Вердикт ИИ:</strong> ${v.supervisorText}`;
+
+                resetAudioHighlights();
+
+                if (demoAudioPlayer) {
+                    demoAudioPlayer.pause();
+                    demoAudioPlayer.src = v.src;
+                    demoAudioPlayer.load();
+                    if (autoPlay) {
+                        demoAudioPlayer.play().catch(e => console.log('Autoplay blocked:', e));
+                    }
+                }
+            }
+
+            variantBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const vKey = btn.getAttribute('data-variant');
+                    applyVariant(vKey, false);
+                });
+            });
+
             if (demoAudioPlayer && demoPlayBtn) {
                 demoAudioPlayer.addEventListener('loadedmetadata', () => {
-                    if (demoDuration) demoDuration.textContent = formatAudioTime(demoAudioPlayer.duration || 26.5);
+                    const dur = demoAudioPlayer.duration || audioVariants[currentVariantKey]?.duration || 30;
+                    if (demoDuration) demoDuration.textContent = formatAudioTime(dur);
                 });
 
                 demoPlayBtn.addEventListener('click', () => {
@@ -2012,7 +2168,8 @@
 
                 demoAudioPlayer.addEventListener('timeupdate', () => {
                     const cur = demoAudioPlayer.currentTime;
-                    const dur = demoAudioPlayer.duration || 26.5;
+                    const v = audioVariants[currentVariantKey] || audioVariants.variant_1;
+                    const dur = demoAudioPlayer.duration || v.duration;
                     const pct = (cur / dur) * 100;
                     if (demoAudioProgress) demoAudioProgress.style.width = pct + '%';
                     if (demoCurrentTime) demoCurrentTime.textContent = formatAudioTime(cur);
@@ -2027,25 +2184,25 @@
                         });
                     }
 
-                    // Synchronous highlights based on precise audio timeline:
-                    // 0.00s - 8.10s: Client objection
-                    if (cur >= 0 && cur < 8.1) {
+                    // Precise synchronized highlights:
+                    // 1. Client objection
+                    if (cur >= 0 && cur < v.client_end) {
                         demoClientBubble?.classList.add('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.remove('hidden');
                         demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
                         managerStatusBadge?.classList.add('hidden');
                         demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
-                    // 8.10s - 15.00s: Manager mistake (Giving up)
-                    else if (cur >= 8.1 && cur < 15.0) {
+                    // 2. Manager mistake (Giving up)
+                    else if (cur >= v.manager_start && cur < v.manager_end) {
                         demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.add('hidden');
                         demoManagerBubble?.classList.add('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
                         managerStatusBadge?.classList.remove('hidden');
                         demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
-                    // 15.00s+: AI Supervisor alert trigger & voice verdict
-                    else if (cur >= 15.0) {
+                    // 3. AI Supervisor alert & verdict
+                    else if (cur >= v.supervisor_start) {
                         demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.add('hidden');
                         demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
@@ -2069,7 +2226,8 @@
                         const rect = demoTimeline.getBoundingClientRect();
                         const clickX = e.clientX - rect.left;
                         const pct = Math.max(0, Math.min(1, clickX / rect.width));
-                        demoAudioPlayer.currentTime = pct * (demoAudioPlayer.duration || 26.5);
+                        const v = audioVariants[currentVariantKey] || audioVariants.variant_1;
+                        demoAudioPlayer.currentTime = pct * (demoAudioPlayer.duration || v.duration);
                     });
                 }
             }
