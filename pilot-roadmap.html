@@ -36,9 +36,9 @@
                 padding: 0 !important;
                 width: 210mm !important;
                 height: 297mm !important;
-                max-height: 297mm !important;
+                min-height: 100% !important;
                 display: block !important;
-                overflow: hidden !important;
+                overflow: visible !important;
             }
             .no-print { display: none !important; }
             .print-card {
@@ -49,14 +49,13 @@
                 border-radius: 0 !important;
                 margin: 0 !important;
                 width: 210mm !important;
-                height: 297mm !important;
-                max-height: 297mm !important;
+                min-height: 297mm !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: space-between !important;
                 page-break-inside: avoid !important;
                 page-break-after: avoid !important;
-                overflow: hidden !important;
+                overflow: visible !important;
             }
             /* Header */
             .print-card > div:nth-of-type(2) {
@@ -252,7 +251,7 @@
                 </div>
                 <div class="md:col-span-5">
                     <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Ваша сторона (15 минут)</div>
-                    <p class="text-sm text-slate-200">15 минут в Zoom: согласовываем критерии вашей ниши. Оплата пилота <strong>29 000 ₽</strong> со 100% гарантией возврата.</p>
+                    <p class="text-sm text-slate-200">15 минут в Zoom: согласовываем критерии вашей ниши. Оплата пилота <strong>14 900 ₽</strong> со 100% гарантией возврата (засчитывается в 1-й месяц).</p>
                 </div>
                 <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
                     <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP</div>
@@ -304,7 +303,7 @@
                 </div>
                 <div class="md:col-span-5 border-t md:border-t-0 md:border-l border-slate-800/80 pt-3 md:pt-0 md:pl-4">
                     <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">Команда AI-ROP</div>
-                    <p class="text-sm text-slate-300">Презентуем «Карту спасенной выручки» (от 300 000 ₽ до 1.5M ₽) и план регулярного сопровождения (от 49 000 ₽/мес).</p>
+                    <p class="text-sm text-slate-300">Презентуем «Карту спасенной выручки» (от 300 000 ₽ до 1.5M ₽) и план регулярного сопровождения (от 29 000 ₽/мес).</p>
                 </div>
             </div>
 
@@ -317,7 +316,7 @@
                     <i class="fas fa-check-circle"></i> 100% Финансовая гарантия возврата
                 </div>
                 <p class="text-xs text-slate-300 leading-relaxed">
-                    Если за 7 дней пилота мы не найдем у вас зависших сделок минимум на <strong>300 000 ₽</strong> — возвращаем вам <strong>29 000 ₽</strong> до копейки по первому требованию.
+                    Если за 7 дней пилота мы не найдем у вас зависших сделок минимум на <strong>300 000 ₽</strong> — возвращаем вам <strong>14 900 ₽</strong> до копейки по первому требованию.
                 </p>
             </div>
             <div class="p-4 rounded-2xl bg-slate-800/40 border border-slate-800">

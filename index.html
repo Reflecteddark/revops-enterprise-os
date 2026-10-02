@@ -18,6 +18,14 @@
     <meta property="og:url" content="https://ai-rop.ru/">
     <meta property="og:site_name" content="RevOps OS Pro">
     <meta property="og:locale" content="ru_RU">
+    <meta property="og:image" content="https://ai-rop.ru/images/og-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RevOps OS Pro — Радар Выручки и Контроль 100% звонков">
+    <meta name="twitter:description" content="Найдём сделки, которые ваш отдел продаж теряет прямо сейчас. Интеграция с amoCRM и Битрикс24 за 15 минут. 152-ФЗ РФ.">
+    <meta name="twitter:image" content="https://ai-rop.ru/images/og-preview.png">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -429,12 +437,12 @@
                 <!-- Interactive Variant Selector (4 варианта озвучки на согласование) -->
                 <div class="mb-5 p-3 rounded-2xl bg-slate-900/90 border border-slate-800">
                     <div class="text-[11px] font-mono text-slate-400 mb-2 px-1 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                        <span class="flex items-center gap-1.5 text-purple-400 font-bold">
-                            <i class="fas fa-microphone-lines text-xs"></i> Выбран Вариант 3 (Студийный Neural HD):
+                        <span class="flex items-center gap-1.5 text-emerald-400 font-bold">
+                            <i class="fas fa-headphones-simple text-xs"></i> Форматы демонстрации разбора звонка:
                         </span>
-                        <a href="audio-review.html" target="_blank" class="text-cyan-400 hover:text-cyan-300 underline font-semibold flex items-center gap-1 text-[11px]">
-                            Сравнить все 4 варианта <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
-                        </a>
+                        <span class="text-slate-400 text-[11px] flex items-center gap-1">
+                            <i class="fas fa-shield-alt text-emerald-400 text-[10px]"></i> Реальный диалог из отдела B2B-продаж
+                        </span>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="variantButtonsContainer">
                         <button type="button" data-variant="variant_3" class="variant-tab-btn active p-2.5 rounded-xl text-left transition border border-purple-500/60 bg-purple-500/10 text-purple-300">
@@ -472,7 +480,7 @@
                     </div>
                     <div class="mt-2.5 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono flex items-center justify-between">
                         <span id="variantDescText"><i class="fas fa-microphone-lines text-purple-400 mr-1.5"></i>Чистый женский нейросетевой голос VITS с естественным дыханием и мягкой дикцией в оригинальной студийной тональности.</span>
-                        <span class="text-purple-400 shrink-0 ml-2 font-bold text-[10px] uppercase tracking-wider" id="variantActiveBadge">ВЫБРАН ВАМИ</span>
+                        <span class="text-purple-400 shrink-0 ml-2 font-bold text-[10px] uppercase tracking-wider" id="variantActiveBadge">ДЕМО-КЕЙС</span>
                     </div>
                 </div>
 
@@ -1300,7 +1308,7 @@
                             <li class="flex items-center gap-2 text-slate-500"><i class="fas fa-minus"></i> Интеграция с CRM</li>
                         </ul>
                     </div>
-                    <a href="#cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
+                    <a href="#cta" onclick="selectPackage('audit')" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
                         Попробовать бесплатно
                     </a>
                 </div>
@@ -1328,7 +1336,7 @@
                     <div>
                         <div class="text-[10px] text-emerald-400 font-mono text-center mb-1">Сумма засчитывается в 1-й месяц</div>
                         <div class="text-[11px] text-slate-400 text-center mb-3">Не увидите результат — вернем 100% денег</div>
-                        <a href="#cta" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs transition text-center shadow-lg shadow-emerald-500/20 block">
+                        <a href="#cta" onclick="selectPackage('pilot')" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs transition text-center shadow-lg shadow-emerald-500/20 block">
                             Начать пилот (14 900 ₽)
                         </a>
                     </div>
@@ -1351,8 +1359,8 @@
                             <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Поддержка в рабочие часы</li>
                         </ul>
                     </div>
-                    <a href="#cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
-                        Выбрать тариф
+                    <a href="#cta" onclick="selectPackage('startup')" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
+                        Выбрать тариф Стартап
                     </a>
                 </div>
 
@@ -1373,8 +1381,8 @@
                             <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Приоритетная поддержка 24/7</li>
                         </ul>
                     </div>
-                    <a href="#cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
-                        Выбрать тариф
+                    <a href="#cta" onclick="selectPackage('business')" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
+                        Выбрать тариф Бизнес
                     </a>
                 </div>
             </div>
@@ -1558,9 +1566,39 @@
                 <!-- Form Card -->
                 <div class="lg:col-span-7 glass-card rounded-3xl p-7 sm:p-10 border border-slate-700 shadow-2xl flex flex-col justify-between">
                     <form id="leadForm" class="space-y-5">
-                        <div class="border-b border-slate-800 pb-3 mb-1">
-                            <span class="text-xs font-mono text-cyan-400 uppercase tracking-wider block mb-1">БРОНИРОВАНИЕ АУДИТА</span>
-                            <h3 class="text-white font-display text-xl sm:text-2xl font-bold">Оставьте контакт для получения отчёта</h3>
+                        <div class="border-b border-slate-800 pb-3 mb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-mono text-cyan-400 uppercase tracking-wider block mb-0.5">БРОНИРОВАНИЕ И РАСЧЁТ</span>
+                                <h3 class="text-white font-display text-xl sm:text-2xl font-bold">Оставьте контакт для старта</h3>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-[11px] font-semibold border border-emerald-500/20 self-start sm:self-auto">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Ответ за 10–15 мин
+                            </span>
+                        </div>
+
+                        <!-- Interactive Package Pills -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Выберите подходящий формат:</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="packagePills">
+                                <button type="button" onclick="selectPackage('audit')" id="pkgBtn_audit" class="pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-bold text-center transition flex flex-col items-center justify-center gap-0.5 bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10">
+                                    <span>Экспресс-Аудит</span>
+                                    <span class="text-[10px] font-mono text-emerald-400">0 ₽</span>
+                                </button>
+                                <button type="button" onclick="selectPackage('pilot')" id="pkgBtn_pilot" class="pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-medium text-center transition flex flex-col items-center justify-center gap-0.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
+                                    <span>Пилот 7 дней</span>
+                                    <span class="text-[10px] font-mono text-slate-400">14 900 ₽</span>
+                                </button>
+                                <button type="button" onclick="selectPackage('startup')" id="pkgBtn_startup" class="pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-medium text-center transition flex flex-col items-center justify-center gap-0.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
+                                    <span>Стартап</span>
+                                    <span class="text-[10px] font-mono text-slate-400">29 000 ₽/мес</span>
+                                </button>
+                                <button type="button" onclick="selectPackage('business')" id="pkgBtn_business" class="pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-medium text-center transition flex flex-col items-center justify-center gap-0.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
+                                    <span>Бизнес</span>
+                                    <span class="text-[10px] font-mono text-slate-400">79 000 ₽/мес</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="selectedPackageInput" value="audit">
                         </div>
 
                         <div class="space-y-4">
@@ -1606,8 +1644,8 @@
                             <i class="fas fa-check text-emerald-400 text-2xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-2 font-display">Заявка успешно принята!</h3>
-                        <p class="text-slate-300 text-sm max-w-lg mx-auto mb-6">
-                            Мы зафиксировали заявку и зарезервировали бесплатный аудит. Передайте 3 аудиозаписи звонков напрямую основателю Дмитрию Федотову или запустите бота:
+                        <p id="formSuccessSubtitle" class="text-slate-300 text-sm max-w-lg mx-auto mb-6">
+                            Мы зафиксировали вашу заявку. Основатель сервиса Дмитрий Федотов уже получил уведомление и ответит в течение 10–15 минут. Вы также можете сразу перейти к диалогу:
                         </p>
                         
                         <div class="grid sm:grid-cols-3 gap-3">
@@ -2001,6 +2039,35 @@
                 });
             }
 
+            // PACKAGE SELECTOR FUNCTIONALITY
+            window.selectPackage = function(pkgKey) {
+                const packages = {
+                    audit: { name: 'Экспресс-Аудит 3 звонков (0 ₽)', btn: 'Получить аудит 3 звонков бесплатно (0 ₽)', pillId: 'pkgBtn_audit' },
+                    pilot: { name: 'Пилот 7 дней (14 900 ₽)', btn: 'Забронировать Пилот 7 дней (14 900 ₽)', pillId: 'pkgBtn_pilot' },
+                    startup: { name: 'Тариф Стартап (29 000 ₽ / мес)', btn: 'Забронировать тариф Стартап (29 000 ₽)', pillId: 'pkgBtn_startup' },
+                    business: { name: 'Тариф Бизнес (79 000 ₽ / мес)', btn: 'Забронировать тариф Бизнес (79 000 ₽)', pillId: 'pkgBtn_business' }
+                };
+                const sel = packages[pkgKey] || packages.audit;
+                const input = document.getElementById('selectedPackageInput');
+                if (input) input.value = pkgKey;
+                
+                Object.keys(packages).forEach(k => {
+                    const btn = document.getElementById(packages[k].pillId);
+                    if (btn) {
+                        if (k === pkgKey) {
+                            btn.className = 'pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-bold text-center transition flex flex-col items-center justify-center gap-0.5 bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10';
+                        } else {
+                            btn.className = 'pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-medium text-center transition flex flex-col items-center justify-center gap-0.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700';
+                        }
+                    }
+                });
+
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.innerHTML = `<i class="fas fa-bolt"></i> <span>${sel.btn}</span>`;
+                }
+            };
+
             if (leadForm && formSuccess) {
                 leadForm.addEventListener('submit', (e) => {
                     e.preventDefault();
@@ -2017,16 +2084,34 @@
                         return;
                     }
 
+                    const pkgKey = document.getElementById('selectedPackageInput')?.value || 'audit';
+                    const packageNames = {
+                        audit: 'Экспресс-Аудит 3 звонков (0 ₽)',
+                        pilot: 'Пилот 7 дней (14 900 ₽)',
+                        startup: 'Тариф Стартап (29 000 ₽/мес)',
+                        business: 'Тариф Бизнес (79 000 ₽/мес)'
+                    };
+                    const selectedPkgName = packageNames[pkgKey] || 'Экспресс-Аудит (0 ₽)';
+
                     // Switch UI
                     leadForm.style.display = 'none';
                     formSuccess.style.display = 'block';
                     formSuccess.classList.remove('hidden');
+                    
+                    const successSub = document.getElementById('formSuccessSubtitle');
+                    if (successSub) {
+                        successSub.innerText = `Вы выбрали: ${selectedPkgName}. Заявка передана основателю Дмитрию Федотову (@dm1918). Он ответит вам в течение 10–15 минут.`;
+                    }
+
                     try {
                         localStorage.removeItem('lead_draft_name');
                         localStorage.removeItem('lead_draft_contact');
                     } catch (e) {}
 
-                    const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков (0 ₽).\nИмя: ${name}\nКонтакт: ${contact}`);
+                    const utmParams = new URLSearchParams(window.location.search);
+                    const utmSource = utmParams.get('utm_source') || 'direct';
+
+                    const tgMsg = encodeURIComponent(`Здравствуйте! Заявка с сайта ai-rop.ru.\nФормат: ${selectedPkgName}\nИмя: ${name}\nКонтакт: ${contact}\nИсточник: ${utmSource}`);
                     const tgUrl = `https://t.me/dm1918?text=${tgMsg}`;
                     const tgBtn = document.getElementById('tgDirectBtn');
                     if (tgBtn) {
@@ -2049,9 +2134,11 @@
                                 'Accept': 'application/json'
                             },
                             body: JSON.stringify({
-                                '_subject': `🔥 Новая заявка на аудит 3 звонков: ${name} (${contact})`,
+                                '_subject': `🔥 Новая заявка [${selectedPkgName}]: ${name} (${contact})`,
+                                'Выбранный пакет': selectedPkgName,
                                 'Имя клиента': name,
                                 'Контакт (TG/Тел)': contact,
+                                'Источник (UTM)': utmSource,
                                 'Дата и время': new Date().toLocaleString('ru-RU'),
                                 '_template': 'table',
                                 '_captcha': 'false'
