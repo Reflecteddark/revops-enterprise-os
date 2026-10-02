@@ -299,37 +299,28 @@ def generate_integrator_offer():
     p_contact.paragraph_format.space_before = Pt(0)
     p_contact.paragraph_format.space_after = Pt(0)
     r_c = p_contact.add_run(
-        "Напишите в Telegram для назначения 15-минутного созвона или запроса партнерского договора:\n"
-        "Telegram: @revops_supervisor | Телефон / WhatsApp: +7 (___) ___-__-__\n"
-        "Платформа: RevOps Enterprise OS V17.6 • Речевой ИИ-Супервайзер & Радар Выручки"
+        "Напишите основателю напрямую в Telegram для назначения 15-минутного созвона или запроса партнерского договора:\n"
+        "Telegram: @dm1918 | Email: info@ai-rop.ru | Сайт платформы: https://ai-rop.ru\n"
+        "RevOps Enterprise OS • ИИ-Супервайзер звонков & Партнерская программа 20% RevShare"
     )
-    r_c.font.size = Pt(9)
-    r_c.font.color.rgb = COLOR_MUTED
+    r_c.font.size = Pt(9.5)
+    r_c.font.bold = True
+    r_c.font.color.rgb = COLOR_NAVY
 
     # Сохранение файлов
-    output_filename = "Партнерское_Предложение_Интеграторам_CRM.docx"
-    docs_path = Path("docs") / output_filename
-    desktop_path = Path("C:/Users/strel/Desktop") / output_filename
-    brain_path = Path("C:/Users/strel/.gemini/antigravity/brain/b958a22b-49ff-459c-a191-6c697ec14334") / output_filename
+    output_filename = "Оффер_Интеграторам_CRM_20_процентов.docx"
+    partner_dir = Path(r"C:\Users\strel\Desktop\RevOps Platform\Каналы продаж\Партнёрка")
+    partner_dir.mkdir(parents=True, exist_ok=True)
+    desktop_dest = partner_dir / output_filename
+    docs_dest = Path("docs") / output_filename
 
-    docs_path.parent.mkdir(parents=True, exist_ok=True)
-    doc.save(docs_path)
-    print(f"✅ Партнерский оффер сохранен в docs: {docs_path.absolute()}")
-    print(f"📄 Размер: {docs_path.stat().st_size / 1024:.1f} KB")
+    docs_dest.parent.mkdir(parents=True, exist_ok=True)
+    doc.save(docs_dest)
+    doc.save(desktop_dest)
+    print(f"✅ Партнерский оффер сохранен в docs: {docs_dest.absolute()}")
+    print(f"📋 Скопировано в папку Партнёрка: {desktop_dest}")
 
-    try:
-        shutil.copy2(docs_path, desktop_path)
-        print(f"📋 Скопировано на Рабочий стол: {desktop_path}")
-    except Exception as e:
-        print(f"⚠️ Ошибка копирования на Рабочий стол: {e}")
-
-    try:
-        shutil.copy2(docs_path, brain_path)
-        print(f"🧠 Скопировано в Brain Artifacts: {brain_path}")
-    except Exception as e:
-        print(f"⚠️ Ошибка копирования в Artifacts: {e}")
-
-    return docs_path
+    return docs_dest
 
 if __name__ == "__main__":
     generate_integrator_offer()
