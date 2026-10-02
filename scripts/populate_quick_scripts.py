@@ -337,7 +337,7 @@ def main():
                 "range": {"sheetId": sheet_id, "startRowIndex": 4, "endRowIndex": len(all_rows), "startColumnIndex": 0, "endColumnIndex": 8},
                 "cell": {
                     "userEnteredFormat": {
-                        "textFormat": {"fontSize": 10},
+                        "textFormat": {"fontSize": 10, "foregroundColor": {"red": 0.08, "green": 0.11, "blue": 0.18}},
                         "verticalAlignment": "TOP",
                         "wrapStrategy": "WRAP"
                     }
@@ -345,31 +345,109 @@ def main():
                 "fields": "userEnteredFormat(textFormat,verticalAlignment,wrapStrategy)"
             }
         },
-        # 5. Column A (Code): Center & bold
-        {
+        # 4b. Alternating zebra background for data rows
+    ]
+
+    for row_idx in range(4, len(all_rows)):
+        bg_color = {"red": 0.97, "green": 0.98, "blue": 0.99} if (row_idx % 2 == 1) else {"red": 1.0, "green": 1.0, "blue": 1.0}
+        requests.append({
             "repeatCell": {
-                "range": {"sheetId": sheet_id, "startRowIndex": 4, "endRowIndex": len(all_rows), "startColumnIndex": 0, "endColumnIndex": 1},
+                "range": {"sheetId": sheet_id, "startRowIndex": row_idx, "endRowIndex": row_idx + 1, "startColumnIndex": 0, "endColumnIndex": 8},
                 "cell": {
                     "userEnteredFormat": {
-                        "textFormat": {"bold": True, "fontSize": 10},
-                        "horizontalAlignment": "CENTER"
+                        "backgroundColor": bg_color
                     }
                 },
-                "fields": "userEnteredFormat(textFormat,horizontalAlignment)"
+                "fields": "userEnteredFormat(backgroundColor)"
             }
-        },
-        # 6. Column Widths
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 0, "endIndex": 1}, "properties": {"pixelSize": 85}, "fields": "pixelSize"}},
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 1, "endIndex": 2}, "properties": {"pixelSize": 180}, "fields": "pixelSize"}},
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 2, "endIndex": 3}, "properties": {"pixelSize": 210}, "fields": "pixelSize"}},
+        })
+
+    # 5. Column A (Code): Center & bold emerald badge style
+    requests.append({
+        "repeatCell": {
+            "range": {"sheetId": sheet_id, "startRowIndex": 4, "endRowIndex": len(all_rows), "startColumnIndex": 0, "endColumnIndex": 1},
+            "cell": {
+                "userEnteredFormat": {
+                    "textFormat": {"bold": True, "fontSize": 10, "foregroundColor": {"red": 0.05, "green": 0.45, "blue": 0.35}},
+                    "horizontalAlignment": "CENTER",
+                    "verticalAlignment": "MIDDLE"
+                }
+            },
+            "fields": "userEnteredFormat(textFormat,horizontalAlignment,verticalAlignment)"
+        }
+    })
+
+    # 6. Grid Borders
+    requests.append({
+        "updateBorders": {
+            "range": {"sheetId": sheet_id, "startRowIndex": 3, "endRowIndex": len(all_rows), "startColumnIndex": 0, "endColumnIndex": 8},
+            "top": {"style": "SOLID", "color": {"red": 0.7, "green": 0.75, "blue": 0.82}},
+            "bottom": {"style": "SOLID", "color": {"red": 0.7, "green": 0.75, "blue": 0.82}},
+            "left": {"style": "SOLID", "color": {"red": 0.7, "green": 0.75, "blue": 0.82}},
+            "right": {"style": "SOLID", "color": {"red": 0.7, "green": 0.75, "blue": 0.82}},
+            "innerHorizontal": {"style": "SOLID", "color": {"red": 0.85, "green": 0.88, "blue": 0.92}},
+            "innerVertical": {"style": "SOLID", "color": {"red": 0.85, "green": 0.88, "blue": 0.92}}
+        }
+    })
+
+    # 7. Column Widths (Generous, highly readable layout)
+    requests.extend([
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 0, "endIndex": 1}, "properties": {"pixelSize": 95}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 1, "endIndex": 2}, "properties": {"pixelSize": 200}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 2, "endIndex": 3}, "properties": {"pixelSize": 220}, "fields": "pixelSize"}},
         {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 3, "endIndex": 4}, "properties": {"pixelSize": 140}, "fields": "pixelSize"}},
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 4, "endIndex": 5}, "properties": {"pixelSize": 240}, "fields": "pixelSize"}},
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 5, "endIndex": 6}, "properties": {"pixelSize": 560}, "fields": "pixelSize"}},
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 6, "endIndex": 7}, "properties": {"pixelSize": 200}, "fields": "pixelSize"}},
-        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 7, "endIndex": 8}, "properties": {"pixelSize": 260}, "fields": "pixelSize"}},
-        # 7. Freeze top 4 rows
-        {"updateSheetProperties": {"properties": {"sheetId": sheet_id, "gridProperties": {"frozenRowCount": 4}}, "fields": "gridProperties.frozenRowCount"}}
-    ]
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 4, "endIndex": 5}, "properties": {"pixelSize": 250}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 5, "endIndex": 6}, "properties": {"pixelSize": 640}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 6, "endIndex": 7}, "properties": {"pixelSize": 220}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "COLUMNS", "startIndex": 7, "endIndex": 8}, "properties": {"pixelSize": 280}, "fields": "pixelSize"}}
+    ])
+
+    # 8. Fixed Row Heights for headers and spacer
+    requests.extend([
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "ROWS", "startIndex": 0, "endIndex": 1}, "properties": {"pixelSize": 52}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "ROWS", "startIndex": 1, "endIndex": 2}, "properties": {"pixelSize": 30}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "ROWS", "startIndex": 2, "endIndex": 3}, "properties": {"pixelSize": 16}, "fields": "pixelSize"}},
+        {"updateDimensionProperties": {"range": {"sheetId": sheet_id, "dimension": "ROWS", "startIndex": 3, "endIndex": 4}, "properties": {"pixelSize": 46}, "fields": "pixelSize"}}
+    ])
+
+    # 9. Dynamic Row Heights for each script row based on text content (Column F width = 640px)
+    CHARS_PER_LINE = 62  # roughly 62 chars per line in 640px Arial 10pt
+    for idx, script in enumerate(scripts_data):
+        row_num = 4 + idx  # 0-indexed
+        text = script[5]
+        
+        # Calculate visual lines in text block
+        text_lines = 0
+        for para in text.split("\n"):
+            if len(para.strip()) == 0:
+                text_lines += 0.8
+            else:
+                text_lines += max(1, (len(para) + CHARS_PER_LINE - 1) // CHARS_PER_LINE)
+        
+        # Also check column 4 (theme), column 6 (CTA), column 7 (hint)
+        col_e_lines = (len(script[4]) + 26) // 26
+        col_g_lines = (len(script[6]) + 24) // 24
+        col_h_lines = (len(script[7]) + 30) // 30
+        
+        max_lines = max(text_lines, col_e_lines, col_g_lines, col_h_lines)
+        # 19px line height + 30px padding for top/bottom margins
+        row_height = max(110, int(max_lines * 19.5 + 30))
+        
+        requests.append({
+            "updateDimensionProperties": {
+                "range": {"sheetId": sheet_id, "dimension": "ROWS", "startIndex": row_num, "endIndex": row_num + 1},
+                "properties": {"pixelSize": row_height},
+                "fields": "pixelSize"
+            }
+        })
+
+    # 10. Freeze top 4 rows
+    requests.append({
+        "updateSheetProperties": {
+            "properties": {"sheetId": sheet_id, "gridProperties": {"frozenRowCount": 4}},
+            "fields": "gridProperties.frozenRowCount"
+        }
+    })
 
     sh.batch_update({"requests": requests})
     print("✓ Google Sheet formatting & styling applied successfully!")
