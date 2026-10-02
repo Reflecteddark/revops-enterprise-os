@@ -146,17 +146,37 @@
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition" title="Telegram-бот">
-                        <i class="fab fa-telegram text-sky-400"></i> TG
-                    </a>
-                    <a href="https://max.ru/se14526668_bot" target="_blank" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition" title="Бот в мессенджере MAX">
-                        <i class="fas fa-comment-dots text-purple-400"></i> MAX
-                    </a>
                     <a href="#cta" class="px-3.5 sm:px-5 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-emerald-500/25 text-xs sm:text-sm flex items-center gap-2">
                         <span>Аудит 3 звонков (0 ₽)</span>
                         <i class="fas fa-arrow-right text-xs"></i>
                     </a>
+                    <!-- Mobile Hamburger Button -->
+                    <button type="button" id="mobileMenuToggleBtn" class="lg:hidden w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition" aria-label="Меню навигации">
+                        <i class="fas fa-bars text-base" id="mobileMenuIcon"></i>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Navigation Menu -->
+        <div id="mobileNavMenu" class="hidden lg:hidden border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-2xl px-4 py-5 space-y-3 font-medium text-sm">
+            <a href="#how-it-works" class="mobile-nav-link block py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-900 transition">Как это работает</a>
+            <a href="#cases" class="mobile-nav-link block py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-900 transition">Кейсы клиентов</a>
+            <a href="#criteria" class="mobile-nav-link block py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-900 transition">13 критериев ИИ</a>
+            <a href="#roi" class="mobile-nav-link block py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-900 transition">Калькулятор потерь</a>
+            <a href="#pricing" class="mobile-nav-link block py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-900 transition">Тарифы</a>
+            <a href="#faq" class="mobile-nav-link block py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-900 transition">Вопросы и ответы (FAQ)</a>
+            <a href="pilot-roadmap.html" class="mobile-nav-link block py-2 px-3 rounded-lg text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 transition flex items-center gap-2">
+                <i class="fas fa-file-pdf"></i>
+                Памятка пилота (7 дней)
+            </a>
+            <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 px-3">
+                <a href="https://t.me/dm1918" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1.5">
+                    <i class="fab fa-telegram text-cyan-400"></i> Дмитрий @dm1918
+                </a>
+                <a href="https://max.ru/se14526668_bot" target="_blank" class="hover:text-purple-400 transition flex items-center gap-1.5">
+                    <i class="fas fa-comment-dots text-purple-400"></i> Бот MAX
+                </a>
             </div>
         </div>
     </nav>
@@ -180,7 +200,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="#cta?utm_source=hero_primary&utm_medium=cta" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-2xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2 text-base">
+                    <a href="#cta" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-2xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2 text-base">
                         <i class="fas fa-bolt"></i>
                         Разобрать 3 звонка бесплатно (0 ₽)
                     </a>
@@ -328,7 +348,7 @@
                             <div>
                                 <div class="flex items-center justify-between mb-3">
                                     <span class="text-xs font-mono uppercase text-emerald-400 font-semibold tracking-wider">Радар потерь</span>
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300">СЕНТЯБРЬ 2026</span>
+                                    <span id="radarMonthBadge" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 uppercase">ОКТЯБРЬ 2026</span>
                                 </div>
                                 <div class="text-3xl font-extrabold text-emerald-400 font-display mb-1">-1 420 000 ₽</div>
                                 <p class="text-slate-400 text-xs leading-relaxed">Предотвращено утечек выручки за счет мгновенных алертов супервайзера</p>
@@ -477,25 +497,44 @@
                                 </span>
                                 <span id="managerStatusBadge" class="hidden text-[9px] px-2 py-0.5 rounded bg-rose-500 text-white font-bold tracking-wider animate-bounce">СЛИВ СДЕЛКИ ⚠️</span>
                             </div>
-                            <span class="text-slate-300 text-xs sm:text-sm leading-relaxed block">«Ну ладно... Тогда я просто скину вам коммерческое предложение на почту, ознакомьтесь.»</span>
+                            <div id="demoManagerTeaser" class="text-slate-500 text-xs italic flex items-center gap-2 py-1">
+                                <i class="fas fa-volume-high text-rose-400/80 text-xs animate-pulse"></i>
+                                <span>Нажмите «Слушать аудиозапись» выше, чтобы услышать ответ менеджера...</span>
+                            </div>
+                            <span id="demoManagerActualText" class="hidden text-slate-300 text-xs sm:text-sm leading-relaxed block">«Ну ладно... Тогда я просто скину вам коммерческое предложение на почту, ознакомьтесь.»</span>
                         </div>
                     </div>
 
-                    <!-- Right: AI Instant Analysis Box -->
+                    <!-- Right: AI Instant Analysis Box (Dynamic reveal without spoilers) -->
                     <div id="demoAiVerdict" class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl relative transition-all duration-300">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="flex items-center gap-1.5 text-xs font-bold text-amber-400 font-mono">
-                                <i class="fas fa-triangle-exclamation text-sm" id="demoAlertIcon"></i>
-                                АЛЕРТ СУПЕРВАЙЗЕРА (0:13 - 0:24)
-                            </span>
-                            <span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold">ОЦЕНКА: 2 / 10</span>
-                        </div>
-                        <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
-                            <p><strong>Вердикт ИИ:</strong> Внимание! Менеджер слил сделку: согласился с возражением и отправил КП на кладбище почты без договорённости о следующем шаге.</p>
-                            <p class="text-rose-300 font-semibold font-mono text-[11px]">Угроза выручке: -340 000 ₽ уходит конкуренту.</p>
-                            <p class="text-emerald-400 text-[11px] pt-1 border-t border-slate-800 font-mono">
-                                <strong>Рекомендация РОПу:</strong> Связаться через 2 часа со сценарием «Отработка через ROI».
+                        <div id="demoVerdictWaiting" class="py-3 text-center">
+                            <div class="w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-amber-400 mx-auto mb-2 shadow-inner">
+                                <i class="fas fa-brain text-base animate-pulse"></i>
+                            </div>
+                            <div class="text-white text-xs font-bold font-mono mb-1">ИИ-СУПЕРВАЙЗЕР ОЦЕНИВАЕТ ЗВОНОК</div>
+                            <p class="text-slate-400 text-[11px] font-mono leading-relaxed max-w-xs mx-auto">
+                                Детекция нарушений в реальном времени. Вердикт и сумма риска появятся на 13-й секунде аудио.
                             </p>
+                            <button type="button" id="revealSpoilerBtn" class="mt-2.5 inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 underline font-mono transition">
+                                <i class="fas fa-eye text-[10px]"></i> Показать вердикт без звука
+                            </button>
+                        </div>
+
+                        <div id="demoVerdictContent" class="hidden">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="flex items-center gap-1.5 text-xs font-bold text-amber-400 font-mono">
+                                    <i class="fas fa-triangle-exclamation text-sm" id="demoAlertIcon"></i>
+                                    <span id="demoAlertLabel">АЛЕРТ СУПЕРВАЙЗЕРА (0:13 - 0:24)</span>
+                                </span>
+                                <span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold">ОЦЕНКА: 2 / 10</span>
+                            </div>
+                            <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                                <p id="demoSupervisorVerdictP"><strong>Вердикт ИИ:</strong> Внимание! Менеджер слил сделку: согласился с возражением и отправил КП на кладбище почты без договорённости о следующем шаге.</p>
+                                <p class="text-rose-300 font-semibold font-mono text-[11px]">Угроза выручке: -340 000 ₽ уходит конкуренту.</p>
+                                <p class="text-emerald-400 text-[11px] pt-1 border-t border-slate-800 font-mono">
+                                    <strong>Рекомендация РОПу:</strong> Связаться через 2 часа со сценарием «Отработка через ROI».
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -774,7 +813,7 @@
                         <div class="text-slate-400 text-xs">Отправьте 3 записи звонков — разберем их по 13 критериям бесплатно за 20 минут</div>
                     </div>
                 </div>
-                <a href="#cta?utm_source=cases_banner&utm_medium=cta" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs sm:text-sm hover:from-emerald-400 hover:to-cyan-400 transition text-center whitespace-nowrap">
+                <a href="#cta" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs sm:text-sm hover:from-emerald-400 hover:to-cyan-400 transition text-center whitespace-nowrap">
                     Разобрать 3 звонка (0 ₽)
                 </a>
             </div>
@@ -1003,7 +1042,7 @@
                             </div>
                         </div>
 
-                        <a href="#cta?utm_source=calc_save&utm_medium=cta" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2 text-sm sm:text-base">
+                        <a href="#cta" id="calcCtaBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2 text-sm sm:text-base">
                             Показать, как спасти эти деньги
                             <i class="fas fa-arrow-right text-xs"></i>
                         </a>
@@ -1046,7 +1085,7 @@
                             <li class="flex items-center gap-2 text-slate-500"><i class="fas fa-minus"></i> Интеграция с CRM</li>
                         </ul>
                     </div>
-                    <a href="#cta?utm_source=tariff_free&utm_medium=cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
+                    <a href="#cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
                         Попробовать бесплатно
                     </a>
                 </div>
@@ -1074,7 +1113,7 @@
                     <div>
                         <div class="text-[10px] text-emerald-400 font-mono text-center mb-1">Сумма засчитывается в 1-й месяц</div>
                         <div class="text-[11px] text-slate-400 text-center mb-3">Не увидите результат — вернем 100% денег</div>
-                        <a href="#cta?utm_source=tariff_pilot&utm_medium=cta" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs transition text-center shadow-lg shadow-emerald-500/20 block">
+                        <a href="#cta" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs transition text-center shadow-lg shadow-emerald-500/20 block">
                             Начать пилот (14 900 ₽)
                         </a>
                     </div>
@@ -1097,7 +1136,7 @@
                             <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Поддержка в рабочие часы</li>
                         </ul>
                     </div>
-                    <a href="#cta?utm_source=tariff_startup&utm_medium=cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
+                    <a href="#cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
                         Выбрать тариф
                     </a>
                 </div>
@@ -1119,7 +1158,7 @@
                             <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Приоритетная поддержка 24/7</li>
                         </ul>
                     </div>
-                    <a href="#cta?utm_source=tariff_business&utm_medium=cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
+                    <a href="#cta" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition text-center border border-slate-700 block">
                         Выбрать тариф
                     </a>
                 </div>
@@ -1313,6 +1352,10 @@
                             <div>
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Telegram или Телефон *</label>
                                 <input type="text" id="formContact" required placeholder="@username или +7 (999) 000-00-00" class="w-full px-4 py-3.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 text-sm transition outline-none">
+                                <p id="contactErrorMsg" class="hidden text-rose-400 text-xs mt-2 font-mono flex items-center gap-1.5 bg-rose-500/10 p-2 rounded-lg border border-rose-500/20">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    <span>Укажите телефон (от 10 цифр) или Telegram (@username)</span>
+                                </p>
                             </div>
                         </div>
 
@@ -1338,8 +1381,8 @@
                         </div>
                     </form>
 
-                    <!-- Success Message Box -->
-                    <div id="formSuccess" class="hidden text-center py-6">
+                    <!-- Success Message Box (Strictly hidden by default) -->
+                    <div id="formSuccess" class="hidden text-center py-6" style="display: none;">
                         <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4">
                             <i class="fas fa-check text-emerald-400 text-2xl"></i>
                         </div>
@@ -1429,7 +1472,7 @@
                 <div class="text-white font-bold text-xs">Аудит 3 звонков</div>
                 <div class="text-[10px] text-emerald-400 font-mono">Бесплатно • 0 ₽</div>
             </div>
-            <a href="#cta?utm_source=sticky_mobile&utm_medium=cta" class="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-emerald-500/20 whitespace-nowrap">
+            <a href="#cta" class="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-emerald-500/20 whitespace-nowrap">
                 Разобрать 3 звонка
             </a>
         </div>
@@ -1707,28 +1750,64 @@
             if (closePolicyBtn) closePolicyBtn.addEventListener('click', closeModal);
             if (closePolicyBtnBottom) closePolicyBtnBottom.addEventListener('click', closeModal);
 
-            // SIMPLIFIED 2-FIELD LEAD FORM
+            // SIMPLIFIED 2-FIELD LEAD FORM WITH HYBRID VALIDATION
             const leadForm = document.getElementById('leadForm');
             const formSuccess = document.getElementById('formSuccess');
+            const formContactInput = document.getElementById('formContact');
+            const contactErrorMsg = document.getElementById('contactErrorMsg');
+
+            function isValidContact(val) {
+                if (!val) return false;
+                const clean = val.trim();
+                // Telegram @username
+                if (clean.startsWith('@')) {
+                    return /^@[a-zA-Z0-9_]{3,32}$/.test(clean);
+                }
+                // Phone number
+                const digits = clean.replace(/\D/g, '');
+                if (digits.length >= 10 && digits.length <= 15) {
+                    return true;
+                }
+                // Telegram username without @
+                if (/^[a-zA-Z0-9_]{5,32}$/.test(clean)) {
+                    return true;
+                }
+                return false;
+            }
+
+            if (formContactInput && contactErrorMsg) {
+                formContactInput.addEventListener('input', () => {
+                    contactErrorMsg.classList.add('hidden');
+                    formContactInput.classList.remove('border-rose-500', 'ring-1', 'ring-rose-500');
+                });
+            }
 
             if (leadForm && formSuccess) {
                 leadForm.addEventListener('submit', (e) => {
                     e.preventDefault();
 
                     const name = document.getElementById('formName').value;
-                    const contact = document.getElementById('formContact').value;
+                    const contact = formContactInput ? formContactInput.value : '';
+
+                    if (!isValidContact(contact)) {
+                        if (contactErrorMsg) contactErrorMsg.classList.remove('hidden');
+                        if (formContactInput) {
+                            formContactInput.classList.add('border-rose-500', 'ring-1', 'ring-rose-500');
+                            formContactInput.focus();
+                        }
+                        return;
+                    }
 
                     // Switch UI
                     leadForm.style.display = 'none';
+                    formSuccess.style.display = 'block';
                     formSuccess.classList.remove('hidden');
                     try {
                         localStorage.removeItem('lead_draft_name');
                         localStorage.removeItem('lead_draft_contact');
                     } catch (e) {}
 
-                    const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков (0 ₽).
-Имя: ${name}
-Контакт: ${contact}`);
+                    const tgMsg = encodeURIComponent(`Здравствуйте! Хочу получить экспресс-аудит 3 звонков (0 ₽).\nИмя: ${name}\nКонтакт: ${contact}`);
                     const tgUrl = `https://t.me/dm1918?text=${tgMsg}`;
                     const tgBtn = document.getElementById('tgDirectBtn');
                     if (tgBtn) {
@@ -2151,17 +2230,51 @@
                 return `${m}:${s < 10 ? '0' : ''}${s}`;
             }
 
-            // Variant tab buttons click handler
+            // Anti-spoiler audio demo controls
             const variantBtns = document.querySelectorAll('.variant-tab-btn');
             const variantDescText = document.getElementById('variantDescText');
             const demoClientTextSpan = demoClientBubble?.querySelector('span.block');
-            const demoManagerTextSpan = demoManagerBubble?.querySelector('span.block');
-            const demoSupervisorTextP = demoAiVerdict?.querySelector('p strong')?.parentElement;
+            const demoManagerTeaser = document.getElementById('demoManagerTeaser');
+            const demoManagerActualText = document.getElementById('demoManagerActualText');
+            const demoVerdictWaiting = document.getElementById('demoVerdictWaiting');
+            const demoVerdictContent = document.getElementById('demoVerdictContent');
+            const revealSpoilerBtn = document.getElementById('revealSpoilerBtn');
+            const demoSupervisorVerdictP = document.getElementById('demoSupervisorVerdictP');
+            const demoAlertLabel = document.getElementById('demoAlertLabel');
+            let isSpoilerRevealed = false;
+
+            function revealManagerResponse() {
+                if (demoManagerTeaser) demoManagerTeaser.classList.add('hidden');
+                if (demoManagerActualText) demoManagerActualText.classList.remove('hidden');
+            }
+
+            function revealSupervisorVerdict() {
+                if (demoVerdictWaiting) demoVerdictWaiting.classList.add('hidden');
+                if (demoVerdictContent) demoVerdictContent.classList.remove('hidden');
+            }
+
+            function showFullAnalysis() {
+                isSpoilerRevealed = true;
+                revealManagerResponse();
+                revealSupervisorVerdict();
+            }
+
+            if (revealSpoilerBtn) {
+                revealSpoilerBtn.addEventListener('click', showFullAnalysis);
+            }
 
             function applyVariant(vKey, autoPlay = false) {
                 if (!audioVariants[vKey]) return;
                 currentVariantKey = vKey;
                 const v = audioVariants[vKey];
+
+                // If spoiler was not explicitly opened, hide manager text and verdict box for the new track
+                if (!isSpoilerRevealed) {
+                    if (demoManagerTeaser) demoManagerTeaser.classList.remove('hidden');
+                    if (demoManagerActualText) demoManagerActualText.classList.add('hidden');
+                    if (demoVerdictWaiting) demoVerdictWaiting.classList.remove('hidden');
+                    if (demoVerdictContent) demoVerdictContent.classList.add('hidden');
+                }
 
                 // Update active tab styles
                 variantBtns.forEach(btn => {
@@ -2184,8 +2297,9 @@
 
                 // Update transcript bubbles text
                 if (demoClientTextSpan) demoClientTextSpan.textContent = v.clientText;
-                if (demoManagerTextSpan) demoManagerTextSpan.textContent = v.managerText;
-                if (demoSupervisorTextP) demoSupervisorTextP.innerHTML = `<strong>Вердикт ИИ:</strong> ${v.supervisorText}`;
+                if (demoManagerActualText) demoManagerActualText.textContent = v.managerText;
+                if (demoSupervisorVerdictP) demoSupervisorVerdictP.innerHTML = `<strong>Вердикт ИИ:</strong> ${v.supervisorText}`;
+                if (demoAlertLabel) demoAlertLabel.textContent = `АЛЕРТ СУПЕРВАЙЗЕРА (${formatAudioTime(v.supervisor_start)} - ${formatAudioTime(v.duration)})`;
 
                 resetAudioHighlights();
 
@@ -2202,7 +2316,8 @@
             variantBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const vKey = btn.getAttribute('data-variant');
-                    applyVariant(vKey, false);
+                    const wasPlaying = demoAudioPlayer && !demoAudioPlayer.paused;
+                    applyVariant(vKey, wasPlaying);
                 });
             });
 
@@ -2235,6 +2350,7 @@
                 demoAudioPlayer.addEventListener('ended', () => {
                     if (demoPlayIcon) demoPlayIcon.className = 'fas fa-rotate-right text-xs';
                     if (demoPlayText) demoPlayText.textContent = 'Слушать снова';
+                    showFullAnalysis();
                     resetAudioHighlights();
                 });
 
@@ -2256,7 +2372,7 @@
                         });
                     }
 
-                    // Precise synchronized highlights:
+                    // Precise synchronized highlights & dynamic anti-spoiler triggers:
                     // 1. Client objection
                     if (cur >= 0 && cur < v.client_end) {
                         demoClientBubble?.classList.add('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
@@ -2265,16 +2381,19 @@
                         managerStatusBadge?.classList.add('hidden');
                         demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
-                    // 2. Manager mistake (Giving up)
-                    else if (cur >= v.manager_start && cur < v.manager_end) {
+                    // 2. Manager mistake (Giving up) -> reveal manager text
+                    else if (cur >= v.manager_start && cur < v.supervisor_start) {
+                        revealManagerResponse();
                         demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.add('hidden');
                         demoManagerBubble?.classList.add('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
                         managerStatusBadge?.classList.remove('hidden');
                         demoAiVerdict?.classList.remove('ring-4', 'ring-rose-500/50', 'border-rose-500', 'bg-rose-950/20');
                     }
-                    // 3. AI Supervisor alert & verdict
+                    // 3. AI Supervisor alert & verdict -> reveal verdict box with alert ring
                     else if (cur >= v.supervisor_start) {
+                        revealManagerResponse();
+                        revealSupervisorVerdict();
                         demoClientBubble?.classList.remove('border-cyan-400', 'bg-cyan-950/30', 'scale-[1.01]');
                         clientStatusBadge?.classList.add('hidden');
                         demoManagerBubble?.classList.remove('border-rose-500', 'bg-rose-950/40', 'scale-[1.02]');
@@ -2304,7 +2423,7 @@
                 }
             }
 
-            // 4. SOCIAL PROOF LIVE TOASTS
+            // 4. SOCIAL PROOF LIVE TOASTS (SUPPRESSED ON MOBILE)
             const socialProofToast = document.getElementById('socialProofToast');
             const toastTitle = document.getElementById('toastTitle');
             const toastDesc = document.getElementById('toastDesc');
@@ -2321,7 +2440,7 @@
             let toastDismissed = false;
 
             function showToast(item) {
-                if (toastDismissed || !socialProofToast) return;
+                if (window.innerWidth < 768 || toastDismissed || !socialProofToast) return;
                 if (toastTitle && toastTitle.firstElementChild) toastTitle.firstElementChild.textContent = item.title;
                 if (toastDesc) toastDesc.textContent = item.desc;
                 if (toastTime) toastTime.textContent = item.time;
@@ -2343,7 +2462,7 @@
                 });
             }
 
-            // First toast after 7s, then every 36s
+            // First toast after 7s, then every 36s (desktop only)
             setTimeout(() => {
                 showToast(proofItems[0]);
                 setInterval(() => {
@@ -2426,6 +2545,56 @@
                     try { localStorage.setItem('lead_draft_contact', formContact.value); } catch (e) {}
                 });
             }
+
+            // 7. MOBILE DRAWER NAVIGATION MENU
+            const mobileMenuToggleBtn = document.getElementById('mobileMenuToggleBtn');
+            const mobileNavMenu = document.getElementById('mobileNavMenu');
+            const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+
+            if (mobileMenuToggleBtn && mobileNavMenu) {
+                mobileMenuToggleBtn.addEventListener('click', () => {
+                    const isHidden = mobileNavMenu.classList.contains('hidden');
+                    if (isHidden) {
+                        mobileNavMenu.classList.remove('hidden');
+                        if (mobileMenuIcon) mobileMenuIcon.className = 'fas fa-xmark text-base';
+                    } else {
+                        mobileNavMenu.classList.add('hidden');
+                        if (mobileMenuIcon) mobileMenuIcon.className = 'fas fa-bars text-base';
+                    }
+                });
+
+                document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileNavMenu.classList.add('hidden');
+                        if (mobileMenuIcon) mobileMenuIcon.className = 'fas fa-bars text-base';
+                    });
+                });
+            }
+
+            // 8. DYNAMIC RADAR MONTH BADGE
+            const radarMonthBadge = document.getElementById('radarMonthBadge');
+            if (radarMonthBadge) {
+                try {
+                    const now = new Date();
+                    const monthYear = now.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+                    radarMonthBadge.textContent = monthYear.toUpperCase();
+                } catch (e) {}
+            }
+
+            // 9. UNIVERSAL SMOOTH SCROLL FOR ALL CTA ANCHORS
+            document.querySelectorAll('a[href^="#cta"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const ctaEl = document.getElementById('cta');
+                    if (ctaEl) {
+                        e.preventDefault();
+                        ctaEl.scrollIntoView({ behavior: 'smooth' });
+                        const formContact = document.getElementById('formContact');
+                        if (formContact) {
+                            setTimeout(() => formContact.focus(), 650);
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
