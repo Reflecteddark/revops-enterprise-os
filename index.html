@@ -27,6 +27,39 @@
     <meta name="twitter:title" content="RevOps OS Pro — Радар Выручки и Контроль 100% звонков">
     <meta name="twitter:description" content="Найдём сделки, которые ваш отдел продаж теряет прямо сейчас. Интеграция с amoCRM и Битрикс24 за 15 минут. 152-ФЗ РФ.">
     <meta name="twitter:image" content="https://ai-rop.ru/images/og-preview.png">
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        // ==========================================
+        // ID СЧЁТЧИКА ЯНДЕКС.МЕТРИКИ (Укажите номер вместо 0)
+        const YM_ID = 0; 
+        // ==========================================
+
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        if (YM_ID && YM_ID !== 0) {
+            ym(YM_ID, "init", {
+                clickmap: true,
+                trackLinks: true,
+                accurateTrackBounce: true,
+                webvisor: true
+            });
+        }
+
+        // Автоматическая отправка целей (lead_submit, calc_use, pilot_click, chat_lead, audio_play)
+        window.reachMetrikaGoal = function(goalName, params) {
+            if (YM_ID && YM_ID !== 0 && typeof ym === 'function') {
+                ym(YM_ID, 'reachGoal', goalName, params || {});
+                console.log('[Yandex.Metrika Goal]:', goalName, params);
+            }
+        };
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/0" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2056,6 +2089,15 @@
             if (revRange && mgrRange) {
                 revRange.addEventListener('input', updateROI);
                 mgrRange.addEventListener('input', updateROI);
+                
+                // Фиксация взаимодействия с калькулятором при отпускании ползунка
+                revRange.addEventListener('change', () => {
+                    if (window.reachMetrikaGoal) window.reachMetrikaGoal('calc_use', { revenue: revRange.value, managers: mgrRange.value });
+                });
+                mgrRange.addEventListener('change', () => {
+                    if (window.reachMetrikaGoal) window.reachMetrikaGoal('calc_use', { revenue: revRange.value, managers: mgrRange.value });
+                });
+
                 updateROI();
             }
 
@@ -2139,6 +2181,11 @@
                     business: { name: 'Тариф Бизнес (79 000 ₽ / мес)', btn: 'Забронировать тариф Бизнес (79 000 ₽)', pillId: 'pkgBtn_business' }
                 };
                 const sel = packages[pkgKey] || packages.audit;
+                // Отправка цели клика по тарифу в Яндекс.Метрику
+                if (pkgKey === 'pilot' && window.reachMetrikaGoal) {
+                    window.reachMetrikaGoal('pilot_click');
+                }
+
                 const input = document.getElementById('selectedPackageInput');
                 if (input) input.value = pkgKey;
                 
@@ -2201,6 +2248,11 @@
 
                     const utmParams = new URLSearchParams(window.location.search);
                     const utmSource = utmParams.get('utm_source') || 'direct';
+
+                    // Отправка конверсии в Яндекс.Метрику
+                    if (window.reachMetrikaGoal) {
+                        window.reachMetrikaGoal('lead_submit', { package: selectedPkgName, utm: utmSource });
+                    }
 
                     const tgMsg = encodeURIComponent(`Здравствуйте! Заявка с сайта ai-rop.ru.\nФормат: ${selectedPkgName}\nИмя: ${name}\nКонтакт: ${contact}\nИсточник: ${utmSource}`);
                     const tgUrl = `https://t.me/dm1918?text=${tgMsg}`;
@@ -2437,6 +2489,7 @@
 
                 if (phoneMatch || tgMatch || emailMatch) {
                     const contact = (phoneMatch ? phoneMatch[0] : (tgMatch ? tgMatch[0] : emailMatch[0]));
+                    if (window.reachMetrikaGoal) window.reachMetrikaGoal('chat_lead', { contact: contact });
 
                     // Async lead notification to info@ai-rop.ru
                     try {
@@ -2726,6 +2779,7 @@
 
                 demoPlayBtn.addEventListener('click', () => {
                     if (demoAudioPlayer.paused) {
+                        if (window.reachMetrikaGoal) window.reachMetrikaGoal('audio_play');
                         demoAudioPlayer.play().catch(e => {
                             console.log('Audio play blocked:', e);
                         });
