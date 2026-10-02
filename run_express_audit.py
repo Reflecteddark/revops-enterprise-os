@@ -158,7 +158,7 @@ def generate_html_audit_card(evaluations: List[CallEvaluation], output_path: Pat
                     <div class="mt-4 pt-3 border-t border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
                             <div class="text-xs text-slate-400">Пилотный спринт:</div>
-                            <div class="text-sm font-bold text-white">7 дней супервизии 100% звонков — 29 000 ₽</div>
+                            <div class="text-sm font-bold text-white">7 дней супервизии 100% звонков — 14 900 ₽ (с гарантией возврата)</div>
                         </div>
                         <span class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition shadow-lg shadow-indigo-600/30">
                             Окупаемость за 3 дня
@@ -195,11 +195,14 @@ def format_telegram_pitch(evaluations: List[CallEvaluation]) -> str:
 Математика потерь:
 При среднем потоке в 150 лидов и чеке 400 000 ₽ из-за брошенных сделок компания теряет от 1 200 000 до 1 900 000 ₽ каждый месяц.
 
-Подробную интерактивную карточку аудита прикрепил файлом.
+Предлагаю запустить 7-дневный пилотный спринт за 14 900 ₽ (со 100% гарантией возврата): подключимся к вашей CRM, оцифруем 100% звонков всех менеджеров и вернем от 400 000 ₽ зависших сделок уже на этой неделе.
 
-Предлагаю запустить 7-дневный пилотный спринт за 29 000 ₽: подключимся к вашей CRM, оцифруем 100% звонков всех менеджеров и вернем от 400 000 ₽ зависших сделок уже на этой неделе.
+Удобно завтра в 11:30 созвониться на 10 минут, покажу, как это работает на ваших данных?
 
-Удобно завтра в 11:30 созвониться на 10 минут, покажу, как это работает на ваших данных?"""
+--
+Дмитрий Федотов
+Основатель сервиса RevOps OS (ai-rop.ru)
+Telegram / MAX: @dm1918"""
 
 
 def run_audit(audio_files: List[str] = None, sync_to_xlsx: bool = True) -> None:
