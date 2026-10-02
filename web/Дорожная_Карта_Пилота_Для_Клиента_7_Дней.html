@@ -164,16 +164,22 @@
         }
     </style>
 </head>
-<body class="p-4 sm:p-8 min-h-screen flex flex-col items-center justify-start sm:justify-center">
+<body class="p-4 sm:p-8 min-h-screen flex flex-col items-center justify-start pt-16 sm:pt-6">
+
+    <!-- Floating Back Button (Always visible on mobile & desktop, hidden in print) -->
+    <a href="/" onclick="goBack(event)" class="no-print fixed top-3 left-3 sm:top-5 sm:left-5 z-50 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/95 hover:bg-slate-800 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold border border-slate-700/90 hover:border-slate-500 shadow-2xl backdrop-blur-md transition-all group cursor-pointer" title="Назад на главную страницу">
+        <i class="fas fa-arrow-left text-xs text-indigo-400 group-hover:-translate-x-1 transition-transform"></i>
+        <span>Назад на сайт</span>
+    </a>
 
     <!-- Top Navigation Bar (Hidden in Print) -->
     <header class="max-w-5xl w-full mb-4 flex items-center justify-between no-print">
-        <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold border border-slate-800 hover:border-slate-700 transition shadow-sm backdrop-blur-md group">
+        <a href="/" onclick="goBack(event)" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold border border-slate-800 hover:border-slate-700 transition shadow-sm backdrop-blur-md group">
             <i class="fas fa-arrow-left text-xs text-indigo-400 group-hover:-translate-x-0.5 transition-transform"></i>
             <span>Назад на главную</span>
         </a>
         <div class="flex items-center gap-2.5 text-xs text-slate-400">
-            <a href="index.html" class="hover:text-indigo-400 transition hidden sm:inline">Главная</a>
+            <a href="/" onclick="goBack(event)" class="hover:text-indigo-400 transition hidden sm:inline">Главная</a>
             <span class="text-slate-600 hidden sm:inline">/</span>
             <span class="text-slate-300 hidden sm:inline">Дорожная карта</span>
             <a href="pilot-roadmap.pdf" download="Дорожная_Карта_Пилота_AI_ROP_7_Дней.pdf" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/90 hover:bg-emerald-500 text-white font-medium shadow-md shadow-emerald-600/20 transition">
@@ -191,14 +197,16 @@
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
             <div>
                 <div class="flex items-center gap-3 mb-1">
-                    <a href="index.html" class="no-print inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium border border-slate-700 transition" title="Вернуться на главную">
+                    <a href="/" onclick="goBack(event)" class="no-print inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium border border-slate-700 transition" title="Вернуться на главную">
                         <i class="fas fa-arrow-left text-[10px] text-indigo-400"></i>
                         <span>Назад</span>
                     </a>
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-indigo-500/30">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <span class="font-display font-bold text-xl text-white tracking-tight">AI-ROP.RU</span>
+                    <a href="/" onclick="goBack(event)" class="inline-flex items-center gap-3 group" title="На главную AI-ROP.RU">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-indigo-500/30 group-hover:scale-105 transition-transform">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl text-white tracking-tight group-hover:text-indigo-300 transition-colors">AI-ROP.RU</span>
+                    </a>
                     <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Enterprise OS</span>
                 </div>
                 <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-white">Дорожная карта пилота: запуск за 7 дней</h1>
@@ -339,7 +347,7 @@
                 </a>
             </div>
             <div class="no-print flex items-center gap-2">
-                <a href="index.html" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium rounded-xl text-xs transition-all border border-slate-700 flex items-center gap-1.5" title="Вернуться на главную">
+                <a href="/" onclick="goBack(event)" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium rounded-xl text-xs transition-all border border-slate-700 flex items-center gap-1.5 cursor-pointer" title="Вернуться на главную">
                     <i class="fas fa-arrow-left text-indigo-400"></i> На главную
                 </a>
                 <a href="pilot-roadmap.pdf" download="Дорожная_Карта_Пилота_AI_ROP_7_Дней.pdf" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl text-xs transition-all shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
@@ -353,5 +361,28 @@
 
     </div>
 
+    <!-- Universal Back Navigation Logic -->
+    <script>
+        function goBack(e) {
+            if (e && e.preventDefault) {
+                e.preventDefault();
+            }
+            var targetUrl = (window.location.protocol === 'file:') ? 'index.html' : '/';
+            var ref = document.referrer;
+            var isFromOurSite = ref && (ref.indexOf(window.location.host) !== -1 || ref.indexOf('ai-rop.ru') !== -1);
+
+            if (window.history.length > 1 && isFromOurSite) {
+                window.history.back();
+                // If history.back did not navigate within 250ms (e.g. edge cases, hash jumps), fallback to root
+                setTimeout(function() {
+                    if (window.location.pathname.indexOf('roadmap') !== -1 || window.location.href.indexOf('roadmap') !== -1) {
+                        window.location.href = targetUrl;
+                    }
+                }, 250);
+            } else {
+                window.location.href = targetUrl;
+            }
+        }
+    </script>
 </body>
 </html>
