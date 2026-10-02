@@ -29,6 +29,16 @@
     <meta name="twitter:description" content="Найдём сделки, которые ваш отдел продаж теряет прямо сейчас. Интеграция с amoCRM и Битрикс24 за 15 минут. 152-ФЗ РФ.">
     <meta name="twitter:image" content="https://ai-rop.ru/images/og-preview.png">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LHRE6Z6TBG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LHRE6Z6TBG');
+    </script>
+
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
         // ==========================================
@@ -53,10 +63,15 @@
         }
 
         // Автоматическая отправка целей (lead_submit, calc_use, pilot_click, chat_lead, audio_play)
+        // Единая отправка конверсий в Яндекс.Метрику и Google Analytics 4
         window.reachMetrikaGoal = function(goalName, params) {
             if (YM_ID && YM_ID !== 0 && typeof ym === 'function') {
                 ym(YM_ID, 'reachGoal', goalName, params || {});
                 console.log('[Yandex.Metrika Goal]:', goalName, params);
+            }
+            if (typeof gtag === 'function') {
+                gtag('event', goalName, params || {});
+                console.log('[Google Analytics Goal]:', goalName, params);
             }
         };
     </script>
