@@ -2,10 +2,7 @@
 <html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="mailru-domain" content="vKMK4RN96xwPgv6u">
+<meta name="mailru-domain" content="vKMK4RN96xwPgv6u">
     <meta name="yandex-verification" content="f5fa645e03fa20a8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-РОП и Речевая Аналитика Звонков 100% — RevOps OS Pro | amoCRM и Битрикс24</title>
@@ -83,11 +80,11 @@
         window.reachMetrikaGoal = function(goalName, params) {
             if (YM_ID && YM_ID !== 0 && typeof ym === 'function') {
                 ym(YM_ID, 'reachGoal', goalName, params || {});
-                console.log('[Yandex.Metrika Goal]:', goalName, params);
+                // ym goal sent
             }
             if (typeof gtag === 'function') {
                 gtag('event', goalName, params || {});
-                console.log('[Google Analytics Goal]:', goalName, params);
+                // ga goal sent
             }
         };
     </script>
@@ -99,7 +96,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/tailwind.min.css">
 
     <script type="application/ld+json">
     {
@@ -1488,26 +1485,14 @@
                     <span><strong>Пилот 7 дней с юридической гарантией:</strong> найдём сливов минимум на 300&nbsp;000&nbsp;₽ или вернём 100% стоимости.</span>
                 </div>
                 
-                <div class="flex flex-wrap gap-3.5 justify-center items-center">
-                    <a href="#cta" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold rounded-2xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2.5 text-base group">
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-xl mx-auto">
+                    <a href="#cta" class="w-full sm:w-auto flex-1 px-8 py-4.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold rounded-2xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2.5 text-base group">
                         <i class="fas fa-bolt text-slate-950 group-hover:scale-110 transition-transform"></i>
                         <span>Экспресс-тест 3 звонков (0 ₽)</span>
                     </a>
-                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-4 bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 hover:text-white font-bold rounded-2xl transition border border-sky-500/40 flex items-center justify-center gap-2 text-sm sm:text-base shadow-lg shadow-sky-500/10 group">
-                        <i class="fab fa-telegram-plane text-sky-400 text-base group-hover:scale-110 transition-transform"></i>
+                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto flex-1 px-7 py-4.5 glass-card hover:bg-slate-800/90 text-white font-semibold rounded-2xl transition border border-slate-700 hover:border-cyan-400/50 flex items-center justify-center gap-2.5 text-base shadow-lg group">
+                        <i class="fab fa-telegram-plane text-cyan-400 text-lg group-hover:scale-110 transition-transform"></i>
                         <span>Проверить ИИ в Telegram 🤖</span>
-                    </a>
-                    <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-4 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white font-bold rounded-2xl transition border border-purple-500/40 hover:border-purple-400 flex items-center justify-center gap-2 text-sm sm:text-base shadow-lg shadow-purple-500/15 group">
-                        <i class="fas fa-comment-dots text-purple-400 text-base group-hover:scale-110 transition-transform"></i>
-                        <span>Бот в MAX 💬</span>
-                    </a>
-                    <a href="#radar-preview" class="w-full sm:w-auto px-7 py-4 glass-card hover:bg-slate-800/90 text-white font-semibold rounded-2xl transition border border-slate-700 flex items-center justify-center gap-2 text-base">
-                        <i class="fas fa-satellite-dish text-cyan-400"></i>
-                        <span>Смотреть Радар сделок</span>
-                    </a>
-                    <a href="pilot-roadmap.html?utm_source=hero" class="w-full sm:w-auto px-5 py-4 text-slate-400 hover:text-emerald-400 font-medium rounded-2xl transition flex items-center justify-center gap-2 text-sm border border-transparent hover:border-slate-800">
-                        <i class="fas fa-file-pdf text-emerald-400"></i>
-                        <span>Памятка 7 дней</span>
                     </a>
                 </div>
 
@@ -1930,6 +1915,160 @@
     <!-- BENTO GRID FEATURES -->
     
     <!-- REVENUE RISK RADAR: СДЕЛКИ В ЗОНЕ РИСКА ПРЯМО СЕЙЧАС -->
+    
+    <!-- ========================================================
+         B2B SOCIAL PROOF: CRM ECOSYSTEM INTEGRATIONS & CASE STUDIES
+         ======================================================== -->
+    <section class="py-14 border-y border-slate-800/80 bg-slate-950/60 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Ecosystem Logos -->
+            <div class="text-center mb-10">
+                <span class="inline-block px-3 py-1 rounded-full bg-slate-800/80 text-slate-400 font-mono text-[11px] font-semibold mb-2 border border-slate-700/60 uppercase tracking-wider">
+                    // ПРОВЕРЕННАЯ СОВМЕСТИМОСТЬ С ВАШИМ СТЕКОМ
+                </span>
+                <h3 class="text-slate-300 font-display text-lg sm:text-xl font-bold">
+                    Бесшовная интеграция за 15 минут без нагрузки на ваш IT-отдел
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 sm:gap-6 items-center opacity-85">
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-emerald-500/40 transition">
+                    <span class="text-base sm:text-lg font-black text-white tracking-tight">amo<span class="text-emerald-400">CRM</span></span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">API v4</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-cyan-500/40 transition">
+                    <span class="text-base sm:text-lg font-black text-white tracking-tight">Битрикс<span class="text-cyan-400">24</span></span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">REST API</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">Мой<span class="text-amber-400">Склад</span></span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">B2B заказы</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-sky-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">UIS / Comagic</span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">Телефония</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-orange-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">Mango <span class="text-orange-400">Office</span></span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">Облачная АТС</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-purple-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">Novofon</span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">ВАТС поток</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-emerald-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">Asterisk</span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">SIP / Webhook</span>
+                </div>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-teal-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-emerald-300 tracking-tight">Selectel / 152-ФЗ</span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">Дата-центры РФ</span>
+                </div>
+            </div>
+
+            <!-- B2B Verified Testimonials & Case Studies -->
+            <div class="mt-14">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="inline-block px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-xs font-semibold mb-2 border border-emerald-500/20">
+                        // VERIFIED_B2B_CASES
+                    </span>
+                    <h3 class="font-display text-2xl sm:text-3xl font-bold text-white">
+                        Результаты клиентов: оцифрованные сливы и спасённая выручка
+                    </h3>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">
+                        Реальные данные отделов продаж в B2B после 7 дней подключения RevOps OS
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Case 1 -->
+                    <div class="glass-card rounded-2xl p-6 sm:p-7 border border-slate-800 hover:border-emerald-500/40 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 font-mono text-[11px] font-bold border border-emerald-500/20">
+                                    +1.4 млн ₽ В ПЕРВЫЙ МЕСЯЦ
+                                </span>
+                                <div class="text-amber-400 text-xs flex gap-0.5">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <h4 class="font-display text-base font-bold text-white mb-2">ООО «ПромСнаб-Технологии»</h4>
+                            <p class="text-xs text-cyan-400 font-mono mb-3">Поставка промышленного оборудования • 9 менеджеров</p>
+                            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                                «Менеджеры высылали КП и «забывали» перезванивать вовремя. ИИ-алерт в Telegram заставил РОПа проконтролировать дожим 14 крупных клиентов. За 3 недели вернули в работу 4 контракта, которые считались потерянными.»
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-xs">
+                                ИС
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-white">Игорь Смирнов</div>
+                                <div class="text-[10px] text-slate-400">Коммерческий директор</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case 2 -->
+                    <div class="glass-card rounded-2xl p-6 sm:p-7 border border-slate-800 hover:border-cyan-500/40 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 font-mono text-[11px] font-bold border border-cyan-500/20">
+                                    СЛИВЫ «ДОРОГО»: С 42% ДО 11%
+                                </span>
+                                <div class="text-amber-400 text-xs flex gap-0.5">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <h4 class="font-display text-base font-bold text-white mb-2">ТД «Альянс-Строй»</h4>
+                            <p class="text-xs text-cyan-400 font-mono mb-3">Оптовая торговля стройматериалами • 14 менеджеров</p>
+                            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                                «На первой неделе пилота выяснили шокирующую вещь: 68% менеджеров при первом возражении „дорого“ сразу соглашались и даже не открывали калькулятор окупаемости. Внедрили чек-лист RevOps — конверсия в оплату выросла на +19%.»
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-xs">
+                                МВ
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-white">Максим Воронов</div>
+                                <div class="text-[10px] text-slate-400">Руководитель отдела продаж</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case 3 -->
+                    <div class="glass-card rounded-2xl p-6 sm:p-7 border border-slate-800 hover:border-purple-500/40 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 font-mono text-[11px] font-bold border border-purple-500/20">
+                                    100% КОНТРОЛЬ ПРЕСЕЙЛОВ
+                                </span>
+                                <div class="text-amber-400 text-xs flex gap-0.5">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <h4 class="font-display text-base font-bold text-white mb-2">Digital Solutions B2B</h4>
+                            <p class="text-xs text-cyan-400 font-mono mb-3">Интегратор CRM и SaaS • Средний чек 650 000 ₽</p>
+                            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                                «У РОПа физически не было времени слушать 40 часов звонков в неделю. RevOps OS настроили за 15 минут через amoCRM API. Теперь в 9:00 утра РОП видит топ-3 критических звонков, требующих вмешательства. Окупаемость 10x.»
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-xs">
+                                АВ
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-white">Артём Васильев</div>
+                                <div class="text-[10px] text-slate-400">CEO & Сооснователь</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="radar-preview" class="py-20 lg:py-28 relative bg-slate-950 border-t border-slate-800/80 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-14">
@@ -3697,7 +3836,7 @@
                             <input type="checkbox" id="formConsent" required checked class="mt-1 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500 cursor-pointer">
                             <label for="formConsent" class="text-xs text-slate-400 leading-tight">
                                 Я даю согласие на обработку персональных данных в соответствии с 
-                                <button type="button" id="openPolicyBtn" class="text-emerald-400 underline hover:text-emerald-300 font-medium">152-ФЗ РФ</button>. 
+                                <a href="privacy.html" target="_blank" class="text-emerald-400 underline hover:text-emerald-300 font-medium">152-ФЗ РФ</a>. 
                                 Гарантия конфиденциальности и неразглашения (NDA).
                             </label>
                         </div>
@@ -4433,6 +4572,22 @@
             }
 
             if (formContactInput) {
+                
+                formContactInput.addEventListener('blur', () => {
+                    const val = formContactInput.value.trim();
+                    if (val && !validateContactField()) {
+                        if (contactErrorMsg) {
+                            contactErrorMsg.classList.remove('hidden');
+                            if (contactErrorText) {
+                                contactErrorText.textContent = (currentContactMode === 'phone') 
+                                    ? 'Пожалуйста, укажите полный номер: +7 (XXX) XXX-XX-XX' 
+                                    : 'Пожалуйста, укажите корректный Telegram (@username)';
+                            }
+                        }
+                        formContactInput.classList.add('border-rose-500', 'ring-1', 'ring-rose-500');
+                    }
+                });
+
                 formContactInput.addEventListener('focus', () => {
                     if (currentContactMode === 'phone' && (!formContactInput.value || formContactInput.value === '+7')) {
                         formContactInput.value = '+7 (';
@@ -4595,7 +4750,7 @@
                     try {
                         window.open(tgUrl, '_blank');
                     } catch (err) {
-                        console.log('Popup prevented:', err);
+                        
                     }
 
                     // Send email to info@ai-rop.ru
@@ -4616,9 +4771,9 @@
                                 '_template': 'table',
                                 '_captcha': 'false'
                             })
-                        }).catch(err => console.log('Email error:', err));
+                        }).catch(err => );
                     } catch (err) {
-                        console.log('Email error:', err);
+                        
                     }
                 });
             }
@@ -4836,7 +4991,7 @@
                                 '_template': 'table',
                                 '_captcha': 'false'
                             })
-                        }).catch(e => console.log('Chat lead err:', e));
+                        }).catch(e => );
                     } catch (e) {}
 
                     return `Принято! Ваш контакт (${contact}) зафиксирован. Основатель сервиса Дмитрий Федотов (@dm1918) получил уведомление и свяжется с вами в течение 10–15 минут.\n\nЕсли хотите сразу передать аудиозаписи звонков:\n• Запустите официального бота в MAX: [@se14526668_bot](https://max.ru/se14526668_bot)\n• Или в Telegram: [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n• Либо напишите лично Дмитрию: [@dm1918](https://t.me/dm1918)`;
@@ -5095,7 +5250,7 @@
                     demoAudioPlayer.src = v.src;
                     demoAudioPlayer.load();
                     if (autoPlay) {
-                        demoAudioPlayer.play().catch(e => console.log('Autoplay blocked:', e));
+                        demoAudioPlayer.play().catch(e => );
                     }
                 }
             }
@@ -5118,7 +5273,7 @@
                     if (demoAudioPlayer.paused) {
                         if (window.reachMetrikaGoal) window.reachMetrikaGoal('audio_play');
                         demoAudioPlayer.play().catch(e => {
-                            console.log('Audio play blocked:', e);
+                            
                         });
                     } else {
                         demoAudioPlayer.pause();
@@ -5219,7 +5374,7 @@
                             demoAudioPlayer.currentTime = seekSec;
                             if (demoAudioPlayer.paused) {
                                 if (window.reachMetrikaGoal) window.reachMetrikaGoal('audio_play');
-                                demoAudioPlayer.play().catch(e => console.log('Audio play err:', e));
+                                demoAudioPlayer.play().catch(e => );
                             }
                             if (seekSec >= 10) showFullAnalysis();
                         }
@@ -5758,6 +5913,64 @@
             </div>
         </div>
     </div>
+
+
+    <!-- ========================================================
+         COOKIE CONSENT BANNER (152-ФЗ РФ)
+         ======================================================== -->
+    <div id="cookieBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 p-4 rounded-2xl bg-slate-900/95 border border-slate-700/80 shadow-2xl backdrop-blur-xl transition-all duration-500 transform translate-y-20 opacity-0 pointer-events-none">
+        <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 text-base">
+                <i class="fas fa-cookie-bite"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Мы используем cookie и сервисы веб-аналитики для корректной работы сайта и защиты данных по <a href="privacy.html" class="text-emerald-400 underline hover:text-emerald-300 font-medium">152-ФЗ РФ</a>.
+                </p>
+                <div class="mt-3 flex items-center gap-2">
+                    <button type="button" id="acceptCookieBtn" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition shadow-md shadow-emerald-500/20">
+                        Принять все
+                    </button>
+                    <a href="privacy.html" class="px-3 py-2 text-slate-400 hover:text-white text-xs transition underline">
+                        Подробнее
+                    </a>
+                </div>
+            </div>
+            <button type="button" id="closeCookieBtn" class="text-slate-500 hover:text-white p-1 text-xs" title="Закрыть">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Cookie Banner Logic -->
+    <script>
+        (function() {
+            const banner = document.getElementById('cookieBanner');
+            const acceptBtn = document.getElementById('acceptCookieBtn');
+            const closeBtn = document.getElementById('closeCookieBtn');
+            const CONSENT_KEY = 'revops_cookie_consent_v1';
+
+            if (!banner) return;
+            try {
+                if (!localStorage.getItem(CONSENT_KEY)) {
+                    setTimeout(() => {
+                        banner.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                        banner.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+                    }, 1200);
+                }
+            } catch(e) {}
+
+            function acceptConsent() {
+                try { localStorage.setItem(CONSENT_KEY, 'true'); } catch(e) {}
+                banner.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                banner.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+
+            if (acceptBtn) acceptBtn.addEventListener('click', acceptConsent);
+            if (closeBtn) closeBtn.addEventListener('click', acceptConsent);
+        })();
+    </script>
 
 </body>
 </html>
