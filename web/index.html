@@ -29,6 +29,18 @@
     <meta name="twitter:description" content="Найдём сделки, которые ваш отдел продаж теряет прямо сейчас. Интеграция с amoCRM и Битрикс24 за 15 минут. 152-ФЗ РФ.">
     <meta name="twitter:image" content="https://ai-rop.ru/images/og-preview.png">
 
+    <!-- Zero-Flicker Theme Pre-render Script -->
+    <script>
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LHRE6Z6TBG"></script>
     <script>
@@ -262,6 +274,193 @@
             scrollbar-width: thin;
             scrollbar-color: #334155 transparent;
         }
+
+        /* ========================================================
+           LIGHT THEME SYSTEM (.theme-light)
+           ======================================================== */
+        html.theme-light body {
+            background-color: #f8fafc !important;
+            color: #1e293b !important;
+        }
+
+        /* Smooth theme transitions */
+        body, nav, .glass-card, input, select, textarea, footer, #mobileNavMenu, #chatWidgetWindow {
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* Background overrides in light theme */
+        html.theme-light .bg-slate-950 {
+            background-color: #ffffff !important;
+        }
+        html.theme-light .bg-slate-950\/60,
+        html.theme-light .bg-slate-950\/70,
+        html.theme-light .bg-slate-950\/80,
+        html.theme-light .bg-slate-950\/90,
+        html.theme-light .bg-slate-950\/95 {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+        }
+        html.theme-light .bg-slate-900 {
+            background-color: #f1f5f9 !important;
+        }
+        html.theme-light .bg-slate-900\/40,
+        html.theme-light .bg-slate-900\/60,
+        html.theme-light .bg-slate-900\/70,
+        html.theme-light .bg-slate-900\/80,
+        html.theme-light .bg-slate-900\/90,
+        html.theme-light .bg-slate-900\/95 {
+            background-color: rgba(241, 245, 249, 0.88) !important;
+        }
+        html.theme-light .bg-slate-800,
+        html.theme-light .bg-slate-800\/80,
+        html.theme-light .bg-slate-800\/90 {
+            background-color: #e2e8f0 !important;
+            color: #1e293b !important;
+        }
+
+        /* Glass Cards in light mode */
+        html.theme-light .glass-card {
+            background: rgba(255, 255, 255, 0.94) !important;
+            border: 1px solid rgba(226, 232, 240, 0.95) !important;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03) !important;
+        }
+        html.theme-light .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.45) !important;
+            box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.08) !important;
+        }
+
+        /* Navbar & Header in light mode */
+        html.theme-light nav {
+            background-color: rgba(255, 255, 255, 0.90) !important;
+            border-bottom-color: rgba(226, 232, 240, 0.9) !important;
+        }
+        html.theme-light #mobileNavMenu {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        /* Hero glow adjustment for light background */
+        html.theme-light .hero-glow {
+            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.06) 35%, transparent 70%) !important;
+        }
+        html.theme-light .data-grid {
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+        }
+
+        /* Typography overrides */
+        html.theme-light .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light .text-slate-200 {
+            color: #1e293b !important;
+        }
+        html.theme-light .text-slate-300 {
+            color: #334155 !important;
+        }
+        html.theme-light .text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light .text-slate-500 {
+            color: #64748b !important;
+        }
+
+        /* Preserve contrast on colored action buttons & gradients */
+        html.theme-light a.bg-gradient-to-r,
+        html.theme-light button.bg-gradient-to-r,
+        html.theme-light .bg-gradient-to-r.text-slate-950,
+        html.theme-light .bg-gradient-to-r .text-slate-950,
+        html.theme-light .bg-emerald-500,
+        html.theme-light .text-slate-950,
+        html.theme-light .bg-emerald-500 .text-slate-950 {
+            color: #020617 !important;
+        }
+        html.theme-light .text-emerald-400 {
+            color: #059669 !important;
+        }
+        html.theme-light .text-cyan-400 {
+            color: #0891b2 !important;
+        }
+        html.theme-light .text-rose-400 {
+            color: #e11d48 !important;
+        }
+        html.theme-light .text-amber-400 {
+            color: #d97706 !important;
+        }
+        html.theme-light .text-sky-400,
+        html.theme-light .text-sky-300 {
+            color: #0284c7 !important;
+        }
+
+        /* Borders in light mode */
+        html.theme-light .border-slate-800,
+        html.theme-light .border-slate-800\/80 {
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light .border-slate-700 {
+            border-color: #cbd5e1 !important;
+        }
+
+        /* Inputs & Form controls */
+        html.theme-light input[type="text"],
+        html.theme-light input[type="tel"],
+        html.theme-light input[type="email"],
+        html.theme-light textarea {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light input::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        /* Badges & highlights with light backgrounds */
+        html.theme-light .bg-emerald-500\/10 {
+            background-color: rgba(16, 185, 129, 0.12) !important;
+        }
+        html.theme-light .bg-cyan-500\/10,
+        html.theme-light .bg-cyan-500\/20 {
+            background-color: rgba(6, 182, 212, 0.12) !important;
+        }
+        html.theme-light .bg-amber-500\/10 {
+            background-color: rgba(245, 158, 11, 0.14) !important;
+        }
+        html.theme-light .bg-rose-500\/10,
+        html.theme-light .bg-rose-950\/20 {
+            background-color: rgba(244, 63, 94, 0.10) !important;
+        }
+        html.theme-light .bg-emerald-950\/30,
+        html.theme-light .bg-emerald-950\/40,
+        html.theme-light .bg-emerald-950\/60 {
+            background-color: rgba(16, 185, 129, 0.10) !important;
+        }
+
+        /* Tables in light mode */
+        html.theme-light table th {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+        }
+        html.theme-light table td {
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light tr:hover {
+            background-color: rgba(241, 245, 249, 0.6) !important;
+        }
+
+        /* Modals & Chat in light mode */
+        html.theme-light #exitIntentModal .glass-card,
+        html.theme-light #videoModal .glass-card,
+        html.theme-light #chatWidgetWindow {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15) !important;
+        }
+        html.theme-light #chatMessages::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+        }
+        html.theme-light #chatMessages {
+            scrollbar-color: #cbd5e1 transparent;
+        }
     </style>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0">
 
@@ -301,6 +500,11 @@
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- THEME TOGGLE (SUN / MOON) -->
+                    <button type="button" id="themeToggleBtn" aria-label="Переключить тему оформления" title="Переключить тему: тёмная / светлая" class="w-10 h-10 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-md group">
+                        <i id="themeToggleIcon" class="fas fa-sun text-amber-400 text-base transition-transform duration-500 group-hover:rotate-45"></i>
+                    </button>
+
                     <a href="#cta" class="px-3.5 sm:px-5 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-emerald-500/25 text-xs sm:text-sm flex items-center gap-2">
                         <span>Аудит 3 звонков (0 ₽)</span>
                         <i class="fas fa-arrow-right text-xs"></i>
@@ -329,12 +533,18 @@
                 Памятка пилота (7 дней)
             </a>
             <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 px-3">
-                <a href="https://t.me/dm1918" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1.5">
-                    <i class="fab fa-telegram text-cyan-400"></i> Дмитрий @dm1918
-                </a>
-                <a href="https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg" target="_blank" class="hover:text-purple-400 transition flex items-center gap-1.5">
-                    <i class="fas fa-comment-dots text-purple-400"></i> Бот MAX
-                </a>
+                <button type="button" id="mobileThemeToggleBtn" class="flex items-center gap-2 py-1.5 px-3 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition">
+                    <i id="mobileThemeToggleIcon" class="fas fa-sun text-amber-400 text-sm"></i>
+                    <span id="mobileThemeToggleText">Светлая тема</span>
+                </button>
+                <div class="flex items-center gap-3">
+                    <a href="https://t.me/dm1918" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1.5">
+                        <i class="fab fa-telegram text-cyan-400"></i> Дмитрий
+                    </a>
+                    <a href="https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg" target="_blank" class="hover:text-purple-400 transition flex items-center gap-1.5">
+                        <i class="fas fa-comment-dots text-purple-400"></i> MAX
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -3570,6 +3780,61 @@
             }
             renderRadarDeal(idx);
         }
+
+        // ========================================================
+        // THEME TOGGLE LOGIC (SUN / MOON)
+        // ========================================================
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const mobileThemeToggleBtn = document.getElementById('mobileThemeToggleBtn');
+        const mobileThemeToggleIcon = document.getElementById('mobileThemeToggleIcon');
+        const mobileThemeToggleText = document.getElementById('mobileThemeToggleText');
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.documentElement.classList.add('theme-light');
+                if (themeToggleIcon) {
+                    themeToggleIcon.className = 'fas fa-moon text-indigo-500 text-base transition-transform duration-500 rotate-180';
+                }
+                if (mobileThemeToggleIcon) {
+                    mobileThemeToggleIcon.className = 'fas fa-moon text-indigo-500 text-sm transition-transform duration-500';
+                }
+                if (mobileThemeToggleText) {
+                    mobileThemeToggleText.textContent = 'Тёмная тема';
+                }
+                try { localStorage.setItem('theme', 'light'); } catch(e) {}
+                if (window.reachMetrikaGoal) window.reachMetrikaGoal('theme_switch_light');
+            } else {
+                document.documentElement.classList.remove('theme-light');
+                if (themeToggleIcon) {
+                    themeToggleIcon.className = 'fas fa-sun text-amber-400 text-base transition-transform duration-500 rotate-0';
+                }
+                if (mobileThemeToggleIcon) {
+                    mobileThemeToggleIcon.className = 'fas fa-sun text-amber-400 text-sm transition-transform duration-500';
+                }
+                if (mobileThemeToggleText) {
+                    mobileThemeToggleText.textContent = 'Светлая тема';
+                }
+                try { localStorage.setItem('theme', 'dark'); } catch(e) {}
+                if (window.reachMetrikaGoal) window.reachMetrikaGoal('theme_switch_dark');
+            }
+        }
+
+        function toggleTheme() {
+            const isLight = document.documentElement.classList.contains('theme-light');
+            applyTheme(isLight ? 'dark' : 'light');
+        }
+
+        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+        if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+
+        // Sync icons on DOM ready
+        try {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                applyTheme('light');
+            }
+        } catch(e) {}
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
