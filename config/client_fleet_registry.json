@@ -1,0 +1,26 @@
+{
+  "master_release": {
+    "version": "V18.0",
+    "release_date": "2026-10-03",
+    "master_spreadsheet_id": "1QnjrrbpqhYssofchee7G06szWrFvBCcOqGIVokjqdVc",
+    "changelog_entry": "Enterprise V18.0: Модуль AI-дожима WhatsApp, предиктивный NRR когорт, прямой вебхук эскалации SLA"
+  },
+  "tenants": [
+    {
+      "tenant_id": "CLIENT-TENANT-001",
+      "company_name": "ООО «Название Компании Клиента»",
+      "spreadsheet_id": "1jBBotOfFh-XEJGScJyQi10jiFrna66OpJ91yPDrXy2A",
+      "tier": "Enterprise Starter",
+      "deployed_at": "2026-10-03",
+      "auto_backup_enabled": true
+    },
+    {
+      "tenant_id": "DEMO-SHOWCASE-000",
+      "company_name": "ООО «Вектор Плюс» (Showcase Master)",
+      "spreadsheet_id": "1QnjrrbpqhYssofchee7G06szWrFvBCcOqGIVokjqdVc",
+      "tier": "Golden Master",
+      "deployed_at": "2026-10-03",
+      "auto_backup_enabled": false
+    }
+  ]
+}
