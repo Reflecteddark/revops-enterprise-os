@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+Upgraded MAX Bot with automated file downloads to Desktop and 3-call progress tracker.
+"""
+
 import os
 import sys
 import time
@@ -18,9 +23,15 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-# Ensure log directory exists
+# Ensure log and download directory exists
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE = os.path.join(BASE_DIR, "max_bot.log")
+
+# Desktop incoming folder for Dmitry
+DESKTOP_INCOMING = r"C:\Users\strel\Desktop\RevOps Platform\Входящие_Звонки_MAX"
+LOCAL_INCOMING = os.path.join(BASE_DIR, "incoming_audios", "max")
+os.makedirs(DESKTOP_INCOMING, exist_ok=True)
+os.makedirs(LOCAL_INCOMING, exist_ok=True)
 
 # Setup logging
 logger = logging.getLogger("MAX_BOT")
@@ -40,22 +51,21 @@ BASE_URL = "https://platform-api2.max.ru"
 SSL_CTX = ssl._create_unverified_context()
 
 GREETING_TEXT = (
-    "Здравствуйте! Я ИИ-супервайзер платформы AI-ROP (ai-rop.ru).\n\n"
-    "1. Экспресс-аудит (0 руб): пришлите сюда 3 аудиозаписи звонков — мы бесплатно разберем их по 13 бизнес-критериям за 20 минут.\n\n"
-    "2. Калькулятор потерь: откройте мини-приложение кнопкой ниже, чтобы посчитать упущенную выручку вашего отдела.\n\n"
-    "3. Связь с основателем: @dm1918 в Telegram или info@ai-rop.ru."
-)
-
-ATTACHMENT_RECEIVED_TEXT = (
-    "Аудиозапись звонка получена! Ваша запись поставлена в очередь на экспресс-аудит Whisper Pro + RevOps OS.\n\n"
-    "Если у вас есть еще записи (до 3 звонков), присылайте сюда. "
-    "Наш специалист или основатель свяжется с вами для передачи итогового отчета."
+    "👋 Здравствуйте! Я ИИ-супервайзер сервиса RevOps OS (ai-rop.ru).\n\n"
+    "🎯 БЕСПЛАТНЫЙ АУДИТ 3 ЗВОНКОВ (0 ₽):\n"
+    "Прикрепите сюда 3 аудиозаписи звонков ваших менеджеров (файлами mp3/wav/m4a или перешлите аудио/войс из чата).\n\n"
+    "⏱️ За 20 минут мы расшифруем диалоги через Whisper Pro, оцифруем скрытые сливы выручки и пришлем вам PDF-карту потерь!\n\n"
+    "👤 Основатель сервиса Дмитрий Федотов: @dm1918 в Telegram."
 )
 
 KEYBOARD_BUTTONS = [
     [
-        {"type": "link", "text": "Открыть сайт ai-rop.ru", "url": "https://ai-rop.ru"},
-        {"type": "link", "text": "Основатель в TG (@dm1918)", "url": "https://t.me/dm1918"}
+        {"type": "link", "text": "🌐 Сайт ai-rop.ru", "url": "https://ai-rop.ru"},
+        {"type": "link", "text": "📄 Образец PDF-отчета", "url": "https://ai-rop.ru/sample-audit-report.html"}
+    ],
+    [
+        {"type": "link", "text": "💬 Связь с Дмитрием в TG", "url": "https://t.me/dm1918"},
+        {"type": "link", "text": "🤖 Telegram-бот", "url": "https://t.me/RevOps_Super_Audit_Bot"}
     ]
 ]
 
@@ -102,7 +112,38 @@ def api_request(endpoint, method="GET", data=None, params=None):
         logger.error(f"Request error on {url}: {e}")
         return None
 
-def send_notification_email(user_info, text_content, attachments_count=0):
+def download_attachment(att, user_name, user_id, index):
+    """Downloads audio attachment and saves to Desktop and local backup."""
+    payload = att.get("payload", {})
+    file_url = payload.get("url") or payload.get("link") or att.get("url")
+    file_name = payload.get("name") or f"call_{index}.mp3"
+    
+    # Clean folder name
+    safe_name = "".join(c for c in f"{user_name}_{user_id}" if c.isalnum() or c in " _-").strip()
+    target_desktop_folder = os.path.join(DESKTOP_INCOMING, safe_name)
+    target_local_folder = os.path.join(LOCAL_INCOMING, safe_name)
+    os.makedirs(target_desktop_folder, exist_ok=True)
+    os.makedirs(target_local_folder, exist_ok=True)
+    
+    dest_file = os.path.join(target_desktop_folder, f"{index}_{file_name}")
+    dest_local = os.path.join(target_local_folder, f"{index}_{file_name}")
+    
+    if file_url:
+        try:
+            req = urllib.request.Request(file_url, headers={"User-Agent": "AI-ROP-Bot/1.0", "Authorization": BOT_TOKEN})
+            with urllib.request.urlopen(req, context=SSL_CTX, timeout=30) as resp:
+                data = resp.read()
+                with open(dest_file, "wb") as f:
+                    f.write(data)
+                with open(dest_local, "wb") as f:
+                    f.write(data)
+            logger.info(f"✓ Saved audio ({len(data)} bytes) to: {dest_file}")
+            return dest_file
+        except Exception as e:
+            logger.error(f"Failed to download attachment {file_url}: {e}")
+    return None
+
+def send_notification_email(user_info, text_content, attachments_count=0, local_files=None):
     """Sends lead notification to info@ai-rop.ru via FormSubmit"""
     try:
         now_str = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
@@ -115,11 +156,12 @@ def send_notification_email(user_info, text_content, attachments_count=0):
             contact_str += f", @{user_handle}"
             
         payload = {
-            "_subject": f"[MAX] Новое обращение от {user_name}",
+            "_subject": f"[MAX] 🎙️ {attachments_count} звонков получено от {user_name}!",
             "Источник": "Мессенджер MAX (@se14526668_bot)",
-            "Пользователь": contact_str,
-            "Сообщение": text_content or "(содержимое без текста)",
-            "Файлов прикреплено": str(attachments_count),
+            "Клиент": contact_str,
+            "Сообщение": text_content or "(аудиозаписи звонков)",
+            "Количество файлов": str(attachments_count),
+            "Сохранено в папку": DESKTOP_INCOMING,
             "Дата": now_str,
             "_template": "table",
             "_captcha": "false"
@@ -136,7 +178,7 @@ def send_notification_email(user_info, text_content, attachments_count=0):
             }
         )
         with urllib.request.urlopen(req, timeout=10) as resp:
-            logger.info(f"FormSubmit notification sent for MAX user {user_id}")
+            logger.info(f"FormSubmit email notification sent for MAX user {user_id}")
     except Exception as e:
         logger.warning(f"Failed to dispatch email notification: {e}")
 
@@ -172,7 +214,7 @@ def run_bot():
     
     logger.info(f"Connected to MAX as @{me.get('username')} (ID: {me.get('user_id')}, Name: {me.get('first_name')})")
 
-    # Start Health Check HTTP server for Render/Railway/Cloud Run if PORT is set
+    # Start Health Check HTTP server if PORT set
     port_env = os.environ.get("PORT")
     if port_env:
         try:
@@ -184,8 +226,11 @@ def run_bot():
 
     marker = None
     processed_msg_ids = set()
+    user_audio_counts = {}
 
+    logger.info(f"Incoming audios will be saved to: {DESKTOP_INCOMING}")
     logger.info("Entering polling loop (long-polling timeout=20s)...")
+    
     while True:
         try:
             params = {"timeout": 20}
@@ -217,7 +262,6 @@ def run_bot():
                     continue
                 if msg_id:
                     processed_msg_ids.add(msg_id)
-                    # Limit size of processed cache
                     if len(processed_msg_ids) > 10000:
                         processed_msg_ids.clear()
                     
@@ -237,15 +281,43 @@ def run_bot():
                 
                 logger.info(f"Incoming message from {user_name} (chat={chat_id}, user={user_id}, text='{text}', attachments={att_count})")
                 
-                # Choose reply message
-                reply_text = ATTACHMENT_RECEIVED_TEXT if att_count > 0 else GREETING_TEXT
+                if att_count > 0:
+                    current_count = user_audio_counts.get(user_id, 0) + att_count
+                    user_audio_counts[user_id] = current_count
+                    
+                    # Download files
+                    saved_files = []
+                    for idx, att in enumerate(attachments, 1):
+                        sf = download_attachment(att, user_name, user_id, current_count - att_count + idx)
+                        if sf: saved_files.append(sf)
+                    
+                    if current_count == 1:
+                        reply_text = (
+                            "✅ <b>Аудиозапись 1 из 3 успешно принята!</b>\n\n"
+                            "Присылайте еще 2 записи звонков ваших менеджеров для полного сравнительного анализа сливов."
+                        )
+                    elif current_count == 2:
+                        reply_text = (
+                            "✅ <b>Аудиозапись 2 из 3 успешно принята!</b>\n\n"
+                            "Отлично! Прикрепите последнюю (3-ю) запись звонка, и ИИ запустит расшифровку."
+                        )
+                    else:
+                        reply_text = (
+                            f"🚀 <b>Все {current_count} звонка успешно получены!</b>\n\n"
+                            "Нейросеть Whisper Pro и модель RevOps AI приступили к анализу по 13 критериям качества.\n\n"
+                            "Основатель сервиса Дмитрий Федотов уже подключился к задаче и пришлет вам оцифрованную PDF-карту сливов в этот чат в течение 20 минут!"
+                        )
+                        user_audio_counts[user_id] = 0 # reset cycle
+                        
+                    user_dict = {"id": user_id, "name": user_name, "username": user_handle}
+                    send_notification_email(user_dict, text or "(файловые вложения звонков)", attachments_count=current_count, local_files=saved_files)
+                else:
+                    reply_text = GREETING_TEXT
+                    user_dict = {"id": user_id, "name": user_name, "username": user_handle}
+                    send_notification_email(user_dict, text, attachments_count=0)
                 
                 # Send response in MAX chat
                 send_bot_message(chat_id=chat_id, user_id=user_id, text=reply_text, with_keyboard=True)
-                
-                # Forward notification to email
-                user_dict = {"id": user_id, "name": user_name, "username": user_handle}
-                send_notification_email(user_dict, text or "(файловое вложение)", attachments_count=att_count)
                 
         except KeyboardInterrupt:
             logger.info("Bot service stopped by user.")
