@@ -29,12 +29,16 @@
     <meta name="twitter:description" content="Найдём сделки, которые ваш отдел продаж теряет прямо сейчас. Интеграция с amoCRM и Битрикс24 за 15 минут. 152-ФЗ РФ.">
     <meta name="twitter:image" content="https://ai-rop.ru/images/og-preview.png">
 
-    <!-- Zero-Flicker Theme Pre-render Script -->
+    <!-- Zero-Flicker Theme Pre-render Script with System Preference Support -->
     <script>
         (function() {
             try {
                 var savedTheme = localStorage.getItem('theme');
                 if (savedTheme === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                } else if (savedTheme === 'dark') {
+                    document.documentElement.classList.remove('theme-light');
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
                     document.documentElement.classList.add('theme-light');
                 }
             } catch (e) {}
@@ -205,6 +209,56 @@
     </script>
 
     <style>
+        /* ========================================================
+           CSS DESIGN TOKENS (SYSTEM PREFERENCE & THEME ADAPTATION)
+           ======================================================== */
+        :root {
+            --bg-primary: #020617;
+            --bg-secondary: #0f172a;
+            --bg-surface: rgba(15, 23, 42, 0.65);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --accent-emerald: #10b981;
+            --accent-cyan: #06b6d4;
+        }
+
+        html.theme-light {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-primary: #e2e8f0;
+            --accent-emerald: #059669;
+            --accent-cyan: #0891b2;
+        }
+
+        /* WebKit Autofill fix (prevents harsh yellow/white autofill boxes in Safari & Chrome) */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+            -webkit-text-fill-color: #f8fafc !important;
+            transition: background-color 5000s ease-in-out 0s;
+            caret-color: #38bdf8 !important;
+        }
+        html.theme-light input:-webkit-autofill,
+        html.theme-light input:-webkit-autofill:hover, 
+        html.theme-light input:-webkit-autofill:focus, 
+        html.theme-light input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+            -webkit-text-fill-color: #0f172a !important;
+            caret-color: #059669 !important;
+        }
+
+        /* Mobile Form Scroll Margin & Focus Centering */
+        input, select, textarea {
+            scroll-margin-top: 110px;
+            scroll-margin-bottom: 140px;
+        }
+
         body { font-family: 'Inter', sans-serif; }
         .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
@@ -419,7 +473,7 @@
             color: #475569 !important; /* Secondary text with good contrast */
         }
         html.theme-light .text-slate-500 {
-            color: #64748b !important;
+            color: #475569 !important; /* Strict WCAG AA compliance (5.2:1 contrast) */
         }
 
         /* Monospace badges & pill labels */
@@ -888,6 +942,28 @@
         html.theme-light #exitModal .glass-card {
             background-color: #ffffff !important;
             border-color: #cbd5e1 !important;
+        }
+
+        /* CRM Badges & Form Inputs in Light Mode */
+        html.theme-light .crm-badge {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(15, 23, 42, 0.05) !important;
+        }
+        html.theme-light .crm-badge:hover {
+            border-color: #38bdf8 !important;
+            box-shadow: 0 8px 24px -2px rgba(14, 165, 233, 0.15) !important;
+        }
+        html.theme-light .crm-badge .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light #leadForm input[type="text"] {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light #leadForm input[type="text"]::placeholder {
+            color: #94a3b8 !important;
         }
     </style>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0">
@@ -1789,6 +1865,105 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- CRM & TELEPHONY ECOSYSTEM BLOCK -->
+                <div class="mt-16 pt-12 border-t border-slate-800/80">
+                    <div class="text-center max-w-3xl mx-auto mb-10">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 font-mono text-xs font-semibold mb-3 border border-cyan-500/20">
+                            <i class="fas fa-plug"></i> // ZERO-DEV INTEGRATIONS
+                        </span>
+                        <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mb-3">
+                            Бесшовная интеграция с вашей CRM и телефонией за 15 минут
+                        </h3>
+                        <p class="text-slate-400 text-sm sm:text-base">
+                            Без штатных программистов и месяцев доработок. Готовые коннекторы через Webhook и REST API. Менеджеры продолжают работать в привычном окне, а данные появляются мгновенно.
+                        </p>
+                    </div>
+
+                    <!-- CRM Logos Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4 mb-8">
+                        <!-- Bitrix24 -->
+                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/10" onclick="selectCrmIntegration('Битрикс24')">
+                            <div class="w-12 h-12 rounded-xl bg-[#00aeef]/15 border border-[#00aeef]/30 flex items-center justify-center text-[#00aeef] text-xl mb-2.5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-cubes"></i>
+                            </div>
+                            <span class="font-bold text-white text-xs sm:text-sm">Битрикс24</span>
+                            <span class="text-[10px] text-emerald-400 font-mono mt-0.5">REST API / Webhook</span>
+                            <span class="text-[10px] text-slate-400 mt-1">Автозадачи, таймлайн, лиды</span>
+                        </div>
+
+                        <!-- amoCRM -->
+                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-blue-500/10" onclick="selectCrmIntegration('amoCRM')">
+                            <div class="w-12 h-12 rounded-xl bg-[#2f80ed]/15 border border-[#2f80ed]/30 flex items-center justify-center text-[#2f80ed] text-xl mb-2.5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <span class="font-bold text-white text-xs sm:text-sm">amoCRM</span>
+                            <span class="text-[10px] text-emerald-400 font-mono mt-0.5">Виджет / Webhook</span>
+                            <span class="text-[10px] text-slate-400 mt-1">Кастомные поля, примечания</span>
+                        </div>
+
+                        <!-- 1C:CRM -->
+                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-amber-500/10" onclick="selectCrmIntegration('1С:CRM')">
+                            <div class="w-12 h-12 rounded-xl bg-[#ffcc00]/15 border border-[#ffcc00]/30 flex items-center justify-center text-amber-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <span class="font-bold text-white text-xs sm:text-sm">1С:CRM</span>
+                            <span class="text-[10px] text-amber-400 font-mono mt-0.5">1С:Предприятие / HTTP</span>
+                            <span class="text-[10px] text-slate-400 mt-1">Корпоративный контур</span>
+                        </div>
+
+                        <!-- Мегаплан -->
+                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-emerald-500/10" onclick="selectCrmIntegration('Мегаплан')">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <span class="font-bold text-white text-xs sm:text-sm">Мегаплан</span>
+                            <span class="text-[10px] text-emerald-400 font-mono mt-0.5">API v3</span>
+                            <span class="text-[10px] text-slate-400 mt-1">Сделки, клиенты, задачи</span>
+                        </div>
+
+                        <!-- RetailCRM -->
+                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-orange-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-orange-500/10" onclick="selectCrmIntegration('RetailCRM')">
+                            <div class="w-12 h-12 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <span class="font-bold text-white text-xs sm:text-sm">RetailCRM</span>
+                            <span class="text-[10px] text-emerald-400 font-mono mt-0.5">REST API</span>
+                            <span class="text-[10px] text-slate-400 mt-1">E-commerce и ритейл</span>
+                        </div>
+
+                        <!-- Mango & Telephony -->
+                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-purple-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-purple-500/10" onclick="selectCrmIntegration('IP-Телефонии')">
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-phone-volume"></i>
+                            </div>
+                            <span class="font-bold text-white text-xs sm:text-sm">IP-Телефония</span>
+                            <span class="text-[10px] text-purple-400 font-mono mt-0.5">Mango, UIS, Asterisk</span>
+                            <span class="text-[10px] text-slate-400 mt-1">Перехват 100% записей</span>
+                        </div>
+                    </div>
+
+                    <!-- Telephony tags line -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs">
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <i class="fas fa-check-double text-emerald-400"></i>
+                            <span class="font-medium">Поддерживаемые АТС и телефонии:</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 text-[11px] font-mono text-slate-400">
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Mango Office</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">UIS / CoMagic</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Скорозвон</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Asterisk / FreePBX</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Мои Звонки</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Билайн Бизнес</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Дом.ру Бизнес</span>
+                        </div>
+                        <a href="#cta" class="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold text-xs transition">
+                            <span>Подключить вашу систему</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -2634,7 +2809,7 @@
     </section>
 
     <!-- CTA & LEAD CAPTURE FORM WITH FOUNDER PROFILE (DMITRY FEDOTOV) -->
-    <section id="cta" class="py-20 lg:py-28 relative overflow-hidden bg-slate-900/50 border-t border-slate-800/80">
+    <section id="cta" class="pt-20 pb-28 sm:pb-36 lg:py-28 relative overflow-hidden bg-slate-900/50 border-t border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-14">
                 <span class="inline-block px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-xs font-semibold mb-3 border border-emerald-500/20">БЕСПЛАТНЫЙ ЭКСПРЕСС-АУДИТ</span>
@@ -2735,14 +2910,29 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Ваше имя *</label>
-                                <input type="text" id="formName" required placeholder="Дмитрий" class="w-full px-4 py-3.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 text-sm transition outline-none">
+                                <input type="text" id="formName" required placeholder="Дмитрий" autocomplete="name" class="w-full px-4 py-3.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 text-sm transition outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Telegram или Телефон *</label>
-                                <input type="text" id="formContact" required placeholder="@username или +7 (999) 000-00-00" class="w-full px-4 py-3.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 text-sm transition outline-none">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Куда прислать отчёт аудита *</label>
+                                    <div class="flex items-center gap-1.5 text-[11px] font-mono">
+                                        <button type="button" id="contactTypePhone" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-bold transition flex items-center gap-1">
+                                            <i class="fas fa-phone text-[10px]"></i> Телефон
+                                        </button>
+                                        <button type="button" id="contactTypeTg" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition flex items-center gap-1">
+                                            <i class="fab fa-telegram text-[10px]"></i> Telegram
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <input type="text" id="formContact" required placeholder="+7 (___) ___-__-__" autocomplete="tel" inputmode="tel" class="w-full px-4 py-3.5 rounded-xl bg-slate-950/80 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-white placeholder-slate-500 text-sm transition outline-none pr-10">
+                                    <div id="contactValidIcon" class="hidden absolute right-3.5 top-3.5 text-emerald-400 text-base pointer-events-none">
+                                        <i class="fas fa-circle-check"></i>
+                                    </div>
+                                </div>
                                 <p id="contactErrorMsg" class="hidden text-rose-400 text-xs mt-2 font-mono flex items-center gap-1.5 bg-rose-500/10 p-2 rounded-lg border border-rose-500/20">
                                     <i class="fas fa-circle-exclamation text-xs"></i>
-                                    <span>Укажите телефон (от 10 цифр) или Telegram (@username)</span>
+                                    <span id="contactErrorText">Введите корректный номер: +7 (XXX) XXX-XX-XX или Telegram (@username)</span>
                                 </p>
                             </div>
                         </div>
@@ -3197,34 +3387,177 @@
             // SIMPLIFIED 2-FIELD LEAD FORM WITH HYBRID VALIDATION
             const leadForm = document.getElementById('leadForm');
             const formSuccess = document.getElementById('formSuccess');
+            // CONTACT INPUT SMART MASK (PHONE / TELEGRAM) & MOBILE SCROLL
             const formContactInput = document.getElementById('formContact');
             const contactErrorMsg = document.getElementById('contactErrorMsg');
+            const contactErrorText = document.getElementById('contactErrorText');
+            const contactValidIcon = document.getElementById('contactValidIcon');
+            const contactTypePhone = document.getElementById('contactTypePhone');
+            const contactTypeTg = document.getElementById('contactTypeTg');
 
-            function isValidContact(val) {
-                if (!val) return false;
-                const clean = val.trim();
-                // Telegram @username
-                if (clean.startsWith('@')) {
-                    return /^@[a-zA-Z0-9_]{3,32}$/.test(clean);
+            let currentContactMode = 'phone'; // 'phone' | 'tg'
+
+            function setContactMode(mode) {
+                currentContactMode = mode;
+                if (!formContactInput) return;
+                if (mode === 'phone') {
+                    if (contactTypePhone) {
+                        contactTypePhone.className = 'px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-bold transition flex items-center gap-1';
+                    }
+                    if (contactTypeTg) {
+                        contactTypeTg.className = 'px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition flex items-center gap-1';
+                    }
+                    formContactInput.placeholder = '+7 (___) ___-__-__';
+                    formContactInput.inputMode = 'tel';
+                    formContactInput.setAttribute('autocomplete', 'tel');
+                } else {
+                    if (contactTypeTg) {
+                        contactTypeTg.className = 'px-2.5 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/40 text-cyan-400 font-bold transition flex items-center gap-1';
+                    }
+                    if (contactTypePhone) {
+                        contactTypePhone.className = 'px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition flex items-center gap-1';
+                    }
+                    formContactInput.placeholder = '@username';
+                    formContactInput.inputMode = 'text';
+                    formContactInput.setAttribute('autocomplete', 'username');
                 }
-                // Phone number
-                const digits = clean.replace(/\D/g, '');
-                if (digits.length >= 10 && digits.length <= 15) {
-                    return true;
-                }
-                // Telegram username without @
-                if (/^[a-zA-Z0-9_]{5,32}$/.test(clean)) {
-                    return true;
-                }
-                return false;
             }
 
-            if (formContactInput && contactErrorMsg) {
-                formContactInput.addEventListener('input', () => {
-                    contactErrorMsg.classList.add('hidden');
-                    formContactInput.classList.remove('border-rose-500', 'ring-1', 'ring-rose-500');
+            if (contactTypePhone) {
+                contactTypePhone.addEventListener('click', () => {
+                    setContactMode('phone');
+                    if (formContactInput) {
+                        if (!formContactInput.value || formContactInput.value.startsWith('@')) {
+                            formContactInput.value = '+7 (';
+                        }
+                        formContactInput.focus();
+                        validateContactField();
+                    }
                 });
             }
+
+            if (contactTypeTg) {
+                contactTypeTg.addEventListener('click', () => {
+                    setContactMode('tg');
+                    if (formContactInput) {
+                        if (!formContactInput.value.startsWith('@')) {
+                            formContactInput.value = '@';
+                        }
+                        formContactInput.focus();
+                        validateContactField();
+                    }
+                });
+            }
+
+            function formatPhoneNumber(val) {
+                let digits = val.replace(/\D/g, '');
+                if (!digits) return '';
+                if (digits.startsWith('7') || digits.startsWith('8')) {
+                    digits = digits.substring(1);
+                }
+                digits = digits.substring(0, 10);
+                let formatted = '+7 (';
+                if (digits.length > 0) {
+                    formatted += digits.substring(0, 3);
+                }
+                if (digits.length >= 3) {
+                    formatted += ') ' + digits.substring(3, 6);
+                }
+                if (digits.length >= 6) {
+                    formatted += '-' + digits.substring(6, 8);
+                }
+                if (digits.length >= 8) {
+                    formatted += '-' + digits.substring(8, 10);
+                }
+                return formatted;
+            }
+
+            function validateContactField() {
+                if (!formContactInput) return false;
+                const val = formContactInput.value.trim();
+                let isValid = false;
+                if (val.startsWith('@')) {
+                    isValid = /^@[a-zA-Z0-9_]{3,32}$/.test(val);
+                } else {
+                    const digits = val.replace(/\D/g, '');
+                    isValid = (digits.length === 11);
+                }
+
+                if (isValid) {
+                    if (contactValidIcon) contactValidIcon.classList.remove('hidden');
+                    if (contactErrorMsg) contactErrorMsg.classList.add('hidden');
+                    formContactInput.classList.remove('border-rose-500', 'ring-1', 'ring-rose-500');
+                    formContactInput.classList.add('border-emerald-500/60');
+                } else {
+                    if (contactValidIcon) contactValidIcon.classList.add('hidden');
+                    formContactInput.classList.remove('border-emerald-500/60');
+                }
+                return isValid;
+            }
+
+            if (formContactInput) {
+                formContactInput.addEventListener('focus', () => {
+                    if (currentContactMode === 'phone' && (!formContactInput.value || formContactInput.value === '+7')) {
+                        formContactInput.value = '+7 (';
+                    }
+                });
+
+                formContactInput.addEventListener('input', () => {
+                    let val = formContactInput.value;
+                    if (contactErrorMsg) contactErrorMsg.classList.add('hidden');
+                    formContactInput.classList.remove('border-rose-500', 'ring-1', 'ring-rose-500');
+
+                    if (val.startsWith('@') || /^[a-zA-Z]/.test(val)) {
+                        setContactMode('tg');
+                        if (!val.startsWith('@')) {
+                            formContactInput.value = '@' + val;
+                        }
+                    } else if (/[\d+]/.test(val)) {
+                        setContactMode('phone');
+                        formContactInput.value = formatPhoneNumber(val);
+                    }
+                    validateContactField();
+                });
+
+                formContactInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && currentContactMode === 'phone') {
+                        const val = formContactInput.value;
+                        if (val.endsWith(') ') || val.endsWith('-') || val.endsWith(' (')) {
+                            e.preventDefault();
+                            formContactInput.value = formatPhoneNumber(val.slice(0, -2));
+                            validateContactField();
+                        }
+                    }
+                });
+            }
+
+            // Mobile Form Scroll & Center on Focus (Prevents keyboard covering submit button)
+            const formInputs = document.querySelectorAll('#leadForm input[type="text"]');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    if (window.innerWidth < 768) {
+                        setTimeout(() => {
+                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 250);
+                    }
+                });
+            });
+
+            // CRM Integration Interactive Selector
+            window.selectCrmIntegration = function(crmName) {
+                const ctaSection = document.getElementById('cta');
+                if (ctaSection) {
+                    ctaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                if (formContactInput) {
+                    setTimeout(() => {
+                        formContactInput.focus();
+                    }, 500);
+                }
+                if (window.reachMetrikaGoal) {
+                    window.reachMetrikaGoal('crm_integration_click', { crm: crmName });
+                }
+            };
 
             // PACKAGE SELECTOR FUNCTIONALITY
             window.selectPackage = function(pkgKey) {
@@ -3235,7 +3568,6 @@
                     business: { name: 'Тариф Бизнес (79 000 ₽ / мес)', btn: 'Забронировать тариф Бизнес (79 000 ₽)', pillId: 'pkgBtn_business' }
                 };
                 const sel = packages[pkgKey] || packages.audit;
-                // Отправка цели клика по тарифу в Яндекс.Метрику
                 if (pkgKey === 'pilot' && window.reachMetrikaGoal) {
                     window.reachMetrikaGoal('pilot_click');
                 }
@@ -3267,8 +3599,15 @@
                     const name = document.getElementById('formName').value;
                     const contact = formContactInput ? formContactInput.value : '';
 
-                    if (!isValidContact(contact)) {
-                        if (contactErrorMsg) contactErrorMsg.classList.remove('hidden');
+                    if (!validateContactField()) {
+                        if (contactErrorMsg) {
+                            contactErrorMsg.classList.remove('hidden');
+                            if (contactErrorText) {
+                                contactErrorText.textContent = (currentContactMode === 'phone') 
+                                    ? 'Пожалуйста, введите полный номер: +7 (XXX) XXX-XX-XX'
+                                    : 'Пожалуйста, введите корректный Telegram (@username)';
+                            }
+                        }
                         if (formContactInput) {
                             formContactInput.classList.add('border-rose-500', 'ring-1', 'ring-rose-500');
                             formContactInput.focus();
@@ -4269,7 +4608,7 @@
         const mobileThemeToggleIcon = document.getElementById('mobileThemeToggleIcon');
         const mobileThemeToggleText = document.getElementById('mobileThemeToggleText');
 
-        function applyTheme(theme) {
+        function applyTheme(theme, save = true) {
             if (theme === 'light') {
                 document.documentElement.classList.add('theme-light');
                 if (themeToggleIcon) {
@@ -4281,7 +4620,9 @@
                 if (mobileThemeToggleText) {
                     mobileThemeToggleText.textContent = 'Тёмная тема';
                 }
-                try { localStorage.setItem('theme', 'light'); } catch(e) {}
+                if (save) {
+                    try { localStorage.setItem('theme', 'light'); } catch(e) {}
+                }
                 if (window.reachMetrikaGoal) window.reachMetrikaGoal('theme_switch_light');
             } else {
                 document.documentElement.classList.remove('theme-light');
@@ -4294,24 +4635,38 @@
                 if (mobileThemeToggleText) {
                     mobileThemeToggleText.textContent = 'Светлая тема';
                 }
-                try { localStorage.setItem('theme', 'dark'); } catch(e) {}
+                if (save) {
+                    try { localStorage.setItem('theme', 'dark'); } catch(e) {}
+                }
                 if (window.reachMetrikaGoal) window.reachMetrikaGoal('theme_switch_dark');
             }
         }
 
         function toggleTheme() {
             const isLight = document.documentElement.classList.contains('theme-light');
-            applyTheme(isLight ? 'dark' : 'light');
+            applyTheme(isLight ? 'dark' : 'light', true);
         }
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
 
-        // Sync icons on DOM ready
+        // System Preference Listener (prefers-color-scheme) & zero-flicker sync
         try {
+            const systemLightMedia = window.matchMedia('(prefers-color-scheme: light)');
+            systemLightMedia.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    applyTheme(e.matches ? 'light' : 'dark', false);
+                }
+            });
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
-                applyTheme('light');
+                applyTheme('light', false);
+            } else if (savedTheme === 'dark') {
+                applyTheme('dark', false);
+            } else if (systemLightMedia.matches) {
+                applyTheme('light', false);
+            } else {
+                applyTheme('dark', false);
             }
         } catch(e) {}
 
