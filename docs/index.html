@@ -350,11 +350,30 @@
             border-bottom-color: #e2e8f0 !important;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
         }
-        html.theme-light nav a.text-slate-400 {
+        html.theme-light nav a.text-slate-400,
+        html.theme-light nav button {
             color: #475569 !important;
         }
-        html.theme-light nav a.text-slate-400:hover {
+        html.theme-light nav a.text-slate-400:hover,
+        html.theme-light nav button:hover {
             color: #059669 !important;
+        }
+        html.theme-light .nav-dropdown {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.04) !important;
+        }
+        html.theme-light .nav-dropdown a:hover {
+            background-color: #f8fafc !important;
+        }
+        html.theme-light .nav-dropdown .dropdown-item-title {
+            color: #0f172a !important;
+        }
+        html.theme-light .nav-dropdown .dropdown-item-desc {
+            color: #64748b !important;
+        }
+        html.theme-light .nav-dropdown .border-slate-800\/80 {
+            border-color: #e2e8f0 !important;
         }
         html.theme-light #mobileNavMenu {
             background-color: #ffffff !important;
@@ -879,8 +898,8 @@
     <!-- NAVBAR -->
     <nav class="fixed w-full z-50 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="#" class="flex items-center gap-3">
+            <div class="flex justify-between h-16 items-center gap-4">
+                <a href="#" class="flex items-center gap-3 shrink-0 whitespace-nowrap">
                     <div class="w-9 h-9 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                         <i class="fas fa-wave-square text-slate-950 text-sm"></i>
                     </div>
@@ -892,34 +911,85 @@
                     </div>
                 </a>
                 
-                <div class="hidden lg:flex items-center space-x-5 xl:space-x-6 text-sm font-medium text-slate-400">
-                    <a href="#radar-preview" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5"><i class="fas fa-satellite-dish text-xs"></i> Радар сделок</a>
-                    <a href="#no-sabotage" class="hover:text-emerald-400 transition-colors">Без саботажа</a>
-                    <a href="#how-it-works" class="hover:text-emerald-400 transition-colors">Как это работает</a>
-                    <a href="#cases" class="hover:text-emerald-400 transition-colors">Кейсы</a>
-                    <a href="#comparison" class="hover:text-emerald-400 transition-colors">Сравнение</a>
-                    <a href="#criteria" class="hover:text-emerald-400 transition-colors">13 критериев</a>
-                    <a href="#roi" class="hover:text-emerald-400 transition-colors">Калькулятор</a>
-                    <a href="#pricing" class="hover:text-emerald-400 transition-colors">Тарифы</a>
-                    <a href="#faq" class="hover:text-emerald-400 transition-colors">FAQ</a>
-                    <a href="pilot-roadmap.html" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5 text-slate-300">
-                        <i class="fas fa-file-pdf text-emerald-400 text-xs"></i>
-                        Памятка пилота
-                    </a>
+                <div class="hidden lg:flex items-center space-x-6 xl:space-x-8 text-sm font-medium text-slate-400">
+                    <a href="#radar-preview" class="whitespace-nowrap text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5"><i class="fas fa-satellite-dish text-xs"></i> Радар сделок</a>
+                    <a href="#how-it-works" class="whitespace-nowrap hover:text-emerald-400 transition-colors">Как это работает</a>
+                    <a href="#cases" class="whitespace-nowrap hover:text-emerald-400 transition-colors">Кейсы</a>
+                    <a href="#roi" class="whitespace-nowrap hover:text-emerald-400 transition-colors">Калькулятор</a>
+                    <a href="#pricing" class="whitespace-nowrap hover:text-emerald-400 transition-colors">Тарифы</a>
+                    
+                    <!-- Dropdown "Ещё" -->
+                    <div class="relative group py-2">
+                        <button type="button" class="whitespace-nowrap flex items-center gap-1.5 hover:text-emerald-400 transition-colors font-medium focus:outline-none" aria-expanded="false" aria-haspopup="true">
+                            <span>Ещё</span>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+                        </button>
+                        
+                        <div class="absolute left-0 top-full pt-1.5 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto">
+                            <div class="nav-dropdown rounded-2xl bg-slate-950/95 border border-slate-800/90 shadow-2xl p-2 backdrop-blur-2xl">
+                                <a href="#no-sabotage" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900 transition-colors text-slate-300 hover:text-emerald-400 text-xs font-medium group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xs shrink-0 group-hover/item:scale-110 transition-transform">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white dropdown-item-title">Без саботажа</div>
+                                        <div class="text-[10px] text-slate-400 dropdown-item-desc">Автозаполнение CRM</div>
+                                    </div>
+                                </a>
+                                <a href="#comparison" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900 transition-colors text-slate-300 hover:text-emerald-400 text-xs font-medium group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-xs shrink-0 group-hover/item:scale-110 transition-transform">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white dropdown-item-title">Сравнение с аналогами</div>
+                                        <div class="text-[10px] text-slate-400 dropdown-item-desc">vs Mango, imot, Roistat</div>
+                                    </div>
+                                </a>
+                                <a href="#criteria" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900 transition-colors text-slate-300 hover:text-emerald-400 text-xs font-medium group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 text-xs shrink-0 group-hover/item:scale-110 transition-transform">
+                                        <i class="fas fa-tasks"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white dropdown-item-title">13 критериев ИИ</div>
+                                        <div class="text-[10px] text-slate-400 dropdown-item-desc">Чек-лист скоринга звонков</div>
+                                    </div>
+                                </a>
+                                <a href="#faq" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900 transition-colors text-slate-300 hover:text-emerald-400 text-xs font-medium group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 text-xs shrink-0 group-hover/item:scale-110 transition-transform">
+                                        <i class="fas fa-question-circle"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white dropdown-item-title">Вопросы и ответы</div>
+                                        <div class="text-[10px] text-slate-400 dropdown-item-desc">Безопасность 152-ФЗ, интеграции</div>
+                                    </div>
+                                </a>
+                                <div class="h-px bg-slate-800/80 my-1"></div>
+                                <a href="pilot-roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors text-emerald-400 text-xs font-semibold group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs shrink-0 group-hover/item:scale-110 transition-transform">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-emerald-400">Памятка пилота (PDF)</div>
+                                        <div class="text-[10px] text-emerald-400/80">Пошаговый регламент 7 дней</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                     <!-- THEME TOGGLE (SUN / MOON) -->
-                    <button type="button" id="themeToggleBtn" aria-label="Переключить тему оформления" title="Переключить тему: тёмная / светлая" class="w-10 h-10 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-md group">
+                    <button type="button" id="themeToggleBtn" aria-label="Переключить тему оформления" title="Переключить тему: тёмная / светлая" class="w-10 h-10 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-md group shrink-0">
                         <i id="themeToggleIcon" class="fas fa-sun text-amber-400 text-base transition-transform duration-500 group-hover:rotate-45"></i>
                     </button>
 
-                    <a href="#cta" class="px-3.5 sm:px-5 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-emerald-500/25 text-xs sm:text-sm flex items-center gap-2">
+                    <a href="#cta" class="px-3.5 sm:px-5 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-emerald-500/25 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap shrink-0">
                         <span>Аудит 3 звонков (0 ₽)</span>
                         <i class="fas fa-arrow-right text-xs"></i>
                     </a>
                     <!-- Mobile Hamburger Button -->
-                    <button type="button" id="mobileMenuToggleBtn" class="lg:hidden w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition" aria-label="Меню навигации">
+                    <button type="button" id="mobileMenuToggleBtn" class="lg:hidden w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition shrink-0" aria-label="Меню навигации">
                         <i class="fas fa-bars text-base" id="mobileMenuIcon"></i>
                     </button>
                 </div>
