@@ -1948,9 +1948,9 @@
                     <span class="text-base sm:text-lg font-bold text-white tracking-tight">UIS / Comagic</span>
                     <span class="text-[10px] text-slate-500 font-mono mt-0.5">Телефония</span>
                 </div>
-                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-orange-500/40 transition">
-                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">Mango <span class="text-orange-400">Office</span></span>
-                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">Облачная АТС</span>
+                <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-emerald-500/40 transition">
+                    <span class="text-base sm:text-lg font-bold text-white tracking-tight">Call<span class="text-emerald-400">touch</span></span>
+                    <span class="text-[10px] text-slate-500 font-mono mt-0.5">ВАТС / Телефония</span>
                 </div>
                 <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-purple-500/40 transition">
                     <span class="text-base sm:text-lg font-bold text-white tracking-tight">Novofon</span>
@@ -2253,6 +2253,19 @@
                             <span>2. СТАЛО: С RevOps OS (Сделка спасена)</span>
                         </button>
                     </div>
+
+                    <!-- Interactive CRM System Switcher for this Simulation -->
+                    <div class="flex items-center justify-center gap-2 mt-4 text-xs font-mono">
+                        <span class="text-slate-500">Система CRM:</span>
+                        <button type="button" id="crmSimBtn_amoCRM" onclick="switchCrmSimulationSystem('amoCRM')" class="px-3.5 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 bg-[#2f80ed]/20 border-[#2f80ed] text-blue-300 shadow-md shadow-blue-500/10 ring-1 ring-[#2f80ed]">
+                            <i class="fas fa-layer-group text-blue-400"></i>
+                            <span>amoCRM</span>
+                        </button>
+                        <button type="button" id="crmSimBtn_Битрикс24" onclick="switchCrmSimulationSystem('Битрикс24')" class="px-3.5 py-1.5 rounded-xl border text-xs font-medium transition flex items-center gap-1.5 bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700">
+                            <i class="fas fa-cubes text-cyan-400"></i>
+                            <span>Битрикс24</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- VIEW BEFORE (Manual CRM Card with Leak) -->
@@ -2260,7 +2273,7 @@
                     <div class="rounded-2xl border-2 border-rose-500/30 bg-slate-950/90 p-5 sm:p-7 relative overflow-hidden">
                         <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
                             <div>
-                                <div class="text-[11px] font-mono text-slate-500">amoCRM / Битрикс24 • Карточка сделки #84920</div>
+                                <div class="text-[11px] font-mono text-slate-500" id="crmSimBeforeHeader">amoCRM • Карточка сделки #84920</div>
                                 <h4 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
                                     ООО «ПромКомплект» — Поставка компрессоров
                                 </h4>
@@ -2276,57 +2289,7 @@
                         </div>
 
                         <div class="grid md:grid-cols-3 gap-6 py-6 text-sm">
-                            
-                        <!-- DYNAMIC CALC LOSS CALLOUT -->
-                        <div id="dynamicLossCallout" class="hidden p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs">
-                            <div class="flex items-center gap-2 font-bold mb-1">
-                                <i class="fas fa-calculator text-amber-400"></i>
-                                <span>ПЕРСОНАЛЬНЫЙ АУДИТ ПО ВАШЕМУ РАСЧЕТУ</span>
-                            </div>
-                            <p class="text-slate-300 text-[11px] leading-tight" id="dynamicLossCalloutText">
-                                Оцифруем точки слива рассчитанных ~480 000 ₽/мес на 3 реальных звонках вашей команды.
-                            </p>
-                        </div>
-
-
-                        <!-- CRM QUALIFIER (1-CLICK) -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Какая CRM установлена в вашей компании?</label>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="crmPills">
-                                <button type="button" onclick="selectCrmPill('amoCRM')" id="crmPill_amoCRM" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10">
-                                    <span>amoCRM</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('Битрикс24')" id="crmPill_Битрикс24" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>Битрикс24</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('МойСклад')" id="crmPill_МойСклад" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>МойСклад</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('Другая / Excel')" id="crmPill_Другая_Excel" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>Другая / Excel</span>
-                                </button>
-                            </div>
-                            <input type="hidden" id="selectedCrmInput" value="amoCRM">
-                        </div>
-
-                        <!-- TEAM SIZE QUALIFIER (1-CLICK) -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Сколько менеджеров звонит клиентам?</label>
-                            <div class="grid grid-cols-3 gap-2" id="teamPills">
-                                <button type="button" onclick="selectTeamPill('2-5 менеджеров')" id="teamPill_2-5" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300">
-                                    <span>2–5 чел</span>
-                                </button>
-                                <button type="button" onclick="selectTeamPill('6-15 менеджеров')" id="teamPill_6-15" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>6–15 чел</span>
-                                </button>
-                                <button type="button" onclick="selectTeamPill('16+ менеджеров')" id="teamPill_16+" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>16+ чел</span>
-                                </button>
-                            </div>
-                            <input type="hidden" id="selectedTeamInput" value="2-5 менеджеров">
-                        </div>
-
-                        <div class="space-y-4">
+                            <div class="space-y-4">
                                 <div>
                                     <div class="text-xs font-mono text-slate-500 mb-1">Ответственный менеджер:</div>
                                     <div class="text-slate-300 font-medium">Алексей С. (загружен звонками)</div>
@@ -2373,8 +2336,8 @@
                     <div class="rounded-2xl border-2 border-emerald-500/40 bg-slate-950/90 p-5 sm:p-7 relative overflow-hidden shadow-2xl shadow-emerald-500/10">
                         <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
                             <div>
-                                <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
-                                    <i class="fas fa-bolt"></i> amoCRM / Битрикс24 • Автозаполнено RevOps OS за 3 сек
+                                <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5" id="crmSimAfterHeader">
+                                    <i class="fas fa-bolt"></i> <span id="crmSimAfterTitle">amoCRM • Автозаполнено RevOps OS за 3 сек</span>
                                 </div>
                                 <h4 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
                                     ООО «ПромКомплект» — Поставка компрессорного оборудования
@@ -2391,57 +2354,7 @@
                         </div>
 
                         <div class="grid md:grid-cols-3 gap-6 py-6 text-sm">
-                            
-                        <!-- DYNAMIC CALC LOSS CALLOUT -->
-                        <div id="dynamicLossCallout" class="hidden p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs">
-                            <div class="flex items-center gap-2 font-bold mb-1">
-                                <i class="fas fa-calculator text-amber-400"></i>
-                                <span>ПЕРСОНАЛЬНЫЙ АУДИТ ПО ВАШЕМУ РАСЧЕТУ</span>
-                            </div>
-                            <p class="text-slate-300 text-[11px] leading-tight" id="dynamicLossCalloutText">
-                                Оцифруем точки слива рассчитанных ~480 000 ₽/мес на 3 реальных звонках вашей команды.
-                            </p>
-                        </div>
-
-
-                        <!-- CRM QUALIFIER (1-CLICK) -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Какая CRM установлена в вашей компании?</label>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="crmPills">
-                                <button type="button" onclick="selectCrmPill('amoCRM')" id="crmPill_amoCRM" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10">
-                                    <span>amoCRM</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('Битрикс24')" id="crmPill_Битрикс24" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>Битрикс24</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('МойСклад')" id="crmPill_МойСклад" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>МойСклад</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('Другая / Excel')" id="crmPill_Другая_Excel" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>Другая / Excel</span>
-                                </button>
-                            </div>
-                            <input type="hidden" id="selectedCrmInput" value="amoCRM">
-                        </div>
-
-                        <!-- TEAM SIZE QUALIFIER (1-CLICK) -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Сколько менеджеров звонит клиентам?</label>
-                            <div class="grid grid-cols-3 gap-2" id="teamPills">
-                                <button type="button" onclick="selectTeamPill('2-5 менеджеров')" id="teamPill_2-5" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300">
-                                    <span>2–5 чел</span>
-                                </button>
-                                <button type="button" onclick="selectTeamPill('6-15 менеджеров')" id="teamPill_6-15" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>6–15 чел</span>
-                                </button>
-                                <button type="button" onclick="selectTeamPill('16+ менеджеров')" id="teamPill_16+" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>16+ чел</span>
-                                </button>
-                            </div>
-                            <input type="hidden" id="selectedTeamInput" value="2-5 менеджеров">
-                        </div>
-
-                        <div class="space-y-4">
+                            <div class="space-y-4">
                                 <div>
                                     <div class="text-xs font-mono text-slate-500 mb-1">ЛПР (извлечено из диалога):</div>
                                     <div class="text-white font-medium flex items-center gap-2">
@@ -2573,66 +2486,101 @@
                     </div>
 
                     <!-- CRM Logos Grid -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4 mb-8">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4 mb-6" id="crmEcosystemGrid">
                         <!-- Bitrix24 -->
-                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/10" onclick="selectCrmIntegration('Битрикс24')">
+                        <div id="crmBadge_Битрикс24" data-crm="Битрикс24" class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/10" onclick="selectCrmIntegration('Битрикс24')">
                             <div class="w-12 h-12 rounded-xl bg-[#00aeef]/15 border border-[#00aeef]/30 flex items-center justify-center text-[#00aeef] text-xl mb-2.5 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-cubes"></i>
                             </div>
                             <span class="font-bold text-white text-xs sm:text-sm">Битрикс24</span>
-                            <span class="text-[10px] text-emerald-400 font-mono mt-0.5">REST API / Webhook</span>
+                            <span class="text-[10px] text-cyan-400 font-mono mt-0.5">REST API / Webhook</span>
                             <span class="text-[10px] text-slate-400 mt-1">Автозадачи, таймлайн, лиды</span>
+                            <span class="crm-selected-check hidden mt-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                                <i class="fas fa-check text-[9px]"></i> Выбрано
+                            </span>
                         </div>
 
                         <!-- amoCRM -->
-                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-blue-500/10" onclick="selectCrmIntegration('amoCRM')">
+                        <div id="crmBadge_amoCRM" data-crm="amoCRM" class="crm-badge group glass-card p-4 rounded-2xl border border-emerald-400 ring-2 ring-emerald-400/50 bg-emerald-500/10 shadow-lg shadow-emerald-500/20 scale-[1.02] transition-all flex flex-col items-center text-center cursor-pointer" onclick="selectCrmIntegration('amoCRM')">
                             <div class="w-12 h-12 rounded-xl bg-[#2f80ed]/15 border border-[#2f80ed]/30 flex items-center justify-center text-[#2f80ed] text-xl mb-2.5 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-layer-group"></i>
                             </div>
                             <span class="font-bold text-white text-xs sm:text-sm">amoCRM</span>
                             <span class="text-[10px] text-emerald-400 font-mono mt-0.5">Виджет / Webhook</span>
                             <span class="text-[10px] text-slate-400 mt-1">Кастомные поля, примечания</span>
+                            <span class="crm-selected-check mt-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                                <i class="fas fa-check text-[9px]"></i> Выбрано
+                            </span>
                         </div>
 
                         <!-- 1C:CRM -->
-                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-amber-500/10" onclick="selectCrmIntegration('1С:CRM')">
+                        <div id="crmBadge_1С_CRM" data-crm="1С:CRM" class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-amber-500/10" onclick="selectCrmIntegration('1С:CRM')">
                             <div class="w-12 h-12 rounded-xl bg-[#ffcc00]/15 border border-[#ffcc00]/30 flex items-center justify-center text-amber-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-database"></i>
                             </div>
                             <span class="font-bold text-white text-xs sm:text-sm">1С:CRM</span>
                             <span class="text-[10px] text-amber-400 font-mono mt-0.5">1С:Предприятие / HTTP</span>
                             <span class="text-[10px] text-slate-400 mt-1">Корпоративный контур</span>
+                            <span class="crm-selected-check hidden mt-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                                <i class="fas fa-check text-[9px]"></i> Выбрано
+                            </span>
                         </div>
 
                         <!-- Мегаплан -->
-                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-emerald-500/10" onclick="selectCrmIntegration('Мегаплан')">
+                        <div id="crmBadge_Мегаплан" data-crm="Мегаплан" class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-emerald-500/10" onclick="selectCrmIntegration('Мегаплан')">
                             <div class="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-chart-pie"></i>
                             </div>
                             <span class="font-bold text-white text-xs sm:text-sm">Мегаплан</span>
                             <span class="text-[10px] text-emerald-400 font-mono mt-0.5">API v3</span>
                             <span class="text-[10px] text-slate-400 mt-1">Сделки, клиенты, задачи</span>
+                            <span class="crm-selected-check hidden mt-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                                <i class="fas fa-check text-[9px]"></i> Выбрано
+                            </span>
                         </div>
 
                         <!-- RetailCRM -->
-                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-orange-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-orange-500/10" onclick="selectCrmIntegration('RetailCRM')">
+                        <div id="crmBadge_RetailCRM" data-crm="RetailCRM" class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-orange-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-orange-500/10" onclick="selectCrmIntegration('RetailCRM')">
                             <div class="w-12 h-12 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-shopping-cart"></i>
                             </div>
                             <span class="font-bold text-white text-xs sm:text-sm">RetailCRM</span>
                             <span class="text-[10px] text-emerald-400 font-mono mt-0.5">REST API</span>
                             <span class="text-[10px] text-slate-400 mt-1">E-commerce и ритейл</span>
+                            <span class="crm-selected-check hidden mt-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                                <i class="fas fa-check text-[9px]"></i> Выбрано
+                            </span>
                         </div>
 
                         <!-- IP-Telephony & Cloud PBX -->
-                        <div class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-purple-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-purple-500/10" onclick="selectCrmIntegration('IP-Телефонии')">
+                        <div id="crmBadge_IP-Телефонии" data-crm="IP-Телефонии" class="crm-badge group glass-card p-4 rounded-2xl border border-slate-800 hover:border-purple-500/50 transition-all flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:shadow-purple-500/10" onclick="selectCrmIntegration('IP-Телефонии')">
                             <div class="w-12 h-12 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-2.5 group-hover:scale-110 transition-transform">
                                 <i class="fas fa-phone-volume"></i>
                             </div>
                             <span class="font-bold text-white text-xs sm:text-sm">IP-Телефония</span>
                             <span class="text-[10px] text-purple-400 font-mono mt-0.5">Облачные АТС, UIS, Asterisk</span>
                             <span class="text-[10px] text-slate-400 mt-1">Перехват 100% записей</span>
+                            <span class="crm-selected-check hidden mt-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                                <i class="fas fa-check text-[9px]"></i> Выбрано
+                            </span>
                         </div>
+                    </div>
+
+                    <!-- Live Dynamic Feedback Bar right below the 6 badges -->
+                    <div id="crmSelectedFeedback" class="mb-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg shadow-emerald-500/10 transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+                                <i class="fas fa-circle-check text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm" id="crmSelectedFeedbackTitle">Выбрана интеграция: amoCRM</div>
+                                <div class="text-xs text-emerald-300/80" id="crmSelectedFeedbackSub">Готовый штатный модуль по API • Подключение за 15 минут без доработок</div>
+                            </div>
+                        </div>
+                        <a href="#cta" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-1.5 active:scale-95 shrink-0">
+                            <span>Перейти к форме заявки для этой CRM</span>
+                            <i class="fas fa-arrow-down text-[10px]"></i>
+                        </a>
                     </div>
 
                     <!-- Telephony tags line -->
@@ -3201,57 +3149,7 @@
                         По статистике 120 000+ проанализированных минут звонков, до 28% потенциальной выручки сгорает впустую из-за забытых перезвонов, неквалифицированных болей и отсутствия назначенного следующего шага.
                     </p>
                     
-                    
-                        <!-- DYNAMIC CALC LOSS CALLOUT -->
-                        <div id="dynamicLossCallout" class="hidden p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs">
-                            <div class="flex items-center gap-2 font-bold mb-1">
-                                <i class="fas fa-calculator text-amber-400"></i>
-                                <span>ПЕРСОНАЛЬНЫЙ АУДИТ ПО ВАШЕМУ РАСЧЕТУ</span>
-                            </div>
-                            <p class="text-slate-300 text-[11px] leading-tight" id="dynamicLossCalloutText">
-                                Оцифруем точки слива рассчитанных ~480 000 ₽/мес на 3 реальных звонках вашей команды.
-                            </p>
-                        </div>
-
-
-                        <!-- CRM QUALIFIER (1-CLICK) -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Какая CRM установлена в вашей компании?</label>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="crmPills">
-                                <button type="button" onclick="selectCrmPill('amoCRM')" id="crmPill_amoCRM" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10">
-                                    <span>amoCRM</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('Битрикс24')" id="crmPill_Битрикс24" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>Битрикс24</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('МойСклад')" id="crmPill_МойСклад" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>МойСклад</span>
-                                </button>
-                                <button type="button" onclick="selectCrmPill('Другая / Excel')" id="crmPill_Другая_Excel" class="crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>Другая / Excel</span>
-                                </button>
-                            </div>
-                            <input type="hidden" id="selectedCrmInput" value="amoCRM">
-                        </div>
-
-                        <!-- TEAM SIZE QUALIFIER (1-CLICK) -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Сколько менеджеров звонит клиентам?</label>
-                            <div class="grid grid-cols-3 gap-2" id="teamPills">
-                                <button type="button" onclick="selectTeamPill('2-5 менеджеров')" id="teamPill_2-5" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300">
-                                    <span>2–5 чел</span>
-                                </button>
-                                <button type="button" onclick="selectTeamPill('6-15 менеджеров')" id="teamPill_6-15" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>6–15 чел</span>
-                                </button>
-                                <button type="button" onclick="selectTeamPill('16+ менеджеров')" id="teamPill_16+" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
-                                    <span>16+ чел</span>
-                                </button>
-                            </div>
-                            <input type="hidden" id="selectedTeamInput" value="2-5 менеджеров">
-                        </div>
-
-                        <div class="space-y-4">
+                    <div class="space-y-4">
                         <div class="flex items-start gap-3.5">
                             <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0 mt-0.5">
                                 <i class="fas fa-check text-xs"></i>
@@ -3643,7 +3541,7 @@
 
             <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
                 <!-- Tariff 1: Express -->
-                <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition">
+                <div id="pricingCard_audit" class="pricing-card glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition">
                     <div>
                         <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">ТЕСТ-ДРАЙВ</div>
                         <h3 class="font-display text-xl font-bold text-white mb-2">Экспресс-Аудит</h3>
@@ -3665,7 +3563,7 @@
                 </div>
 
                 <!-- Tariff 2: Pilot 7 days (HIT) -->
-                <div class="glass-card rounded-2xl p-6 border-2 border-emerald-500/60 shadow-xl shadow-emerald-500/10 flex flex-col justify-between relative bg-slate-900/90">
+                <div id="pricingCard_pilot" class="pricing-card glass-card rounded-2xl p-6 border-2 border-emerald-500/60 shadow-xl shadow-emerald-500/10 flex flex-col justify-between relative bg-slate-900/90">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-bold text-[10px] uppercase font-mono tracking-wider shadow-md">
                         100% ГАРАНТИЯ ВОЗВРАТА
                     </div>
@@ -3694,7 +3592,7 @@
                 </div>
 
                 <!-- Tariff 3: Startup -->
-                <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition">
+                <div id="pricingCard_startup" class="pricing-card glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition">
                     <div>
                         <div class="text-xs font-mono text-cyan-400 uppercase tracking-wider mb-2">РЕГУЛЯРНЫЙ</div>
                         <h3 class="font-display text-xl font-bold text-white mb-2">Стартап</h3>
@@ -3716,7 +3614,7 @@
                 </div>
 
                 <!-- Tariff 4: Business -->
-                <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition">
+                <div id="pricingCard_business" class="pricing-card glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition">
                     <div>
                         <div class="text-xs font-mono text-purple-400 uppercase tracking-wider mb-2">МАСШТАБ</div>
                         <h3 class="font-display text-xl font-bold text-white mb-2">Бизнес</h3>
@@ -3996,7 +3894,7 @@
                                 <button type="button" onclick="selectTeamPill('6-15 менеджеров')" id="teamPill_6-15" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
                                     <span>6–15 чел</span>
                                 </button>
-                                <button type="button" onclick="selectTeamPill('16+ менеджеров')" id="teamPill_16+" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
+                                <button type="button" onclick="selectTeamPill('16+ менеджеров')" id="teamPill_16plus" class="team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
                                     <span>16+ чел</span>
                                 </button>
                             </div>
@@ -4924,29 +4822,154 @@
                 });
             });
 
-            // CRM Integration Interactive Selector
+            // ========================================================
+            // 1. CRM ECOSYSTEM & FORM SYNCHRONIZATION CONTROLLER
+            // ========================================================
+            window.syncEcosystemBadge = function(crmName) {
+                const badges = document.querySelectorAll('.crm-badge');
+                badges.forEach(b => {
+                    b.classList.remove('border-emerald-400', 'ring-2', 'ring-emerald-400/50', 'bg-emerald-500/10', 'shadow-lg', 'shadow-emerald-500/20', 'scale-[1.02]');
+                    b.classList.add('border-slate-800');
+                    const chk = b.querySelector('.crm-selected-check');
+                    if (chk) chk.classList.add('hidden');
+                });
+
+                let targetBadgeId = 'crmBadge_amoCRM';
+                let title = 'Выбрана интеграция: amoCRM';
+                let subtitle = 'Готовый штатный модуль по API • Подключение за 15 минут без доработок';
+
+                if (crmName === 'Битрикс24' || (typeof crmName === 'string' && crmName.includes('Битрикс'))) {
+                    targetBadgeId = 'crmBadge_Битрикс24';
+                    title = 'Выбрана интеграция: Битрикс24 (REST API)';
+                    subtitle = 'Штатный вебхук и автозадачи в таймлайне сделки • Коннектор RevOps OS готов';
+                } else if (crmName === '1С:CRM' || (typeof crmName === 'string' && crmName.includes('1С'))) {
+                    targetBadgeId = 'crmBadge_1С_CRM';
+                    title = 'Выбрана интеграция: 1С:CRM (1С:Предприятие)';
+                    subtitle = 'Безопасный корпоративный контур по 152-ФЗ РФ • Готовый HTTP-шлюз';
+                } else if (crmName === 'Мегаплан' || (typeof crmName === 'string' && crmName.includes('Мегаплан'))) {
+                    targetBadgeId = 'crmBadge_Мегаплан';
+                    title = 'Выбрана интеграция: Мегаплан (API v3)';
+                    subtitle = 'Автозаполнение сделок, контрагентов и расширенных полей за 3 секунды';
+                } else if (crmName === 'RetailCRM' || (typeof crmName === 'string' && crmName.includes('Retail'))) {
+                    targetBadgeId = 'crmBadge_RetailCRM';
+                    title = 'Выбрана интеграция: RetailCRM (E-commerce)';
+                    subtitle = 'Контроль заказов, звонков и сквозной аналитики интернет-магазинов';
+                } else if (typeof crmName === 'string' && (crmName.includes('Телефони') || crmName.includes('АТС'))) {
+                    targetBadgeId = 'crmBadge_IP-Телефонии';
+                    title = 'Выбрана интеграция: IP-Телефония и Облачные АТС';
+                    subtitle = 'Прямой перехват 100% записей звонков (UIS, Calltouch, Novofon, Asterisk, Телфин)';
+                }
+
+                const targetBadge = document.getElementById(targetBadgeId);
+                if (targetBadge) {
+                    targetBadge.classList.remove('border-slate-800');
+                    targetBadge.classList.add('border-emerald-400', 'ring-2', 'ring-emerald-400/50', 'bg-emerald-500/10', 'shadow-lg', 'shadow-emerald-500/20', 'scale-[1.02]');
+                    const chk = targetBadge.querySelector('.crm-selected-check');
+                    if (chk) chk.classList.remove('hidden');
+                }
+
+                const feedbackBar = document.getElementById('crmSelectedFeedback');
+                const feedbackTitle = document.getElementById('crmSelectedFeedbackTitle');
+                const feedbackSub = document.getElementById('crmSelectedFeedbackSub');
+                if (feedbackBar && feedbackTitle && feedbackSub) {
+                    feedbackTitle.textContent = title;
+                    feedbackSub.textContent = subtitle;
+                    feedbackBar.classList.remove('hidden');
+                }
+            };
+
+            window.switchCrmSimulationSystem = function(crmName, syncOther = true) {
+                const btnAmo = document.getElementById('crmSimBtn_amoCRM');
+                const btnB24 = document.getElementById('crmSimBtn_Битрикс24');
+                const beforeHeader = document.getElementById('crmSimBeforeHeader');
+                const afterTitle = document.getElementById('crmSimAfterTitle');
+
+                if (crmName === 'Битрикс24') {
+                    if (btnB24) btnB24.className = 'px-3.5 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 bg-[#00aeef]/20 border-[#00aeef] text-cyan-300 shadow-md shadow-cyan-500/10 ring-1 ring-[#00aeef]';
+                    if (btnAmo) btnAmo.className = 'px-3.5 py-1.5 rounded-xl border text-xs font-medium transition flex items-center gap-1.5 bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700';
+                    if (beforeHeader) beforeHeader.textContent = 'Битрикс24 • Карточка сделки и таймлайн #84920';
+                    if (afterTitle) afterTitle.textContent = 'Битрикс24 • Автозаполнено RevOps OS за 3 сек';
+                } else {
+                    if (btnAmo) btnAmo.className = 'px-3.5 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 bg-[#2f80ed]/20 border-[#2f80ed] text-blue-300 shadow-md shadow-blue-500/10 ring-1 ring-[#2f80ed]';
+                    if (btnB24) btnB24.className = 'px-3.5 py-1.5 rounded-xl border text-xs font-medium transition flex items-center gap-1.5 bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700';
+                    if (beforeHeader) beforeHeader.textContent = 'amoCRM • Карточка сделки #84920';
+                    if (afterTitle) afterTitle.textContent = 'amoCRM • Автозаполнено RevOps OS за 3 сек';
+                }
+
+                if (syncOther) {
+                    window.selectCrmPill(crmName, false);
+                    window.syncEcosystemBadge(crmName);
+                }
+            };
+
             window.selectCrmIntegration = function(crmName) {
-                const ctaSection = document.getElementById('cta');
-                if (ctaSection) {
-                    ctaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                window.syncEcosystemBadge(crmName);
+
+                let formPillName = 'Другая / Excel';
+                if (crmName === 'amoCRM') formPillName = 'amoCRM';
+                else if (crmName === 'Битрикс24') formPillName = 'Битрикс24';
+                else if (crmName === 'МойСклад') formPillName = 'МойСклад';
+
+                window.selectCrmPill(formPillName, false);
+
+                if (crmName === 'amoCRM' || crmName === 'Битрикс24') {
+                    window.switchCrmSimulationSystem(crmName, false);
                 }
-                if (formContactInput) {
-                    setTimeout(() => {
-                        formContactInput.focus();
-                    }, 500);
-                }
+
                 if (window.reachMetrikaGoal) {
                     window.reachMetrikaGoal('crm_integration_click', { crm: crmName });
+                }
+            };
+
+            window.selectCrmPill = function(crmName, syncBadges = true) {
+                const input = document.getElementById('selectedCrmInput');
+                if (input) input.value = crmName;
+
+                const pills = document.querySelectorAll('.crm-pill');
+                pills.forEach(p => {
+                    p.className = 'crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700';
+                });
+
+                const targetId = 'crmPill_' + crmName.replace(/\s+|\//g, '_');
+                const selectedBtn = document.getElementById(targetId);
+                if (selectedBtn) {
+                    selectedBtn.className = 'crm-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-500';
+                }
+
+                if (syncBadges) {
+                    window.syncEcosystemBadge(crmName);
+                    if (crmName === 'amoCRM' || crmName === 'Битрикс24') {
+                        window.switchCrmSimulationSystem(crmName, false);
+                    }
+                }
+            };
+
+            window.selectTeamPill = function(teamSize) {
+                const input = document.getElementById('selectedTeamInput');
+                if (input) input.value = teamSize;
+
+                const pills = document.querySelectorAll('.team-pill');
+                pills.forEach(p => {
+                    p.className = 'team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700';
+                });
+
+                let btnId = 'teamPill_2-5';
+                if (teamSize.startsWith('6')) btnId = 'teamPill_6-15';
+                else if (teamSize.startsWith('16')) btnId = 'teamPill_16plus';
+
+                const selectedBtn = document.getElementById(btnId);
+                if (selectedBtn) {
+                    selectedBtn.className = 'team-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-500';
                 }
             };
 
             // PACKAGE SELECTOR FUNCTIONALITY
             window.selectPackage = function(pkgKey) {
                 const packages = {
-                    audit: { name: 'Экспресс-Аудит 3 звонков (0 ₽)', btn: 'Получить аудит 3 звонков бесплатно (0 ₽)', pillId: 'pkgBtn_audit' },
-                    pilot: { name: 'Пилот 7 дней (14 900 ₽)', btn: 'Забронировать Пилот 7 дней (14 900 ₽)', pillId: 'pkgBtn_pilot' },
-                    startup: { name: 'Тариф Стартап (29 000 ₽ / мес)', btn: 'Забронировать тариф Стартап (29 000 ₽)', pillId: 'pkgBtn_startup' },
-                    business: { name: 'Тариф Бизнес (79 000 ₽ / мес)', btn: 'Забронировать тариф Бизнес (79 000 ₽)', pillId: 'pkgBtn_business' }
+                    audit: { name: 'Экспресс-Аудит 3 звонков (0 ₽)', btn: 'Получить аудит 3 звонков бесплатно (0 ₽)', pillId: 'pkgBtn_audit', cardId: 'pricingCard_audit' },
+                    pilot: { name: 'Пилот 7 дней (14 900 ₽)', btn: 'Забронировать Пилот 7 дней (14 900 ₽)', pillId: 'pkgBtn_pilot', cardId: 'pricingCard_pilot' },
+                    startup: { name: 'Тариф Стартап (29 000 ₽ / мес)', btn: 'Забронировать тариф Стартап (29 000 ₽)', pillId: 'pkgBtn_startup', cardId: 'pricingCard_startup' },
+                    business: { name: 'Тариф Бизнес (79 000 ₽ / мес)', btn: 'Забронировать тариф Бизнес (79 000 ₽)', pillId: 'pkgBtn_business', cardId: 'pricingCard_business' }
                 };
                 const sel = packages[pkgKey] || packages.audit;
                 if (pkgKey === 'pilot' && window.reachMetrikaGoal) {
@@ -4960,9 +4983,18 @@
                     const btn = document.getElementById(packages[k].pillId);
                     if (btn) {
                         if (k === pkgKey) {
-                            btn.className = 'pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-bold text-center transition flex flex-col items-center justify-center gap-0.5 bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10';
+                            btn.className = 'pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-bold text-center transition flex flex-col items-center justify-center gap-0.5 bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-500';
                         } else {
                             btn.className = 'pkg-pill px-2.5 py-2.5 rounded-xl border text-xs font-medium text-center transition flex flex-col items-center justify-center gap-0.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700';
+                        }
+                    }
+                    const card = document.getElementById(packages[k].cardId);
+                    if (card) {
+                        if (k === pkgKey) {
+                            card.classList.add('ring-2', 'ring-emerald-400', 'border-emerald-500');
+                        } else {
+                            card.classList.remove('ring-2', 'ring-emerald-400');
+                            if (k !== 'pilot') card.classList.remove('border-emerald-500');
                         }
                     }
                 });
@@ -5880,6 +5912,22 @@
                     }
                 });
             });
+
+            // Initial sync on load (default: amoCRM, 2-5 managers, audit package)
+            try {
+                if (typeof window.syncEcosystemBadge === 'function') {
+                    window.syncEcosystemBadge('amoCRM');
+                }
+                if (typeof window.selectCrmPill === 'function') {
+                    window.selectCrmPill('amoCRM', false);
+                }
+                if (typeof window.selectTeamPill === 'function') {
+                    window.selectTeamPill('2-5 менеджеров');
+                }
+                if (typeof window.selectPackage === 'function') {
+                    window.selectPackage('audit');
+                }
+            } catch(e) {}
         });
     </script>
 
@@ -6118,7 +6166,7 @@
         (function() {
             const exitModal = document.getElementById('exitIntentModal');
             const exitCard = document.getElementById('exitModalCard');
-            const closeBtn = document.getElementById('closeExitModalBtn');
+            const closeBtn = document.getElementById('closeExitIntentBtn');
             const goCtaBtn = document.getElementById('exitModalGoCta');
             const STORAGE_KEY = 'ai_rop_exit_intent_dismissed';
 
@@ -6178,7 +6226,7 @@
             <div class="absolute -right-20 -top-20 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <!-- Close Button -->
-            <button type="button" id="closeExitModalBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-xs transition" title="Закрыть">
+            <button type="button" id="closeExitIntentBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-xs transition" title="Закрыть">
                 <i class="fas fa-times"></i>
             </button>
 
@@ -6341,37 +6389,7 @@
     </div>
 
 <script>
-        // ========================================================
-        // 1. CRM & TEAM SIZE QUALIFIER CONTROLLER
-        // ========================================================
-        window.selectCrmPill = function(crmName) {
-            const input = document.getElementById('selectedCrmInput');
-            if (input) input.value = crmName;
-            const pills = document.querySelectorAll('.crm-pill');
-            pills.forEach(p => {
-                p.className = 'crm-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700';
-            });
-            const selectedBtn = document.getElementById('crmPill_' + crmName.replace(/\s+|\//g, '_'));
-            if (selectedBtn) {
-                selectedBtn.className = 'crm-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-md shadow-emerald-500/10';
-            }
-        };
-
-        window.selectTeamPill = function(teamSize) {
-            const input = document.getElementById('selectedTeamInput');
-            if (input) input.value = teamSize;
-            const pills = document.querySelectorAll('.team-pill');
-            pills.forEach(p => {
-                p.className = 'team-pill px-2.5 py-2 rounded-xl border text-xs font-medium text-center transition bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700';
-            });
-            let btnId = 'teamPill_2-5';
-            if (teamSize.startsWith('6')) btnId = 'teamPill_6-15';
-            else if (teamSize.startsWith('16')) btnId = 'teamPill_16+';
-            const selectedBtn = document.getElementById(btnId);
-            if (selectedBtn) {
-                selectedBtn.className = 'team-pill px-2.5 py-2 rounded-xl border text-xs font-bold text-center transition bg-emerald-500/15 border-emerald-500 text-emerald-300';
-            }
-        };
+        // (CRM & Team qualifiers are handled by unified controllers above)
 
         // ========================================================
         // 2. DYNAMIC ROI CALCULATOR BRIDGE TO FORM
@@ -6452,8 +6470,8 @@
                 if (heroBadge) heroBadge.textContent = '⚡ Специализированный модуль для 1С-Битрикс24 (REST API) • Радар Выручки';
                 if (heroH1) heroH1.innerHTML = 'Найдём сделки в Битрикс24, которые отдел продаж<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">теряет прямо сейчас.</span>';
                 if (typeof window.selectCrmPill === 'function') window.selectCrmPill('Битрикс24');
-            } else if (crmParam.includes('telecom') || crmParam.includes('звонк') || crmParam.includes('uis') || crmParam.includes('mango')) {
-                if (heroBadge) heroBadge.textContent = '⚡ Прямой поток из облачной АТС (UIS, Mango, Novofon, Asterisk)';
+            } else if (crmParam.includes('telecom') || crmParam.includes('звонк') || crmParam.includes('uis') || crmParam.includes('calltouch')) {
+                if (heroBadge) heroBadge.textContent = '⚡ Прямой поток из облачной АТС (UIS, Calltouch, Novofon, Asterisk)';
                 if (heroH1) heroH1.innerHTML = 'Найдём звонки, на которых менеджеры<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">сливают горячих клиентов.</span>';
             }
         })();
