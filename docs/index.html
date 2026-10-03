@@ -213,6 +213,7 @@
            CSS DESIGN TOKENS (SYSTEM PREFERENCE & THEME ADAPTATION)
            ======================================================== */
         :root {
+            color-scheme: dark;
             --bg-primary: #020617;
             --bg-secondary: #0f172a;
             --bg-surface: rgba(15, 23, 42, 0.65);
@@ -224,6 +225,7 @@
         }
 
         html.theme-light {
+            color-scheme: light;
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
             --bg-surface: #ffffff;
@@ -234,29 +236,73 @@
             --accent-cyan: #0891b2;
         }
 
-        /* WebKit Autofill fix (prevents harsh yellow/white autofill boxes in Safari & Chrome) */
+        /* Default Dark Mode Accessibility & Contrast Boost (Outdoor Phone Readability) */
+        .text-slate-500 {
+            color: #94a3b8; /* Enhanced from #64748b to 5.5:1 contrast against dark slate */
+        }
+
+        /* Universal Form Control Scheme & Mobile Scroll Centering */
+        input, select, textarea {
+            color-scheme: dark;
+            scroll-margin-top: 110px;
+            scroll-margin-bottom: 140px;
+        }
+        html.theme-light input, 
+        html.theme-light select, 
+        html.theme-light textarea {
+            color-scheme: light;
+        }
+
+        /* Base Input Styles (Dark Mode - prevents iOS white autofill background artifact) */
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        textarea {
+            color-scheme: dark !important;
+            background-color: #020617 !important;
+            color: #f8fafc !important;
+            -webkit-text-fill-color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        }
+        input[type="text"]::placeholder,
+        input[type="tel"]::placeholder,
+        input[type="email"]::placeholder,
+        textarea::placeholder {
+            color: #94a3b8 !important;
+            -webkit-text-fill-color: #94a3b8 !important;
+            opacity: 1;
+        }
+
+        /* WebKit Autofill fix (Safari iOS/macOS & Chrome Android/Desktop) */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
+        input:-webkit-autofill:active,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+        textarea:-webkit-autofill:active {
             -webkit-box-shadow: 0 0 0 1000px #020617 inset !important;
+            box-shadow: 0 0 0 1000px #020617 inset !important;
             -webkit-text-fill-color: #f8fafc !important;
-            transition: background-color 5000s ease-in-out 0s;
+            color: #f8fafc !important;
             caret-color: #38bdf8 !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
         html.theme-light input:-webkit-autofill,
         html.theme-light input:-webkit-autofill:hover, 
         html.theme-light input:-webkit-autofill:focus, 
-        html.theme-light input:-webkit-autofill:active {
+        html.theme-light input:-webkit-autofill:active,
+        html.theme-light textarea:-webkit-autofill,
+        html.theme-light textarea:-webkit-autofill:hover,
+        html.theme-light textarea:-webkit-autofill:focus,
+        html.theme-light textarea:-webkit-autofill:active {
             -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+            box-shadow: 0 0 0 1000px #ffffff inset !important;
             -webkit-text-fill-color: #0f172a !important;
+            color: #0f172a !important;
             caret-color: #059669 !important;
-        }
-
-        /* Mobile Form Scroll Margin & Focus Centering */
-        input, select, textarea {
-            scroll-margin-top: 110px;
-            scroll-margin-bottom: 140px;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         body { font-family: 'Inter', sans-serif; }
@@ -459,25 +505,29 @@
         html.theme-light h2,
         html.theme-light h3,
         html.theme-light h4,
+        html.theme-light h5,
+        html.theme-light h6,
         html.theme-light .text-white {
             color: #0f172a !important; /* Deep luxury charcoal */
         }
         html.theme-light p,
         html.theme-light .text-slate-300 {
-            color: #334155 !important; /* Clear, comfortable readable body text */
+            color: #1e293b !important; /* Clear, comfortable readable body text */
         }
         html.theme-light .text-slate-200 {
             color: #1e293b !important;
         }
         html.theme-light .text-slate-400 {
-            color: #475569 !important; /* Secondary text with good contrast */
+            color: #334155 !important; /* High contrast WCAG AAA (7.2:1 against white) */
         }
         html.theme-light .text-slate-500 {
             color: #475569 !important; /* Strict WCAG AA compliance (5.2:1 contrast) */
         }
 
         /* Monospace badges & pill labels */
-        html.theme-light .font-mono.text-slate-400,
+        html.theme-light .font-mono.text-slate-400 {
+            color: #334155 !important;
+        }
         html.theme-light .font-mono.text-slate-500 {
             color: #475569 !important;
         }
@@ -651,17 +701,23 @@
         /* ========================================================
            RADAR PREVIEW REVISION
            ======================================================== */
-        html.theme-light #radarTabsContainer button {
+        html.theme-light #radarTabsContainer button,
+        html.theme-light #radarTabs button,
+        html.theme-light .radar-tab-btn {
             background-color: #ffffff !important;
             border-color: #e2e8f0 !important;
             color: #334155 !important;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
         }
-        html.theme-light #radarTabsContainer button:hover {
+        html.theme-light #radarTabsContainer button:hover,
+        html.theme-light #radarTabs button:hover,
+        html.theme-light .radar-tab-btn:hover {
             background-color: #f8fafc !important;
             border-color: #cbd5e1 !important;
         }
-        html.theme-light #radarTabsContainer button.active {
+        html.theme-light #radarTabsContainer button.active,
+        html.theme-light #radarTabs button.active,
+        html.theme-light .radar-tab-btn.active {
             background-color: #fff1f2 !important;
             border-color: #fb7185 !important;
             color: #9f1239 !important;
@@ -672,9 +728,24 @@
             border-color: #e2e8f0 !important;
             box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
         }
+        html.theme-light #radarDealDetails .bg-slate-900 {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light #radarDealDetails .bg-slate-900\/90 {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+        }
         html.theme-light #radarDealDetails .bg-slate-900\/80 {
             background-color: #f8fafc !important;
             border-color: #e2e8f0 !important;
+        }
+        html.theme-light #radarDealDetails .text-slate-500 {
+            color: #334155 !important;
+            font-weight: 600;
+        }
+        html.theme-light #radarDealDetails .text-slate-200 {
+            color: #0f172a !important;
         }
         html.theme-light #radarDealDetails .bg-emerald-950\/30 {
             background-color: #ecfdf5 !important;
@@ -683,10 +754,27 @@
         html.theme-light #radarDealDetails .bg-emerald-950\/30 p {
             color: #064e3b !important;
         }
+        #radarDealDetails .text-slate-500 {
+            color: #94a3b8;
+        }
 
         /* ========================================================
-           CRM BEFORE / AFTER REVISION
+           CRM BEFORE / AFTER & NO-SABOTAGE REVISION
            ======================================================== */
+        html.theme-light #no-sabotage .text-slate-500 {
+            color: #334155 !important;
+            font-weight: 600;
+        }
+        html.theme-light #no-sabotage .text-slate-400 {
+            color: #334155 !important;
+        }
+        html.theme-light #no-sabotage .text-slate-300,
+        html.theme-light #no-sabotage .text-slate-200 {
+            color: #1e293b !important;
+        }
+        #no-sabotage .text-slate-500 {
+            color: #94a3b8;
+        }
         html.theme-light #crmTabBefore {
             background-color: #fff1f2 !important;
             border-color: #fecdd3 !important;
@@ -705,7 +793,7 @@
         html.theme-light #crmViewBefore .bg-slate-900 {
             background-color: #fff1f2 !important;
             border-color: #fecdd3 !important;
-            color: #334155 !important;
+            color: #1e293b !important;
         }
         html.theme-light #crmViewBefore .bg-rose-950\/20 {
             background-color: #ffe4e6 !important;
@@ -721,6 +809,18 @@
             background-color: #ecfdf5 !important;
             border-color: #a7f3d0 !important;
             color: #1e293b !important;
+        }
+        html.theme-light #crmViewAfter .bg-emerald-500\/10 {
+            background-color: #d1fae5 !important;
+            border-color: #6ee7b7 !important;
+        }
+        html.theme-light #crmViewAfter .text-emerald-300 {
+            color: #065f46 !important;
+        }
+        html.theme-light #crmViewAfter .bg-emerald-950\/60 {
+            background-color: #dcfce7 !important;
+            border-color: #86efac !important;
+            color: #065f46 !important;
         }
         html.theme-light #crmViewAfter .bg-emerald-950\/30 {
             background-color: #dcfce7 !important;
@@ -802,14 +902,58 @@
         html.theme-light #pricing .glass-card {
             background-color: #ffffff !important;
             border-color: #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
         }
         html.theme-light #pricing .border-emerald-500\/60 {
             background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%) !important;
             border: 2.5px solid #10b981 !important;
             box-shadow: 0 16px 36px -4px rgba(16, 185, 129, 0.16) !important;
         }
+        html.theme-light #pricing h3,
+        html.theme-light #pricing .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light #pricing .text-slate-400 {
+            color: #334155 !important; /* High contrast WCAG AAA (7.2:1) */
+        }
+        html.theme-light #pricing .text-slate-300,
+        html.theme-light #pricing .text-slate-200 {
+            color: #1e293b !important;
+        }
+        html.theme-light #pricing li.text-slate-500 {
+            color: #64748b !important;
+        }
         html.theme-light #pricing ul li i.fa-check {
             color: #059669 !important;
+        }
+        html.theme-light #pricing a.bg-slate-800 {
+            background-color: #f1f5f9 !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light #pricing a.bg-slate-800:hover {
+            background-color: #e2e8f0 !important;
+            border-color: #94a3b8 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light #pricing .bg-slate-900 {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #1e293b !important;
+        }
+
+        /* Dark Mode Pricing Refinements */
+        #pricing .text-slate-400 {
+            color: #cbd5e1;
+        }
+        #pricing a.bg-slate-800 {
+            background-color: #1e293b;
+            border-color: #334155;
+            color: #ffffff !important;
+        }
+        #pricing a.bg-slate-800:hover {
+            background-color: #334155;
         }
 
         /* ========================================================
@@ -824,9 +968,11 @@
         html.theme-light input[type="tel"],
         html.theme-light input[type="email"],
         html.theme-light textarea {
+            color-scheme: light !important;
             background-color: #ffffff !important;
             border: 1.5px solid #cbd5e1 !important;
             color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
         }
         html.theme-light input[type="text"]:focus,
         html.theme-light input[type="tel"]:focus,
@@ -835,8 +981,11 @@
             border-color: #10b981 !important;
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
         }
-        html.theme-light input::placeholder {
-            color: #94a3b8 !important;
+        html.theme-light input::placeholder,
+        html.theme-light textarea::placeholder {
+            color: #64748b !important;
+            -webkit-text-fill-color: #64748b !important;
+            opacity: 1;
         }
         html.theme-light #formSuccess {
             background-color: #ffffff !important;
@@ -944,7 +1093,7 @@
             border-color: #cbd5e1 !important;
         }
 
-        /* CRM Badges & Form Inputs in Light Mode */
+        /* CRM Badges, Graphics & Form Inputs in Light Mode */
         html.theme-light .crm-badge {
             background-color: #ffffff !important;
             border-color: #e2e8f0 !important;
@@ -954,16 +1103,25 @@
             border-color: #38bdf8 !important;
             box-shadow: 0 8px 24px -2px rgba(14, 165, 233, 0.15) !important;
         }
-        html.theme-light .crm-badge .text-white {
+        html.theme-light .crm-badge .text-white,
+        html.theme-light .crm-badge .font-bold {
             color: #0f172a !important;
+        }
+        html.theme-light .crm-badge .text-slate-400 {
+            color: #334155 !important;
+        }
+        html.theme-light .border-slate-950 {
+            border-color: #ffffff !important;
         }
         html.theme-light #leadForm input[type="text"] {
             background-color: #ffffff !important;
             border-color: #cbd5e1 !important;
             color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
         }
         html.theme-light #leadForm input[type="text"]::placeholder {
-            color: #94a3b8 !important;
+            color: #64748b !important;
+            -webkit-text-fill-color: #64748b !important;
         }
     </style>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0">
