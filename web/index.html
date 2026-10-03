@@ -659,6 +659,26 @@
             color: #0369a1 !important;
             border-color: #38bdf8 !important;
         }
+
+        /* MAX Bot Action Button (Hero, CTA, Navbar & Chat) */
+        html.theme-light a[href*="se14526668_bot"],
+        html.theme-light a.bg-purple-600\/20,
+        html.theme-light a.bg-purple-600\/15 {
+            background-color: #faf5ff !important;
+            border-color: #d8b4fe !important;
+            color: #6b21a8 !important;
+            box-shadow: 0 4px 14px -2px rgba(147, 51, 234, 0.12) !important;
+        }
+        html.theme-light a[href*="se14526668_bot"]:hover,
+        html.theme-light a.bg-purple-600\/20:hover,
+        html.theme-light a.bg-purple-600\/15:hover {
+            background-color: #f3e8ff !important;
+            color: #581c87 !important;
+            border-color: #c084fc !important;
+        }
+        html.theme-light a[href*="se14526668_bot"] i {
+            color: #7e22ce !important;
+        }
         html.theme-light a[href="#radar-preview"] {
             background-color: #ffffff !important;
             border-color: #cbd5e1 !important;
@@ -1207,12 +1227,27 @@
                                         <div class="text-[10px] text-emerald-400/80">Пошаговый регламент 7 дней</div>
                                     </div>
                                 </a>
+                                <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/25 transition-colors text-purple-300 text-xs font-semibold group/item mt-1">
+                                    <div class="w-7 h-7 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-xs shrink-0 group-hover/item:scale-110 transition-transform">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-purple-300">Бот в MAX (@se14526668_bot)</div>
+                                        <div class="text-[10px] text-purple-400/80">Экспресс-аудит звонков в MAX</div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <!-- MAX Bot Quick Button (Navbar) -->
+                    <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-600/15 hover:bg-purple-600/25 border border-purple-500/30 hover:border-purple-400 text-purple-300 hover:text-white text-xs font-semibold transition shadow-sm" title="Открыть бота в мессенджере MAX">
+                        <i class="fas fa-comment-dots text-purple-400 text-xs"></i>
+                        <span>MAX Бот</span>
+                    </a>
+
                     <!-- THEME TOGGLE (SUN / MOON) -->
                     <button type="button" id="themeToggleBtn" aria-label="Переключить тему оформления" title="Переключить тему: тёмная / светлая" class="w-10 h-10 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-md group shrink-0">
                         <i id="themeToggleIcon" class="fas fa-sun text-amber-400 text-base transition-transform duration-500 group-hover:rotate-45"></i>
@@ -1294,6 +1329,10 @@
                     <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-4 bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 hover:text-white font-bold rounded-2xl transition border border-sky-500/40 flex items-center justify-center gap-2 text-sm sm:text-base shadow-lg shadow-sky-500/10 group">
                         <i class="fab fa-telegram-plane text-sky-400 text-base group-hover:scale-110 transition-transform"></i>
                         <span>Проверить ИИ в Telegram 🤖</span>
+                    </a>
+                    <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-4 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white font-bold rounded-2xl transition border border-purple-500/40 hover:border-purple-400 flex items-center justify-center gap-2 text-sm sm:text-base shadow-lg shadow-purple-500/15 group">
+                        <i class="fas fa-comment-dots text-purple-400 text-base group-hover:scale-110 transition-transform"></i>
+                        <span>Бот в MAX 💬</span>
                     </a>
                     <a href="#radar-preview" class="w-full sm:w-auto px-7 py-4 glass-card hover:bg-slate-800/90 text-white font-semibold rounded-2xl transition border border-slate-700 flex items-center justify-center gap-2 text-base">
                         <i class="fas fa-satellite-dish text-cyan-400"></i>
@@ -3111,15 +3150,21 @@
 
                         <div class="relative flex py-2 items-center">
                             <div class="flex-grow border-t border-slate-800"></div>
-                            <span class="flex-shrink mx-3 text-[11px] font-mono text-slate-500 uppercase tracking-wider">или без ввода телефона и формы</span>
+                            <span class="flex-shrink mx-3 text-[11px] font-mono text-slate-500 uppercase tracking-wider">или отправьте 3 аудио напрямую в бот без формы:</span>
                             <div class="flex-grow border-t border-slate-800"></div>
                         </div>
 
-                        <!-- Прямой вход в TG-бот (1.6) -->
-                        <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="w-full py-4 bg-sky-500/15 hover:bg-sky-500/25 border-2 border-sky-500/40 hover:border-sky-400 text-sky-300 hover:text-white font-bold rounded-2xl transition shadow-lg shadow-sky-500/10 text-sm sm:text-base flex items-center justify-center gap-2.5 group">
-                            <i class="fab fa-telegram-plane text-sky-400 text-lg group-hover:scale-110 transition-transform"></i>
-                            <span>Проверить ИИ в Telegram 🤖 (загрузить 3 аудио напрямую)</span>
-                        </a>
+                        <!-- Прямой вход в боты (Telegram и MAX) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="py-4 px-4 bg-sky-500/15 hover:bg-sky-500/25 border-2 border-sky-500/40 hover:border-sky-400 text-sky-300 hover:text-white font-bold rounded-2xl transition shadow-lg shadow-sky-500/10 text-xs sm:text-sm flex items-center justify-center gap-2.5 group text-center">
+                                <i class="fab fa-telegram-plane text-sky-400 text-lg group-hover:scale-110 transition-transform shrink-0"></i>
+                                <span>Проверить ИИ в Telegram 🤖</span>
+                            </a>
+                            <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="py-4 px-4 bg-purple-600/20 hover:bg-purple-600/30 border-2 border-purple-500/40 hover:border-purple-400 text-purple-300 hover:text-white font-bold rounded-2xl transition shadow-lg shadow-purple-500/15 text-xs sm:text-sm flex items-center justify-center gap-2.5 group text-center">
+                                <i class="fas fa-comment-dots text-purple-400 text-lg group-hover:scale-110 transition-transform shrink-0"></i>
+                                <span>Проверить ИИ в MAX 💬</span>
+                            </a>
+                        </div>
 
                         <!-- Соцдоказательство у формы -->
                         <div class="pt-2 text-center text-xs text-slate-400 font-mono flex flex-wrap items-center justify-center gap-4">
@@ -3215,14 +3260,22 @@
 
     <!-- SPRINT 3: STICKY BOTTOM BAR FOR MOBILE (<768px) -->
     <div id="stickyMobileBar" class="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 p-3 sm:hidden shadow-2xl transition-transform duration-300">
-        <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center justify-between gap-2.5">
             <div class="text-left">
                 <div class="text-white font-bold text-xs">Аудит 3 звонков</div>
                 <div class="text-[10px] text-emerald-400 font-mono">Бесплатно • 0 ₽</div>
             </div>
-            <a href="#cta" class="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-emerald-500/20 whitespace-nowrap">
-                Разобрать 3 звонка
-            </a>
+            <div class="flex items-center gap-2">
+                <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 flex items-center justify-center shrink-0 shadow-sm" title="Открыть бота в MAX">
+                    <i class="fas fa-comment-dots text-sm"></i>
+                </a>
+                <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-sky-500/20 border border-sky-500/40 text-sky-300 flex items-center justify-center shrink-0 shadow-sm" title="Открыть бота в Telegram">
+                    <i class="fab fa-telegram text-sm"></i>
+                </a>
+                <a href="#cta" class="px-3.5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-emerald-500/20 whitespace-nowrap">
+                    Начать 0 ₽
+                </a>
+            </div>
         </div>
     </div>
 
@@ -3309,6 +3362,24 @@
                 </div>
             </div>
 
+            <!-- Official Bots Channel Strip (MAX & Telegram) -->
+            <div class="px-4 py-2 bg-slate-900/95 border-b border-slate-800 flex items-center justify-between text-xs">
+                <span class="text-slate-400 font-mono text-[10px] flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Боты аудита:
+                </span>
+                <div class="flex items-center gap-2">
+                    <a href="https://max.ru/se14526668_bot" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-purple-600/20 hover:bg-purple-600/35 text-purple-300 hover:text-white border border-purple-500/40 text-[11px] font-semibold flex items-center gap-1.5 transition shadow-sm" title="Запустить бота в MAX">
+                        <i class="fas fa-comment-dots text-purple-400"></i>
+                        <span>MAX Бот</span>
+                    </a>
+                    <a href="https://t.me/RevOps_Super_Audit_Bot" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 text-sky-300 hover:text-white border border-sky-500/40 text-[11px] font-semibold flex items-center gap-1.5 transition shadow-sm" title="Запустить бота в Telegram">
+                        <i class="fab fa-telegram text-sky-400"></i>
+                        <span>TG Бот</span>
+                    </a>
+                </div>
+            </div>
+
             <!-- Messages Stream Area with clean dark scrollbar -->
             <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs sm:text-sm">
                 <!-- Messages injected dynamically -->
@@ -3327,6 +3398,10 @@
                     <span>Быстрый выбор в 1 клик:</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5">
+                    <button type="button" data-prompt="Как открыть бота в MAX?" class="chat-chip px-2.5 py-1 rounded-lg bg-purple-900/40 hover:bg-purple-800 text-purple-200 text-[11px] border border-purple-500/40 hover:border-purple-300 transition flex items-center gap-1 font-semibold">
+                        <i class="fas fa-comment-dots text-purple-400"></i>
+                        <span>Бот в MAX 💬</span>
+                    </button>
                     <button type="button" data-prompt="Хочу бесплатный аудит 3 звонков" class="chat-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] border border-slate-700 hover:border-emerald-500/50 transition">
                         🎯 Аудит 3 звонков (0 ₽)
                     </button>
@@ -3941,7 +4016,7 @@
                     chatHistory = [
                         {
                             sender: 'bot',
-                            text: 'Здравствуйте! Я ИИ-супервайзер **AI-ROP**.\n\nПомогу бесплатно разобрать 3 звонка (0 ₽), рассчитать потери выручки или запустить пилот.\n\n👇 **Выберите готовый вопрос выше или напишите свой вопрос в поле ввода внизу:**',
+                            text: 'Здравствуйте! Я ИИ-супервайзер **AI-ROP**.\n\nПомогу бесплатно разобрать 3 звонка (0 ₽), рассчитать потери выручки или запустить пилот.\n\nТакже наши боты для отправки звонков доступны напрямую:\n• **В MAX:** [@se14526668_bot](https://max.ru/se14526668_bot)\n• **В Telegram:** [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n\n👇 **Выберите готовый вопрос выше или напишите свой вопрос в поле ввода внизу:**',
                             time: getTimeString()
                         }
                     ];
@@ -4060,12 +4135,17 @@
                         }).catch(e => console.log('Chat lead err:', e));
                     } catch (e) {}
 
-                    return `Принято! Ваш контакт (${contact}) зафиксирован. Основатель сервиса Дмитрий Федотов (@dm1918) получил уведомление и свяжется с вами в течение 10–15 минут.\n\nЕсли хотите сразу передать аудиозаписи звонков:\n• Напишите напрямую Дмитрию в Telegram: [@dm1918](https://t.me/dm1918)\n• Или запустите бота в [мессенджере MAX](https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg)`;
+                    return `Принято! Ваш контакт (${contact}) зафиксирован. Основатель сервиса Дмитрий Федотов (@dm1918) получил уведомление и свяжется с вами в течение 10–15 минут.\n\nЕсли хотите сразу передать аудиозаписи звонков:\n• Запустите официального бота в MAX: [@se14526668_bot](https://max.ru/se14526668_bot)\n• Или в Telegram: [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n• Либо напишите лично Дмитрию: [@dm1918](https://t.me/dm1918)`;
+                }
+
+                // MAX Messenger bot
+                if (q.includes('max') || q.includes('макс') || q.includes('se14526668')) {
+                    return `🤖 **Официальный ИИ-бот в мессенджере MAX:**\n\n• Бот: **[@se14526668_bot](https://max.ru/se14526668_bot)**\n• Прямой переход: [max.ru/se14526668_bot](https://max.ru/se14526668_bot)\n• Резервная ссылка: [Открыть в MAX Web/App](https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg)\n\nВ MAX боте можно:\n1. Прикрепить 3 аудиозаписи звонков с телефона;\n2. Мгновенно получить транскрибацию и скоринг сливов;\n3. Задать вопрос напрямую фаундеру Дмитрию Федотову.`;
                 }
 
                 // Greetings
                 if (q.match(/^(привет|здравствуй|добрый|хай|салам|здорово|ку)/)) {
-                    return `Приветствую! Чем могу помочь по контролю звонков вашего отдела продаж?\n\n• **Экспресс-аудит 3 звонков** = 0 ₽ (бесплатно)\n• **Пилот 7 дней** = 14 900 ₽ (с гарантией возврата)\n• **Связь с основателем:** Дмитрий Федотов [@dm1918](https://t.me/dm1918) в Telegram или [@se14526668_bot](https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg) в MAX.`;
+                    return `Приветствую! Чем могу помочь по контролю звонков вашего отдела продаж?\n\n• **Экспресс-аудит 3 звонков** = 0 ₽ (бесплатно)\n• **Пилот 7 дней** = 14 900 ₽ (с гарантией возврата)\n• **Боты для отправки звонков:** [MAX Бот @se14526668_bot](https://max.ru/se14526668_bot) | [TG Бот](https://t.me/RevOps_Super_Audit_Bot)\n• **Связь с основателем:** Дмитрий Федотов [@dm1918](https://t.me/dm1918).`;
                 }
 
                 // Audit 3 calls
@@ -4084,12 +4164,12 @@
                 }
 
                 // Founder / Contacts
-                if (q.includes('основател') || q.includes('человек') || q.includes('контакт') || q.includes('связ') || q.includes('max') || q.includes('макс') || q.includes('телеграм') || q.includes('телефон') || q.includes('почт')) {
-                    return `**Прямые контакты:**\n• Основатель сервиса: Дмитрий Федотов (10+ лет в B2B-продажах, 8 лет менеджером в полях, знает всю механику сливов изнутри)\n• Личный Telegram Дмитрия: [@dm1918](https://t.me/dm1918)\n• Мессенджер MAX: [@se14526668_bot](https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg)\n• Telegram-бот аудита: [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n• Email: info@ai-rop.ru\n\nЛибо напишите свой номер/Telegram прямо здесь, и мы ответим в течение 10 минут.`;
+                if (q.includes('основател') || q.includes('человек') || q.includes('контакт') || q.includes('связ') || q.includes('телеграм') || q.includes('телефон') || q.includes('почт')) {
+                    return `**Прямые контакты:**\n• Основатель сервиса: Дмитрий Федотов (10+ лет в B2B-продажах, 8 лет менеджером в полях, знает всю механику сливов изнутри)\n• Официальный бот в MAX: [@se14526668_bot](https://max.ru/se14526668_bot)\n• Личный Telegram Дмитрия: [@dm1918](https://t.me/dm1918)\n• Telegram-бот аудита: [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n• Email: info@ai-rop.ru\n\nЛибо напишите свой номер/Telegram прямо здесь, и мы ответим в течение 10 минут.`;
                 }
 
                 // Default answer
-                return `Я ИИ-супервайзер RevOps OS Pro. Чтобы мы помогли решить вашу задачу или провели бесплатный аудит 3 звонков (0 ₽):\n\nОставьте ваш **Telegram или номер телефона** прямо в этом сообщении — мы оперативно свяжемся!\n\nЛибо напишите основателю Дмитрию Федотову напрямую: [@dm1918](https://t.me/dm1918) в Telegram или [@se14526668_bot](https://max.ru/u/f9LHodD0cOLRcNKRakz94FpZjmUJ25lYzJUMzPBJyLKwxM1Tzzai1aF-dTg) в мессенджере MAX.`;
+                return `Я ИИ-супервайзер RevOps OS Pro. Чтобы мы помогли решить вашу задачу или провели бесплатный аудит 3 звонков (0 ₽):\n\nОставьте ваш **Telegram или номер телефона** прямо в этом сообщении — мы оперативно свяжемся!\n\nЛибо запустите наших ботов для загрузки записей:\n• В MAX: [@se14526668_bot](https://max.ru/se14526668_bot)\n• В Telegram: [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n• Напрямую Дмитрию: [@dm1918](https://t.me/dm1918)`;
             }
 
             function handleUserSubmit(text) {
