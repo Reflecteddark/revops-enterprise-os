@@ -479,5 +479,28 @@
         })();
     </script>
 
+    <!-- FLOATING SCROLL-TO-TOP BUTTON -->
+    <button type="button" id="scrollToTopBtn" aria-label="Вернуться наверх" class="no-print fixed bottom-6 right-6 z-40 p-3 rounded-2xl bg-slate-900/90 hover:bg-emerald-500 text-slate-300 hover:text-slate-950 border border-slate-700/80 shadow-2xl transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:scale-105 active:scale-95 flex items-center gap-2 group backdrop-blur-xl">
+        <i class="fas fa-arrow-up text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+        <span class="text-xs font-bold font-mono pr-1 hidden sm:inline">Наверх</span>
+    </button>
+    <script>
+        (function() {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (!btn) return;
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                } else {
+                    btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                }
+            }, { passive: true });
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+    </script>
 </body>
 </html>

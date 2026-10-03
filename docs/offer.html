@@ -37,17 +37,32 @@
     <!-- /Yandex.Metrika counter -->
 </head>
 <body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Плавающая кнопка Назад (на мобильных и десктопах) -->
+    <a href="/" onclick="goBack(event)" class="no-print fixed top-3 left-3 sm:top-5 sm:left-5 z-50 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/95 hover:bg-slate-800 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold border border-slate-700/90 hover:border-slate-500 shadow-2xl backdrop-blur-md transition-all group cursor-pointer" title="Назад на главную страницу">
+        <i class="fas fa-arrow-left text-xs text-emerald-400 group-hover:-translate-x-1 transition-transform"></i>
+        <span>Назад на сайт</span>
+    </a>
+
     <div class="max-w-4xl mx-auto glass-card rounded-2xl p-6 sm:p-10 shadow-2xl">
         
         <!-- Верхняя панель навигации -->
-        <div class="flex items-center justify-between pb-6 border-b border-slate-800 mb-8">
-            <a href="/" class="flex items-center gap-2 text-white font-bold text-lg hover:text-emerald-400 transition">
-                <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 text-sm font-black">AI</span>
-                <span>RevOps OS Pro</span>
-            </a>
-            <div class="flex items-center gap-3 text-xs">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800 mb-8">
+            <div class="flex items-center gap-3">
+                <a href="/" onclick="goBack(event)" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition group" title="Вернуться на главную">
+                    <i class="fas fa-arrow-left text-xs text-emerald-400 group-hover:-translate-x-0.5 transition-transform"></i>
+                    <span>На главную</span>
+                </a>
+                <a href="/" class="flex items-center gap-2 text-white font-bold text-base hover:text-emerald-400 transition">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 text-sm font-black">AI</span>
+                    <span>RevOps OS Pro</span>
+                </a>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                <button type="button" onclick="window.print()" class="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 font-medium transition flex items-center gap-1.5" title="Печать">
+                    <i class="fas fa-print text-cyan-400 text-[11px]"></i> Печать
+                </button>
                 <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">152-ФЗ РФ</span>
-                <span class="text-slate-400">Редакция: 02.10.2026 г.</span>
+                <span class="text-slate-400 hidden sm:inline">Редакция: 02.10.2026 г.</span>
             </div>
         </div>
 
@@ -207,6 +222,28 @@
             </div>
         </div>
 
+        <!-- Блок возврата на сайт и связи с основателем -->
+        <div class="mt-10 p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-left">
+                <div class="text-sm font-bold text-white mb-0.5">Остались вопросы по оферте или тарифам?</div>
+                <div class="text-xs text-slate-400">Основатель сервиса Дмитрий Федотов на связи лично в мессенджере.</div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="/" onclick="goBack(event)" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 transition">
+                    <i class="fas fa-arrow-left text-emerald-400"></i>
+                    <span>Вернуться на сайт</span>
+                </a>
+                <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition">
+                    <i class="fas fa-print text-cyan-400"></i>
+                    <span>Печать / В PDF</span>
+                </button>
+                <a href="https://t.me/dm1918" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-md shadow-emerald-500/20">
+                    <i class="fab fa-telegram"></i>
+                    <span>Написать Дмитрию</span>
+                </a>
+            </div>
+        </div>
+
         <div class="mt-8 pt-4 border-t border-slate-900 text-center text-xs text-slate-500">
             <div class="flex items-center justify-center gap-4 mb-2">
                 <a href="/" class="hover:text-slate-300 underline">Главная</a>
@@ -264,7 +301,48 @@
             if (acceptBtn) acceptBtn.addEventListener('click', acceptConsent);
             if (closeBtn) closeBtn.addEventListener('click', acceptConsent);
         })();
+
+        // Universal Back Navigation Logic
+        function goBack(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            var targetUrl = (window.location.protocol === 'file:') ? 'index.html' : '/';
+            var ref = document.referrer;
+            var isFromOurSite = ref && (ref.indexOf(window.location.host) !== -1 || ref.indexOf('ai-rop.ru') !== -1);
+            if (window.history.length > 1 && isFromOurSite) {
+                window.history.back();
+                setTimeout(function() {
+                    if (window.location.pathname.indexOf('offer') !== -1 || window.location.href.indexOf('offer') !== -1) {
+                        window.location.href = targetUrl;
+                    }
+                }, 250);
+            } else {
+                window.location.href = targetUrl;
+            }
+        }
     </script>
 
+    <!-- FLOATING SCROLL-TO-TOP BUTTON -->
+    <button type="button" id="scrollToTopBtn" aria-label="Вернуться наверх" class="fixed bottom-6 right-6 z-40 p-3 rounded-2xl bg-slate-900/90 hover:bg-emerald-500 text-slate-300 hover:text-slate-950 border border-slate-700/80 shadow-2xl transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:scale-105 active:scale-95 flex items-center gap-2 group backdrop-blur-xl">
+        <i class="fas fa-arrow-up text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+        <span class="text-xs font-bold font-mono pr-1 hidden sm:inline">Наверх</span>
+    </button>
+    <script>
+        (function() {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (!btn) return;
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                } else {
+                    btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                }
+            }, { passive: true });
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+    </script>
 </body>
 </html>

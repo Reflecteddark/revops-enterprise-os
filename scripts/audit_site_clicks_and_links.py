@@ -11,7 +11,8 @@ pages = [
     'web/index.html',
     'web/offer.html',
     'web/privacy.html',
-    'web/pilot-roadmap.html'
+    'web/pilot-roadmap.html',
+    'web/sample-audit-report.html'
 ]
 
 print("==================================================")

@@ -1255,7 +1255,7 @@
     <nav class="fixed w-full z-50 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center gap-4">
-                <a href="#" class="flex items-center gap-3 shrink-0 whitespace-nowrap">
+                <a href="/" class="flex items-center gap-3 shrink-0 whitespace-nowrap">
                     <div class="w-9 h-9 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                         <i class="fas fa-wave-square text-slate-950 text-sm"></i>
                     </div>
@@ -3950,6 +3950,7 @@
                                 </button>
                             </div>
                             <input type="hidden" id="selectedPackageInput" value="audit">
+                            <input type="hidden" id="ctaNotes" value="">
                         </div>
 
                         
@@ -4060,7 +4061,7 @@
                             <input type="checkbox" id="formConsent" required checked class="mt-1 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500 cursor-pointer">
                             <label for="formConsent" class="text-xs text-slate-400 leading-tight">
                                 Я даю согласие на обработку персональных данных в соответствии с 
-                                <a href="privacy.html" target="_blank" class="text-emerald-400 underline hover:text-emerald-300 font-medium">152-ФЗ РФ</a>. 
+                                <a href="privacy.html" id="openPolicyBtn" target="_blank" class="text-emerald-400 underline hover:text-emerald-300 font-medium">152-ФЗ РФ</a>. 
                                 Гарантия конфиденциальности и неразглашения (NDA).
                             </label>
                         </div>
@@ -4170,7 +4171,7 @@
                                 <span>Или отправьте 3 аудиозаписи лично основателю Дмитрию Федотову:</span>
                             </span>
                             <div class="flex items-center gap-3 font-semibold">
-                                <a href="https://t.me/dm1918" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1">
+                                <a href="https://t.me/dm1918" id="tgDirectBtn" target="_blank" class="text-cyan-400 hover:underline flex items-center gap-1">
                                     <i class="fab fa-telegram"></i> @dm1918 (Telegram)
                                 </a>
                                 <span>•</span>
@@ -4223,7 +4224,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-slate-800/80">
                 <!-- Col 1: Brand & Security (lg:col-span-4) -->
                 <div class="lg:col-span-4 space-y-4">
-                    <a href="#" class="inline-flex items-center gap-3 group">
+                    <a href="/" class="inline-flex items-center gap-3 group">
                         <div class="w-11 h-11 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
                             <i class="fas fa-wave-square text-slate-950 text-base"></i>
                         </div>
@@ -4732,7 +4733,8 @@
             const closePolicyBtn = document.getElementById('closePolicyBtn');
             const closePolicyBtnBottom = document.getElementById('closePolicyBtnBottom');
 
-            function openModal() { 
+            function openModal(e) { 
+                if (e && e.preventDefault) e.preventDefault();
                 policyModal.classList.remove('hidden'); 
                 document.body.classList.add('overflow-hidden');
                 if (window.innerWidth < 640 && typeof closeChat === 'function') closeChat();
@@ -5028,7 +5030,9 @@
                         window.reachMetrikaGoal('lead_submit', { package: selectedPkgName, utm: utmSource });
                     }
 
-                    const tgMsg = encodeURIComponent(`Здравствуйте! Заявка с сайта ai-rop.ru.\nФормат: ${selectedPkgName}\nИмя: ${name}\nКонтакт: ${contact}\nИсточник: ${utmSource}`);
+                    const ctaNotes = document.getElementById('ctaNotes')?.value || '';
+                    const notesLine = ctaNotes ? `\nЗапрос: ${ctaNotes}` : '';
+                    const tgMsg = encodeURIComponent(`Здравствуйте! Заявка с сайта ai-rop.ru.\nФормат: ${selectedPkgName}\nИмя: ${name}\nКонтакт: ${contact}${notesLine}\nИсточник: ${utmSource}`);
                     const tgUrl = `https://t.me/dm1918?text=${tgMsg}`;
                     const tgBtn = document.getElementById('tgDirectBtn');
                     if (tgBtn) {
@@ -5039,7 +5043,7 @@
                     try {
                         window.open(tgUrl, '_blank');
                     } catch (err) {
-                        
+                        console.warn('Telegram popup blocked or handled inline:', err);
                     }
 
                     // Send email to info@ai-rop.ru
@@ -5055,14 +5059,17 @@
                                 'Выбранный пакет': selectedPkgName,
                                 'Имя клиента': name,
                                 'Контакт (TG/Тел)': contact,
+                                'Детали / Запрос': ctaNotes || 'Стандартная заявка с формы',
                                 'Источник (UTM)': utmSource,
                                 'Дата и время': new Date().toLocaleString('ru-RU'),
                                 '_template': 'table',
                                 '_captcha': 'false'
                             })
-                        }).catch(err => );
+                        }).catch(err => {
+                            console.warn('FormSubmit background notification notice:', err);
+                        });
                     } catch (err) {
-                        
+                        console.warn('FormSubmit fetch error:', err);
                     }
                 });
             }
@@ -5280,7 +5287,9 @@
                                 '_template': 'table',
                                 '_captcha': 'false'
                             })
-                        }).catch(e => );
+                        }).catch(e => {
+                            console.warn('Chat lead submit notification notice:', e);
+                        });
                     } catch (e) {}
 
                     return `Принято! Ваш контакт (${contact}) зафиксирован. Основатель сервиса Дмитрий Федотов (@dm1918) получил уведомление и свяжется с вами в течение 10–15 минут.\n\nЕсли хотите сразу передать аудиозаписи звонков:\n• Запустите официального бота в MAX: [@se14526668_bot](https://max.ru/se14526668_bot)\n• Или в Telegram: [@RevOps_Super_Audit_Bot](https://t.me/RevOps_Super_Audit_Bot)\n• Либо напишите лично Дмитрию: [@dm1918](https://t.me/dm1918)`;
@@ -5539,7 +5548,9 @@
                     demoAudioPlayer.src = v.src;
                     demoAudioPlayer.load();
                     if (autoPlay) {
-                        demoAudioPlayer.play().catch(e => );
+                        demoAudioPlayer.play().catch(e => {
+                            console.warn('Audio autoplay prevented by browser policy:', e);
+                        });
                     }
                 }
             }
@@ -5663,7 +5674,9 @@
                             demoAudioPlayer.currentTime = seekSec;
                             if (demoAudioPlayer.paused) {
                                 if (window.reachMetrikaGoal) window.reachMetrikaGoal('audio_play');
-                                demoAudioPlayer.play().catch(e => );
+                                demoAudioPlayer.play().catch(e => {
+                                    console.warn('Audio play prevented by browser policy:', e);
+                                });
                             }
                             if (seekSec >= 10) showFullAnalysis();
                         }
@@ -6540,5 +6553,29 @@
             };
         })();
 </script>
+
+    <!-- FLOATING SCROLL-TO-TOP BUTTON -->
+    <button type="button" id="scrollToTopBtn" aria-label="Вернуться наверх" class="fixed bottom-36 sm:bottom-24 right-4 sm:right-6 z-40 p-3 rounded-2xl bg-slate-900/90 hover:bg-emerald-500 text-slate-300 hover:text-slate-950 border border-slate-700/80 shadow-2xl transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:scale-105 active:scale-95 flex items-center gap-2 group backdrop-blur-xl">
+        <i class="fas fa-arrow-up text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+        <span class="text-xs font-bold font-mono pr-1 hidden sm:inline">Наверх</span>
+    </button>
+    <script>
+        (function() {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (!btn) return;
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 400) {
+                    btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                } else {
+                    btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                }
+            }, { passive: true });
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+    </script>
 </body>
 </html>

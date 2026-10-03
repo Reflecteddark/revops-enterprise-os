@@ -11,13 +11,20 @@
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen py-10 px-4 sm:px-6">
+    <!-- Плавающая кнопка Назад -->
+    <a href="/" onclick="goBack(event)" class="fixed top-3 left-3 sm:top-5 sm:left-5 z-50 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/95 hover:bg-slate-800 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold border border-slate-700/90 hover:border-slate-500 shadow-2xl backdrop-blur-md transition-all group cursor-pointer" title="Назад на главную страницу">
+        <i class="fas fa-arrow-left text-xs text-emerald-400 group-hover:-translate-x-1 transition-transform"></i>
+        <span>Назад на сайт</span>
+    </a>
+
     <div class="max-w-4xl mx-auto">
         <!-- Top Nav -->
-        <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-800">
-            <a href="/" class="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition">
-                <i class="fas fa-arrow-left text-emerald-400"></i> Вернуться на главную ai-rop.ru
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-6 border-b border-slate-800">
+            <a href="/" onclick="goBack(event)" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition w-fit">
+                <i class="fas fa-arrow-left text-emerald-400"></i>
+                <span>Вернуться на главную ai-rop.ru</span>
             </a>
-            <a href="samples/Образец_ИИ_Аудита_3_Звонков_RevOps_OS.pdf" download class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-cyan-400 transition">
+            <a href="samples/Образец_ИИ_Аудита_3_Звонков_RevOps_OS.pdf" download class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-cyan-400 transition w-fit">
                 <i class="fas fa-download"></i> Скачать PDF (образцовый отчет)
             </a>
         </div>
@@ -108,9 +115,55 @@
                     <a href="https://t.me/dm1918" target="_blank" class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5">
                         <i class="fab fa-telegram text-cyan-400"></i> Отправить звонки в Telegram
                     </a>
+                    <a href="/" onclick="goBack(event)" class="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold rounded-xl text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5">
+                        <i class="fas fa-arrow-left text-emerald-400"></i> Назад на главную
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- FLOATING SCROLL-TO-TOP BUTTON -->
+    <button type="button" id="scrollToTopBtn" aria-label="Вернуться наверх" class="fixed bottom-6 right-6 z-40 p-3 rounded-2xl bg-slate-900/90 hover:bg-emerald-500 text-slate-300 hover:text-slate-950 border border-slate-700/80 shadow-2xl transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:scale-105 active:scale-95 flex items-center gap-2 group backdrop-blur-xl">
+        <i class="fas fa-arrow-up text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+        <span class="text-xs font-bold font-mono pr-1 hidden sm:inline">Наверх</span>
+    </button>
+
+    <!-- Universal Back Navigation & Scroll Logic -->
+    <script>
+        function goBack(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            var targetUrl = (window.location.protocol === 'file:') ? 'index.html' : '/';
+            var ref = document.referrer;
+            var isFromOurSite = ref && (ref.indexOf(window.location.host) !== -1 || ref.indexOf('ai-rop.ru') !== -1);
+            if (window.history.length > 1 && isFromOurSite) {
+                window.history.back();
+                setTimeout(function() {
+                    if (window.location.pathname.indexOf('sample') !== -1 || window.location.href.indexOf('sample') !== -1) {
+                        window.location.href = targetUrl;
+                    }
+                }, 250);
+            } else {
+                window.location.href = targetUrl;
+            }
+        }
+
+        (function() {
+            const btn = document.getElementById('scrollToTopBtn');
+            if (!btn) return;
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                } else {
+                    btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                }
+            }, { passive: true });
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+    </script>
 </body>
 </html>
