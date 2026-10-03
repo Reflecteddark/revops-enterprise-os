@@ -276,20 +276,35 @@
         }
 
         /* ========================================================
-           LIGHT THEME SYSTEM (.theme-light)
+           COMPREHENSIVE LIGHT THEME REVISION (.theme-light)
+           Clean, high-contrast, SaaS-grade light palette
            ======================================================== */
         html.theme-light body {
-            background-color: #f8fafc !important;
+            background-color: #f8fafc !important; /* Soft luxury off-white base */
             color: #1e293b !important;
         }
 
         /* Smooth theme transitions */
-        body, nav, .glass-card, input, select, textarea, footer, #mobileNavMenu, #chatWidgetWindow {
+        body, nav, .glass-card, input, select, textarea, footer, #mobileNavMenu, #chatWidgetWindow, #radarTabsContainer button {
             transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        /* Background overrides in light theme */
+        /* Surface & Background Hierarchy: alternating clean white and soft slate */
+        html.theme-light body.bg-slate-950,
         html.theme-light .bg-slate-950 {
+            background-color: #f8fafc !important;
+        }
+        html.theme-light .bg-slate-900 {
+            background-color: #ffffff !important;
+        }
+        html.theme-light .bg-slate-900\/40,
+        html.theme-light .bg-slate-900\/60,
+        html.theme-light .bg-slate-900\/70 {
+            background-color: #f8fafc !important;
+        }
+        html.theme-light .bg-slate-900\/80,
+        html.theme-light .bg-slate-900\/90,
+        html.theme-light .bg-slate-900\/95 {
             background-color: #ffffff !important;
         }
         html.theme-light .bg-slate-950\/60,
@@ -297,102 +312,261 @@
         html.theme-light .bg-slate-950\/80,
         html.theme-light .bg-slate-950\/90,
         html.theme-light .bg-slate-950\/95 {
-            background-color: rgba(255, 255, 255, 0.95) !important;
-        }
-        html.theme-light .bg-slate-900 {
-            background-color: #f1f5f9 !important;
-        }
-        html.theme-light .bg-slate-900\/40,
-        html.theme-light .bg-slate-900\/60,
-        html.theme-light .bg-slate-900\/70,
-        html.theme-light .bg-slate-900\/80,
-        html.theme-light .bg-slate-900\/90,
-        html.theme-light .bg-slate-900\/95 {
-            background-color: rgba(241, 245, 249, 0.88) !important;
-        }
-        html.theme-light .bg-slate-800,
-        html.theme-light .bg-slate-800\/80,
-        html.theme-light .bg-slate-800\/90 {
-            background-color: #e2e8f0 !important;
-            color: #1e293b !important;
+            background-color: #ffffff !important;
         }
 
-        /* Glass Cards in light mode */
+        /* Distinct Section Rhythm */
+        html.theme-light #how-it-works { background-color: #f8fafc !important; }
+        html.theme-light #radar-preview { background-color: #ffffff !important; }
+        html.theme-light #no-sabotage { background-color: #f8fafc !important; }
+        html.theme-light #features { background-color: #ffffff !important; }
+        html.theme-light #cases { background-color: #f8fafc !important; }
+        html.theme-light #comparison { background-color: #ffffff !important; }
+        html.theme-light #criteria { background-color: #f8fafc !important; }
+        html.theme-light #roi { background-color: #ffffff !important; }
+        html.theme-light #pricing { background-color: #f8fafc !important; }
+        html.theme-light #faq { background-color: #ffffff !important; }
+        html.theme-light #cta { background-color: #f8fafc !important; }
+        html.theme-light footer { 
+            background-color: #f1f5f9 !important; 
+            border-top: 1px solid #e2e8f0 !important; 
+        }
+
+        /* Glass Cards: Crisp white with refined border and soft ambient shadow */
         html.theme-light .glass-card {
-            background: rgba(255, 255, 255, 0.94) !important;
-            border: 1px solid rgba(226, 232, 240, 0.95) !important;
-            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03) !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 8px 24px -4px rgba(15, 23, 42, 0.05) !important;
         }
         html.theme-light .glass-card:hover {
-            border-color: rgba(16, 185, 129, 0.45) !important;
-            box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.08) !important;
+            border-color: #a7f3d0 !important;
+            box-shadow: 0 12px 30px -4px rgba(16, 185, 129, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.04) !important;
         }
 
         /* Navbar & Header in light mode */
         html.theme-light nav {
-            background-color: rgba(255, 255, 255, 0.90) !important;
-            border-bottom-color: rgba(226, 232, 240, 0.9) !important;
+            background-color: rgba(255, 255, 255, 0.92) !important;
+            backdrop-filter: blur(16px);
+            border-bottom-color: #e2e8f0 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+        }
+        html.theme-light nav a.text-slate-400 {
+            color: #475569 !important;
+        }
+        html.theme-light nav a.text-slate-400:hover {
+            color: #059669 !important;
         }
         html.theme-light #mobileNavMenu {
-            background-color: rgba(255, 255, 255, 0.98) !important;
+            background-color: #ffffff !important;
             border-color: #e2e8f0 !important;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1) !important;
+        }
+        html.theme-light .mobile-nav-link {
+            color: #334155 !important;
+        }
+        html.theme-light .mobile-nav-link:hover {
+            background-color: #f1f5f9 !important;
+            color: #059669 !important;
         }
 
         /* Hero glow adjustment for light background */
         html.theme-light .hero-glow {
-            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.06) 35%, transparent 70%) !important;
+            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.09) 0%, rgba(6, 182, 212, 0.05) 35%, #ffffff 75%) !important;
         }
         html.theme-light .data-grid {
             background-image: 
-                linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+                linear-gradient(rgba(16, 185, 129, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.06) 1px, transparent 1px);
         }
 
-        /* Typography overrides */
+        /* ========================================================
+           TYPOGRAPHY & CONTRAST HIERARCHY
+           ======================================================== */
+        html.theme-light h1,
+        html.theme-light h2,
+        html.theme-light h3,
+        html.theme-light h4,
         html.theme-light .text-white {
-            color: #0f172a !important;
+            color: #0f172a !important; /* Deep luxury charcoal */
+        }
+        html.theme-light p,
+        html.theme-light .text-slate-300 {
+            color: #334155 !important; /* Clear, comfortable readable body text */
         }
         html.theme-light .text-slate-200 {
             color: #1e293b !important;
         }
-        html.theme-light .text-slate-300 {
-            color: #334155 !important;
-        }
         html.theme-light .text-slate-400 {
-            color: #64748b !important;
+            color: #475569 !important; /* Secondary text with good contrast */
         }
         html.theme-light .text-slate-500 {
             color: #64748b !important;
         }
 
-        /* Preserve contrast on colored action buttons & gradients */
-        html.theme-light a.bg-gradient-to-r,
-        html.theme-light button.bg-gradient-to-r,
-        html.theme-light .bg-gradient-to-r.text-slate-950,
-        html.theme-light .bg-gradient-to-r .text-slate-950,
-        html.theme-light .bg-emerald-500,
-        html.theme-light .text-slate-950,
-        html.theme-light .bg-emerald-500 .text-slate-950 {
-            color: #020617 !important;
+        /* Monospace badges & pill labels */
+        html.theme-light .font-mono.text-slate-400,
+        html.theme-light .font-mono.text-slate-500 {
+            color: #475569 !important;
         }
-        html.theme-light .text-emerald-400 {
-            color: #059669 !important;
-        }
-        html.theme-light .text-cyan-400 {
-            color: #0891b2 !important;
-        }
-        html.theme-light .text-rose-400 {
-            color: #e11d48 !important;
-        }
-        html.theme-light .text-amber-400 {
-            color: #d97706 !important;
-        }
-        html.theme-light .text-sky-400,
-        html.theme-light .text-sky-300 {
-            color: #0284c7 !important;
+        html.theme-light span.bg-slate-800\/80,
+        html.theme-light span.bg-slate-900,
+        html.theme-light div.bg-slate-900 {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #1e293b !important;
         }
 
-        /* Borders in light mode */
+        /* ========================================================
+           RICH ICON CONTAINERS & ACCENT COLORS
+           ======================================================== */
+        /* Icon box containers */
+        html.theme-light .bg-emerald-500\/10 {
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+        }
+        html.theme-light .bg-cyan-500\/10,
+        html.theme-light .bg-cyan-500\/20 {
+            background-color: #ecfeff !important;
+            border-color: #a5f3fc !important;
+        }
+        html.theme-light .bg-amber-500\/10,
+        html.theme-light .bg-amber-500\/20 {
+            background-color: #fffbeb !important;
+            border-color: #fde68a !important;
+        }
+        html.theme-light .bg-rose-500\/10,
+        html.theme-light .bg-rose-500\/20,
+        html.theme-light .bg-rose-950\/20 {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+        }
+        html.theme-light .bg-sky-500\/10,
+        html.theme-light .bg-sky-500\/15,
+        html.theme-light .bg-sky-500\/25 {
+            background-color: #f0f9ff !important;
+            border-color: #bae6fd !important;
+        }
+        html.theme-light .bg-purple-500\/10,
+        html.theme-light .bg-purple-600\/10 {
+            background-color: #faf5ff !important;
+            border-color: #e9d5ff !important;
+        }
+        html.theme-light .w-12.h-12,
+        html.theme-light .w-10.h-10 {
+            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Rich Saturated Icon Colors (WCAG AA compliant) */
+        html.theme-light .text-emerald-400,
+        html.theme-light .text-emerald-500,
+        html.theme-light i.fa-check.text-emerald-400,
+        html.theme-light i.fa-bolt.text-emerald-400,
+        html.theme-light i.fa-shield-alt.text-emerald-400 {
+            color: #059669 !important;
+        }
+        html.theme-light .text-cyan-400,
+        html.theme-light .text-cyan-500,
+        html.theme-light i.fa-satellite-dish.text-cyan-400,
+        html.theme-light i.fa-plug.text-cyan-400 {
+            color: #0891b2 !important;
+        }
+        html.theme-light .text-amber-400,
+        html.theme-light .text-amber-500,
+        html.theme-light i.fa-lightbulb.text-amber-400,
+        html.theme-light i.fa-clock.text-amber-400,
+        html.theme-light i.fa-star.text-amber-400 {
+            color: #d97706 !important;
+        }
+        html.theme-light .text-rose-400,
+        html.theme-light .text-rose-500 {
+            color: #e11d48 !important;
+        }
+        html.theme-light .text-sky-400,
+        html.theme-light .text-sky-500,
+        html.theme-light i.fa-telegram.text-sky-400,
+        html.theme-light i.fa-telegram-plane.text-sky-400 {
+            color: #0284c7 !important;
+        }
+        html.theme-light .text-purple-400 {
+            color: #9333ea !important;
+        }
+
+        /* High-contrast Text Badges & Chips */
+        html.theme-light .text-amber-300 {
+            color: #78350f !important; /* Deep rich brown-amber, crystal clear readability */
+        }
+        html.theme-light .border-amber-500\/40 {
+            border-color: #fcd34d !important;
+        }
+        html.theme-light .text-emerald-300 {
+            color: #064e3b !important; /* Deep rich emerald */
+        }
+        html.theme-light .border-emerald-500\/40 {
+            border-color: #6ee7b7 !important;
+        }
+        html.theme-light .text-cyan-300 {
+            color: #0e7490 !important;
+        }
+        html.theme-light .border-cyan-500\/30,
+        html.theme-light .border-cyan-500\/40 {
+            border-color: #67e8f9 !important;
+        }
+        html.theme-light .text-rose-300 {
+            color: #9f1239 !important;
+        }
+        html.theme-light .border-rose-500\/30,
+        html.theme-light .border-rose-500\/40 {
+            border-color: #fda4af !important;
+        }
+
+        /* ========================================================
+           ACTION BUTTONS & HERO CONTROLS
+           ======================================================== */
+        /* Telegram Bot Action Button (Hero & CTA) */
+        html.theme-light a[href*="RevOps_Super_Audit_Bot"],
+        html.theme-light a.bg-sky-500\/15 {
+            background-color: #f0f9ff !important;
+            border-color: #7dd3fc !important;
+            color: #0284c7 !important;
+            box-shadow: 0 4px 14px -2px rgba(2, 132, 199, 0.12) !important;
+        }
+        html.theme-light a[href*="RevOps_Super_Audit_Bot"]:hover,
+        html.theme-light a.bg-sky-500\/15:hover {
+            background-color: #e0f2fe !important;
+            color: #0369a1 !important;
+            border-color: #38bdf8 !important;
+        }
+        html.theme-light a[href="#radar-preview"] {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        }
+        html.theme-light a[href="#radar-preview"]:hover {
+            background-color: #f8fafc !important;
+            border-color: #94a3b8 !important;
+        }
+        html.theme-light a[href*="pilot-roadmap"] {
+            color: #475569 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light a[href*="pilot-roadmap"]:hover {
+            color: #059669 !important;
+            border-color: #a7f3d0 !important;
+        }
+
+        /* Keep dark text on emerald gradient buttons */
+        html.theme-light a.bg-gradient-to-r,
+        html.theme-light button.bg-gradient-to-r {
+            color: #020617 !important;
+        }
+        html.theme-light a.bg-gradient-to-r i,
+        html.theme-light button.bg-gradient-to-r i {
+            color: #020617 !important;
+        }
+
+        /* Borders across sections */
         html.theme-light .border-slate-800,
         html.theme-light .border-slate-800\/80 {
             border-color: #e2e8f0 !important;
@@ -401,65 +575,300 @@
             border-color: #cbd5e1 !important;
         }
 
-        /* Inputs & Form controls */
+        /* ========================================================
+           RADAR PREVIEW REVISION
+           ======================================================== */
+        html.theme-light #radarTabsContainer button {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            color: #334155 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+        }
+        html.theme-light #radarTabsContainer button:hover {
+            background-color: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+        }
+        html.theme-light #radarTabsContainer button.active {
+            background-color: #fff1f2 !important;
+            border-color: #fb7185 !important;
+            color: #9f1239 !important;
+            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.12) !important;
+        }
+        html.theme-light #radarDealDetails {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.theme-light #radarDealDetails .bg-slate-900\/80 {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light #radarDealDetails .bg-emerald-950\/30 {
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+        }
+        html.theme-light #radarDealDetails .bg-emerald-950\/30 p {
+            color: #064e3b !important;
+        }
+
+        /* ========================================================
+           CRM BEFORE / AFTER REVISION
+           ======================================================== */
+        html.theme-light #crmTabBefore {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+            color: #be123c !important;
+        }
+        html.theme-light #crmTabAfter {
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+            color: #047857 !important;
+        }
+        html.theme-light #crmViewBefore > div {
+            background-color: #ffffff !important;
+            border-color: #fecdd3 !important;
+            box-shadow: 0 4px 20px -2px rgba(244, 63, 94, 0.06) !important;
+        }
+        html.theme-light #crmViewBefore .bg-slate-900 {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+            color: #334155 !important;
+        }
+        html.theme-light #crmViewBefore .bg-rose-950\/20 {
+            background-color: #ffe4e6 !important;
+            border-color: #fecdd3 !important;
+            color: #9f1239 !important;
+        }
+        html.theme-light #crmViewAfter > div {
+            background-color: #ffffff !important;
+            border-color: #a7f3d0 !important;
+            box-shadow: 0 8px 24px -2px rgba(16, 185, 129, 0.08) !important;
+        }
+        html.theme-light #crmViewAfter .bg-slate-900 {
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+            color: #1e293b !important;
+        }
+        html.theme-light #crmViewAfter .bg-emerald-950\/30 {
+            background-color: #dcfce7 !important;
+            border-color: #86efac !important;
+        }
+        html.theme-light #crmViewAfter .bg-emerald-950\/30 .text-emerald-200 {
+            color: #14532d !important;
+        }
+
+        /* ========================================================
+           COMPARISON & MIGRATION CARD REVISION
+           ======================================================== */
+        html.theme-light #comparison table {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.theme-light #comparison th {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light #comparison th.bg-emerald-950\/40 {
+            background-color: #dcfce7 !important;
+            border-color: #10b981 !important;
+        }
+        html.theme-light #comparison td.bg-emerald-950\/30 {
+            background-color: #f0fdf4 !important;
+            border-color: #10b981 !important;
+        }
+        html.theme-light #comparison td {
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light #comparison tr:hover {
+            background-color: rgba(248, 250, 252, 0.8) !important;
+        }
+        html.theme-light #migration-offer {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 50%, #ecfeff 100%) !important;
+            border: 2px solid #67e8f9 !important;
+            box-shadow: 0 12px 36px -4px rgba(6, 182, 212, 0.12) !important;
+        }
+        html.theme-light #migration-offer .bg-slate-950\/70 {
+            background-color: #ffffff !important;
+            border-color: #a5f3fc !important;
+            color: #0e7490 !important;
+            box-shadow: 0 2px 6px rgba(6, 182, 212, 0.06) !important;
+        }
+
+        /* ========================================================
+           ROI CALCULATOR REVISION
+           ======================================================== */
+        html.theme-light #roi input[type=range] {
+            background-color: #e2e8f0 !important;
+        }
+        html.theme-light #roi .bg-slate-950\/60 {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+        }
+        html.theme-light #lossVal {
+            color: #e11d48 !important;
+        }
+        html.theme-light #lossMetaFot,
+        html.theme-light #lossMetaAd {
+            color: #475569 !important;
+        }
+        html.theme-light #lossPerMinVal,
+        html.theme-light #liveLossCounter {
+            color: #be123c !important;
+        }
+        html.theme-light #roi .bg-slate-950\/80 {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        /* ========================================================
+           PRICING TARIFFS REVISION
+           ======================================================== */
+        html.theme-light #pricing .glass-card {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light #pricing .border-emerald-500\/60 {
+            background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%) !important;
+            border: 2.5px solid #10b981 !important;
+            box-shadow: 0 16px 36px -4px rgba(16, 185, 129, 0.16) !important;
+        }
+        html.theme-light #pricing ul li i.fa-check {
+            color: #059669 !important;
+        }
+
+        /* ========================================================
+           CTA FORM & INPUTS REVISION
+           ======================================================== */
+        html.theme-light #ctaForm {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08) !important;
+        }
         html.theme-light input[type="text"],
         html.theme-light input[type="tel"],
         html.theme-light input[type="email"],
         html.theme-light textarea {
             background-color: #ffffff !important;
-            border-color: #cbd5e1 !important;
+            border: 1.5px solid #cbd5e1 !important;
             color: #0f172a !important;
+        }
+        html.theme-light input[type="text"]:focus,
+        html.theme-light input[type="tel"]:focus,
+        html.theme-light input[type="email"]:focus,
+        html.theme-light textarea:focus {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
         }
         html.theme-light input::placeholder {
             color: #94a3b8 !important;
         }
-
-        /* Badges & highlights with light backgrounds */
-        html.theme-light .bg-emerald-500\/10 {
-            background-color: rgba(16, 185, 129, 0.12) !important;
+        html.theme-light #formSuccess {
+            background-color: #ffffff !important;
+            border-color: #a7f3d0 !important;
         }
-        html.theme-light .bg-cyan-500\/10,
-        html.theme-light .bg-cyan-500\/20 {
-            background-color: rgba(6, 182, 212, 0.12) !important;
-        }
-        html.theme-light .bg-amber-500\/10 {
-            background-color: rgba(245, 158, 11, 0.14) !important;
-        }
-        html.theme-light .bg-rose-500\/10,
-        html.theme-light .bg-rose-950\/20 {
-            background-color: rgba(244, 63, 94, 0.10) !important;
-        }
-        html.theme-light .bg-emerald-950\/30,
-        html.theme-light .bg-emerald-950\/40,
-        html.theme-light .bg-emerald-950\/60 {
-            background-color: rgba(16, 185, 129, 0.10) !important;
-        }
-
-        /* Tables in light mode */
-        html.theme-light table th {
-            background-color: #f1f5f9 !important;
+        html.theme-light #formSuccessSubtitle {
             color: #334155 !important;
         }
-        html.theme-light table td {
-            border-color: #e2e8f0 !important;
-        }
-        html.theme-light tr:hover {
-            background-color: rgba(241, 245, 249, 0.6) !important;
-        }
 
-        /* Modals & Chat in light mode */
+        /* ========================================================
+           MODALS, CHAT WIDGET & THEME TOGGLE BUTTON
+           ======================================================== */
+        html.theme-light #exitIntentModal {
+            background-color: rgba(15, 23, 42, 0.4) !important;
+            backdrop-filter: blur(8px);
+        }
         html.theme-light #exitIntentModal .glass-card,
-        html.theme-light #videoModal .glass-card,
+        html.theme-light #videoModal .glass-card {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25) !important;
+        }
         html.theme-light #chatWidgetWindow {
             background-color: #ffffff !important;
             border-color: #cbd5e1 !important;
-            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15) !important;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.18) !important;
+        }
+        html.theme-light #chatWidgetWindow .bg-slate-900\/95 {
+            background: linear-gradient(135deg, #059669 0%, #0891b2 100%) !important;
+        }
+        html.theme-light #chatWidgetWindow .bg-slate-900\/95 * {
+            color: #ffffff !important;
+        }
+        html.theme-light #chatWidgetWindow .bg-slate-900\/80 {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light #chatInput {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
         }
         html.theme-light #chatMessages::-webkit-scrollbar-thumb {
             background: #cbd5e1;
         }
         html.theme-light #chatMessages {
             scrollbar-color: #cbd5e1 transparent;
+        }
+
+        /* Toggle Buttons */
+        html.theme-light #themeToggleBtn {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        html.theme-light #mobileThemeToggleBtn {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #1e293b !important;
+        }
+
+        /* High opacity / specific dark backgrounds in light mode */
+        html.theme-light .bg-emerald-950\/20,
+        html.theme-light .bg-emerald-950\/30,
+        html.theme-light .bg-emerald-950\/40 {
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+            color: #064e3b !important;
+        }
+        html.theme-light .bg-cyan-950\/20,
+        html.theme-light .bg-cyan-950\/30 {
+            background-color: #ecfeff !important;
+            border-color: #a5f3fc !important;
+            color: #0e7490 !important;
+        }
+        html.theme-light .bg-purple-950\/30 {
+            background-color: #faf5ff !important;
+            border-color: #e9d5ff !important;
+            color: #581c87 !important;
+        }
+        html.theme-light .bg-rose-950\/20,
+        html.theme-light .bg-rose-950\/40 {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+            color: #9f1239 !important;
+        }
+        html.theme-light #stickyMobileBar {
+            background-color: rgba(255, 255, 255, 0.96) !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+        }
+        html.theme-light #chatWindow {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.18) !important;
+        }
+        html.theme-light #policyModal,
+        html.theme-light #exitModal {
+            background-color: rgba(15, 23, 42, 0.45) !important;
+        }
+        html.theme-light #policyModal .glass-card,
+        html.theme-light #exitModal .glass-card {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
         }
     </style>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0">
